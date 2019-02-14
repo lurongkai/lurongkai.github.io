@@ -1,0 +1,731 @@
+
+ <!DOCTYPE HTML>
+<html lang="default">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+  
+    <title>.NET 4中的并行编程(上) | lurongkai&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Lu Rongkai">
+    
+
+    
+    <meta name="description" content="并行是.NET 4中新加入的特性，为了使程序在多核心多CPU环境运行的更好、更快、更强大。 前面已经说过了，并发和并行是不一样的，并发最多可以算做是多线程，而所谓并行是将任务分散到不同的CPU上同时执行。尤其值得我们关注的是，在Web环境下的先天并行特性，使得并行编程成为解决性能瓶颈的又一武器。">
+<meta property="og:type" content="article">
+<meta property="og:title" content=".NET 4中的并行编程(上)">
+<meta property="og:url" content="https://lurongkai.github.io/2010/04/19/dotnet-parallel-programming-1/index.html">
+<meta property="og:site_name" content="lurongkai&#39;s blog">
+<meta property="og:description" content="并行是.NET 4中新加入的特性，为了使程序在多核心多CPU环境运行的更好、更快、更强大。 前面已经说过了，并发和并行是不一样的，并发最多可以算做是多线程，而所谓并行是将任务分散到不同的CPU上同时执行。尤其值得我们关注的是，在Web环境下的先天并行特性，使得并行编程成为解决性能瓶颈的又一武器。">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-02-14T02:48:33.433Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content=".NET 4中的并行编程(上)">
+<meta name="twitter:description" content="并行是.NET 4中新加入的特性，为了使程序在多核心多CPU环境运行的更好、更快、更强大。 前面已经说过了，并发和并行是不一样的，并发最多可以算做是多线程，而所谓并行是将任务分散到不同的CPU上同时执行。尤其值得我们关注的是，在Web环境下的先天并行特性，使得并行编程成为解决性能瓶颈的又一武器。">
+
+    
+    <link rel="alternative" href="/atom.xml" title="lurongkai&#39;s blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="lurongkai&#39;s blog">lurongkai&#39;s blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
+						<input type="hidden" name="q" value="site:lurongkai.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</ul></nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2010/04/19/dotnet-parallel-programming-1/" title=".NET 4中的并行编程(上)" itemprop="url">.NET 4中的并行编程(上)</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Lu Rongkai" target="_blank" itemprop="author">Lu Rongkai</a>
+		
+  </p><p class="article-time">
+    <time datetime="2010-04-18T22:46:00.000Z" itemprop="datePublished"> Published 2010-04-19</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			
+		
+		</div>
+		
+		<p>并行是.NET 4中新加入的特性，为了使程序在多核心多CPU环境运行的更好、更快、更强大。</p>
+<p><a href="/blog/2010/04/11/dotnet-4-changes-on-clr-and-bcl-1/">前面</a>已经说过了，并发和并行是不一样的，并发最多可以算做是多线程，而所谓并行是将任务分散到不同的CPU上同时执行。尤其值得我们关注的是，在Web环境下的先天并行特性，使得并行编程成为解决性能瓶颈的又一武器。<br><a id="more"></a></p>
+<p>.NET 4中的并行编程主要是Parallel和Task，微软强势构建了TPL(Task Parallel Library)，使开发过程变得简洁。</p>
+<p>接下来，先看一个简单的Demo：</p>
+<pre><code>using System.Threading.Tasks;
+
+Parallel.Invoke(
+    () =&gt; {
+        Thread.Sleep(1000);
+        Console.WriteLine(&quot;1&quot;);
+    },
+    () =&gt; {
+        Thread.Sleep(1000);
+        Console.WriteLine(&quot;2&quot;);
+    },
+    () =&gt; {
+        Thread.Sleep(1000);
+        Console.WriteLine(&quot;3&quot;);
+    });
+</code></pre><p><code>Parallel.Invoke()</code>方法可以接收一个Action委托的params数组。我们来猜一下上段代码的执行结果是什么？123的顺序还是132？213？231？这个，不一定，得看人品……呵呵，开个玩笑，并行执行时，将上面三个Lambda表达式传递的方法分别看做一个“任务”，将其分配至空闲CPU，然后执行，由于CPU的情况是不一定的，所以执行完毕的顺序也就有了差异。</p>
+<p>由于很多需要并行执行的任务都有一定的相似性，所以一般情况下我们可以用一种类似for循环的方式对这些任务进行并行的处理，例如在.NET 4中可以这么做：</p>
+<pre><code>Parallel.For(0, 10, i =&gt; {
+    Console.WriteLine(i);
+});
+</code></pre><p>但样做有时却不方便，例如我们要处理一个集合中的数据，既然集合实现了IEnumerable接口，为什么还要用索引来遍历呢？</p>
+<p>其实我们是可以方便并行的处理一个数据集合的，以在多CPU环境下获得更高的性能。具体的，我们可以这么做：</p>
+<pre><code>var dataList = new string[] { &quot;data1&quot;, &quot;data2&quot;, &quot;data3&quot; };//IEnumerable interface.
+Parallel.ForEach(dataList, taskOptions, data =&gt; {
+    Console.WriteLine(data + &quot; processing&quot;);
+});
+</code></pre><p><code>taskOptions</code>是一个可选的参数，用于指定并行任务执行的方式，可以这样设置它：</p>
+<pre><code>ParallelOptions taskOptions = new ParallelOptions();
+taskOptions.MaxDegreeOfParallelism = 2;
+</code></pre><p>这里只是简单的设置了一下并行执行的程序，可以理解为使用的CPU核心数，-1表示由CLR来决定，因为我的本本是两核的，那就指定为2吧……</p>
+<p>当然了，processing的顺序也不一定的顺序了，原因看上面。</p>
+<p>Parallel为我们提供了一种最原始的控制并行任务的过程，但这在实际的使用中是远不够的，我们需要更加细腻的控制并行执行中的阶段和并发冲突情况(并行中当然也有冲突了)等，.NET 4为我们带来的Task很好的解决了这个需求。</p>
+<p>先上一个简单的例子：</p>
+<pre><code>Task task1 = new Task(() =&gt; {
+    Console.WriteLine(&quot;Task1&quot;);
+});
+task1.Start();
+
+Task task2 = Task.Factory.StartNew(() =&gt; {
+    Console.WriteLine(&quot;Task2&quot;);
+});
+</code></pre><p>这里使用了两种方式来启动一个Task，第一种是普通的做法，先实例化一个Task，再调用Start()方法来启动一个任务。第二种是使用Task的工厂方法来初始化并启动。孰好孰坏就全看个人喜好了。</p>
+<p>当我们的Task执行完毕后会产生一个新结果时，可以在初始化任务时指定返回的类型，然后访问.Result属性来获取任务结束后的值，例如下面：</p>
+<pre><code>Task task1 = Task.Factory.StartNew(() =&gt;{
+    Thread.Sleep(1000);
+    return &quot;string1&quot;;
+});
+
+Task task2 = Task.Factory.StartNew(() =&gt;{
+    Thread.Sleep(1000);
+    return &quot;string2&quot;;
+});
+
+Task task3 = Task.Factory.StartNew(() =&gt;{
+    Thread.Sleep(1000);
+    return &quot;string3&quot;;
+});
+
+Console.WriteLine(task1.Result);
+Console.WriteLine(task2.Result);
+Console.WriteLine(task3.Result);
+</code></pre><p>需要说明的是，当访问Task.Result属性时，如果对应的Task还没有结束，那么在访问线程将会阻塞，直到所对应的Task执行完毕才会继续。</p>
+<p>这种阻塞当然是安全的，然而很多时候，我们需要确保某些任务结束后才可以执行后续的代码，这时候会怎么做呢？</p>
+<pre><code>Task task1 = new Task(() =&gt; { Console.WriteLine(&quot;Task1&quot;); });
+Task task2 = new Task(() =&gt; { Console.WriteLine(&quot;Task2&quot;); });
+Task task3 = new Task(() =&gt; { Console.WriteLine(&quot;Task3&quot;); });
+
+task3.Start();
+Task.WaitAll(task3);//params Task
+
+Console.WriteLine(&quot;Task3 complete&quot;);
+
+Task.WaitAny(task3, task2);//task2并没有运行
+Console.WriteLine(&quot;task2和task3中必然完成了一个&quot;);
+task1.Start();
+</code></pre><p>Task.WaitAll()方法会阻塞线程直到指定的Task全部完成后才会向下运行，这相当于设了一道关卡，确保指定任务全部结束。</p>
+<p>而Task.WaitAny()方法会检测指定的全部Task，只要其中的任何一个Task完成，那么就可以继续。</p>
+<p>其实在多线程中也有类似的做法，并不是并行的专利，例如这样：</p>
+<pre><code>CountdownEvent cde = new CountdownEvent(3);
+
+ThreadPool.QueueUserWorkItem(_ =&gt;{
+    Thread.Sleep(2000);
+    Console.WriteLine(&quot;Work item 1&quot;);
+    cde.Signal();
+});
+ThreadPool.QueueUserWorkItem(_ =&gt;{
+    Thread.Sleep(4000);
+    Console.WriteLine(&quot;Work item 2&quot;);
+    cde.Signal();
+});
+ThreadPool.QueueUserWorkItem(_ =&gt;{
+    Thread.Sleep(6000);
+    Console.WriteLine(&quot;Work item 3&quot;);
+    cde.Signal();
+});
+
+cde.Wait();
+Console.WriteLine(&quot;All complete.&quot;);
+</code></pre><p>只不过Task的方法更加的直接而已。</p>
+<p>然而任务间有时也有着依赖关系，例如Task1依赖于Task2的执行，Task2又依赖于Task3的执行，这样，完全可以用普通的单线程来替代了，为什么还要使用并行呢？其实就拿上面的例子来说，Task3在一个CPU1上执行完毕了Task2在CPU2上立即启动，这时CPU1完全可以用来做别的并行任务了，不是么？这就是任务链的作用，我们可以用一个Demo来说明：</p>
+<pre><code>Task task1 = new Task(() =&gt;{
+    Console.WriteLine(&quot;Task1&quot;);
+    return 1;
+});
+Task task2 = task1.ContinueWith(parent =&gt; {
+    Console.WriteLine(&quot;Task2&quot;);
+    Console.WriteLine(&quot;Task1&apos;s result:{0}&quot;, parent.Result);
+    return &quot;Task2&quot;;
+});
+Task task3 = task2.ContinueWith(parent =&gt; {
+    Console.WriteLine(&quot;Task3&quot;);
+    Console.WriteLine(&quot;Task2&apos;s result:{0}&quot;, parent.Result);
+    return &quot;Task3&quot;;
+});
+
+task1.Start();
+</code></pre><p>当调用task1.Start()方法后task1启动，执行完毕后task2启动，再然后task3启动，呈一条链状执行，可以写在一条语句：</p>
+<pre><code>Task task = Task.Factory.StartNew(() =&gt; {
+    Console.WriteLine(&quot;Task1&quot;);
+    return 1;
+}).ContinueWith(parent =&gt; {
+    Console.WriteLine(&quot;Task2&quot;);
+    Console.WriteLine(&quot;Task1&apos;s result:{0}&quot;, parent.Result);
+    return &quot;Task2&quot;;
+}).ContinueWith(parent =&gt; {
+    Console.WriteLine(&quot;Task3&quot;);
+    Console.WriteLine(&quot;Task2&apos;s result:{0}&quot;, parent.Result);
+    return &quot;Task3&quot;;
+});
+</code></pre><p>显然，这些只能在任务的外部进行并行执行阶段的控制，如果想要更加细度的控制并行的执行，例如在并行过程的内部实现阶段的控制，那么就需要引入Barrier结构了。Barrier结构可以为并行过程内部提供“阶段关卡”，让并行也分阶段来协作，一个简单的例子是这样：</p>
+<pre><code>Barrier barrierDemo = new Barrier(3, (barrier) =&gt; {
+    Console.WriteLine(&quot;Phase {0} has been completed.&quot;, barrier.CurrentPhaseNumber + 1);
+});
+
+Task task1 = Task.Factory.StartNew(() =&gt; {
+    Console.WriteLine(&quot;Task1,phase 1.&quot;);
+    barrierDemo.SignalAndWait();// phase 1
+
+    Console.WriteLine(&quot;Task1,phase 2.&quot;);
+    barrierDemo.SignalAndWait();// phase 2
+
+    Console.WriteLine(&quot;Task1,phase 3.&quot;);
+    barrierDemo.SignalAndWait();// phase 3
+});
+Task task2 = Task.Factory.StartNew(() =&gt; {
+    Console.WriteLine(&quot;Task2,phase 1.&quot;);
+    barrierDemo.SignalAndWait();// phase 1
+    Console.WriteLine(&quot;Task2,phase 2.&quot;);
+    barrierDemo.SignalAndWait();// phase 2
+    Console.WriteLine(&quot;Task2,phase 3.&quot;);
+    barrierDemo.SignalAndWait();// phase 3
+});
+Task task3 = Task.Factory.StartNew(() =&gt; {
+    Console.WriteLine(&quot;Task3,phase 1.&quot;);
+    barrierDemo.SignalAndWait();// phase 1
+
+    Console.WriteLine(&quot;Task3,phase 2.&quot;);
+
+    barrierDemo.SignalAndWait();// phase 2
+    Console.WriteLine(&quot;Task3,phase 3.&quot;);
+
+    barrierDemo.SignalAndWait();// phase 3
+});
+
+Task.WaitAll(task1, task2, task3);
+Console.WriteLine(&quot;All complete.&quot;);
+</code></pre><p>三个Task是并行执行的当然没有问题，因而顺序也就不一定，原因再请看上面。我们需要解决的问题是怎样把Task分为3个阶段，让所有的Task在对应的阶段能统一一下步子，然后再往下走，Barrier就是为此而生，先在主线线程内声明一个Barrier实例并指定需要控制的阶段数量，然后在Task内分别来使用SignalAndWait()来设阶段关卡，可以预想执行的结果是：</p>
+<pre><code>Task2,phase 1.    
+Task1,phase 1.    
+Task3,phase 1.
+Phase 1 has been completed. 
+Task1,phase 2. 
+Task2,phase 2. 
+Task3,phase 2. 
+Phase 2 has been completed. 
+Task3,phase 3. 
+Task1,phase 3. 
+Task2,phase 3.  
+Phase 3 has been completed.
+All complete.
+</code></pre><p>当然，每个阶段的完成顺序可以是不一样的。</p>
+<p>下一次将要讨论的是并行编程中的关于异常处理、访问安全问题以及PLINQ，当然了，这些都只是一些开头，当真正要在工程中使用并行，需要考虑的问题还有很多，毕竟，不管是多线程还是并行都提升了代码的复杂度，我们必须要衡量在大的环境下这样做是否值得……</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/dot-net/">dot-net</a>
+</div>
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://lurongkai.github.io/2010/04/19/dotnet-parallel-programming-1/" data-title=".NET 4中的并行编程(上) | lurongkai&#39;s blog" data-tsina="" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev">
+ <a href="/2010/04/20/dotnet-parallel-programming-2/" title=".NET 4中的并行编程(下)">
+  <strong>上一篇：</strong><br>
+  <span>
+  .NET 4中的并行编程(下)</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2010/04/12/dotnet-4-changes-on-clr-and-bcl-3/" title=".NET 4在CLR和BCL的一些变化(3)">
+ <strong>下一篇：</strong><br> 
+ <span>.NET 4在CLR和BCL的一些变化(3)
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ 
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/lurongkai" target="_blank" title="Github">Github</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="/software-designing-perspective" target="_blank" title="软件和设计">软件和设计</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="/human-being-and-life-perspective" target="_blank" title="人类和生活">人类和生活</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/productivity/" title="productivity">productivity<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/C/" title="C#">C#<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/collaboration/" title="collaboration">collaboration<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F/" title="F#">F#<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Functional-Programming/" title="Functional-Programming">Functional-Programming<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/asynchronous/" title="asynchronous">asynchronous<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/javascript/" title="javascript">javascript<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/asp-net/" title="asp-net">asp-net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/dot-net/" title="dot-net">dot-net<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/essays/" title="essays">essays<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/joke/" title="joke">joke<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/life/" title="life">life<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/other/" title="other">other<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/productivity/" title="productivity">productivity<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/reproduce/" title="reproduce">reproduce<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/tips/" title="tips">tips<sup>3</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer">
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m lurongkai on Github <br>
+			</p>
+	</section>
+	 
+	<div class="social-font">
+		
+		<a href="http://weibo.com/2176287895" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/lurongkai" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019 
+		
+		<a href="/about" target="_blank" title="Lu Rongkai">Lu Rongkai</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'lurongkai';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?74291727c50712cd2fcc785ef807bd0c";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

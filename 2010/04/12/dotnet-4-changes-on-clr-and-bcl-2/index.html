@@ -1,0 +1,601 @@
+
+ <!DOCTYPE HTML>
+<html lang="default">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+  
+    <title>.NET 4在CLR和BCL的一些变化(2) | lurongkai&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Lu Rongkai">
+    
+
+    
+    <meta name="description" content="上一篇讨论了.NET 4中关于垃圾回收、线程、并行、全球化等方面的内容，这次我们接着上次往下说。">
+<meta property="og:type" content="article">
+<meta property="og:title" content=".NET 4在CLR和BCL的一些变化(2)">
+<meta property="og:url" content="https://lurongkai.github.io/2010/04/12/dotnet-4-changes-on-clr-and-bcl-2/index.html">
+<meta property="og:site_name" content="lurongkai&#39;s blog">
+<meta property="og:description" content="上一篇讨论了.NET 4中关于垃圾回收、线程、并行、全球化等方面的内容，这次我们接着上次往下说。">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://lurongkai.github.io/photos/2010-04-11-dotnet-4-changes-on-clr-and-bcl-2/1.jpg">
+<meta property="og:image" content="https://lurongkai.github.io/photos/2010-04-11-dotnet-4-changes-on-clr-and-bcl-2/2.jpg">
+<meta property="og:image" content="https://lurongkai.github.io/photos/2010-04-11-dotnet-4-changes-on-clr-and-bcl-2/3.jpg">
+<meta property="og:image" content="https://lurongkai.github.io/photos/2010-04-11-dotnet-4-changes-on-clr-and-bcl-2/4.jpg">
+<meta property="og:image" content="https://lurongkai.github.io/photos/2010-04-11-dotnet-4-changes-on-clr-and-bcl-2/5.jpg">
+<meta property="og:updated_time" content="2019-02-14T02:48:33.431Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content=".NET 4在CLR和BCL的一些变化(2)">
+<meta name="twitter:description" content="上一篇讨论了.NET 4中关于垃圾回收、线程、并行、全球化等方面的内容，这次我们接着上次往下说。">
+<meta name="twitter:image" content="https://lurongkai.github.io/photos/2010-04-11-dotnet-4-changes-on-clr-and-bcl-2/1.jpg">
+
+    
+    <link rel="alternative" href="/atom.xml" title="lurongkai&#39;s blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="lurongkai&#39;s blog">lurongkai&#39;s blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
+						<input type="hidden" name="q" value="site:lurongkai.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</ul></nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2010/04/12/dotnet-4-changes-on-clr-and-bcl-2/" title=".NET 4在CLR和BCL的一些变化(2)" itemprop="url">.NET 4在CLR和BCL的一些变化(2)</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Lu Rongkai" target="_blank" itemprop="author">Lu Rongkai</a>
+		
+  </p><p class="article-time">
+    <time datetime="2010-04-12T04:41:00.000Z" itemprop="datePublished"> Published 2010-04-12</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#安全"><span class="toc-number">1.</span> <span class="toc-text">安全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#监测与分析"><span class="toc-number">2.</span> <span class="toc-text">监测与分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Dynamic的引入与DLR"><span class="toc-number">3.</span> <span class="toc-text">Dynamic的引入与DLR</span></a></li></ol>
+		
+		</div>
+		
+		<p><a href="/blog/2010/04/12/dotnet-4-changes-on-clr-and-bcl-1/">上一篇</a>讨论了.NET 4中关于垃圾回收、线程、并行、全球化等方面的内容，这次我们接着上次往下说。<br><a id="more"></a></p>
+<h2 id="安全"><a href="#安全" class="headerlink" title="安全"></a>安全</h2><p>安全是一个很大的概念。在.NET 4中，主要的改进在于对CAS操作的简化。</p>
+<p>先前的版本中，如果想要控制资源的安全访问，那么就会使用CAS策略，但是操作往往很复杂，4改进了操作，主要体现在这些方面：</p>
+<p>改进的透明模型。透明模型将代码分为了安全、不安全、或许安全，当然，这取决于程序宿主机的设置。于是.NET为不同应用程序设置了不同的安全类型，就像我们平常知道的那样，ASP.NET和SQL, Silverlight可以运行代码的安全级别都不一样，这都是CAS策略所管理的。先前的透明模型主要和一些代码检查工具如FxCop等协同来审核代码。</p>
+<p>透明模型有三种类型：透明代码、关键代码、安全关键代码，分别代表的代码的不同安全等级。当.NET 4的应用程序以部分信任运行时，CLR将确保透明代码可以调用其它的透明和安全的代码。并且，在程序调用安全的同时，CLR要求一定的权限才能执行，这个权限是通过程检查程序宿主机的设置来确认的。</p>
+<p>与过去不同的是，.NET 4将通过Windows Explorer和网络共享运行的代码定义为完全信任，换句话讲，它们的等级是相同的，而先前的版本中，两者的运行等级并不相同。而运行在主机的应用程序，不管是ASP.NET或是Silverlight，将使用主机授权，也就是说我们只需要考虑授权这些应用程序以不同的权限。部分信任的应用程序已经对其有了必要的限制，对于非本机的代码，微软建议我们使用SRPs(Software Restriction Policies软件限制策略)来应用安全策略，这个东东可以在托管代码和非托管代码上应用，具体的大家查查MSDN。</p>
+<p>新的版本中，已经删除了在CLR中有关Deny, RequestMinimum, RequestOptional,RequestRefuse的权限要求，所以说如果要迁移程序到新版本，一定要删除相关的代码才行，不然会报错。</p>
+<p>缝缝补补，.NET 4终于可以不用像以前那样繁琐的来控制应用程序的权限相关的问题了。另外值得注意的是，.NET 4中有了一个<code>PartialTrustVisibilityLevel</code>的特性(Attribute)，使用这个特性，我们可以在部分信任的应用程序中，调用一些需要完全信任权限才能调用的程序集，这对于我们是一个好消息，尤其是ASP.NET应用程序。CAS的使用需要辅以“证据”，我们可以看看下图中CAS的构建模块：</p>
+<p><img src="/photos/2010-04-11-dotnet-4-changes-on-clr-and-bcl-2/1.jpg" alt="CAS"></p>
+<p>.NET 4中的证据类型基类Evidence现在可以确保继承它的证据类型是非空和可序列化的。额外的，新加入了一些方法可以用于查询证据的具体类型，这在先前的版本中是通过遍历来实现的。</p>
+<h2 id="监测与分析"><a href="#监测与分析" class="headerlink" title="监测与分析"></a>监测与分析</h2><p>.NET 4的改进中不得不提的是，我们现在可以获取每个应用程序域关于CPU和内存的使用情况了，这对于ASP.NET应用程序是个不错的功能，很多时候我们需要知道应用程序的状况来做相关的优化时却措手无策，现在好了，新的改进可以使开发人员从容淡定的了解其应用程序的运行状况，然后淡定的修修补补，OK，效率上去了。</p>
+<p>当然了，新的API肯定是有的，新增的API可以用做profiling和debugging，总的原则就是改善程序员的生存状态，不要累死在Debug上，嗯。</p>
+<p>监测程序不正常的传统做法就是异常处理，我们经常这么做：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">	<span class="comment">//Do some thing</span></span><br><span class="line">&#125; <span class="keyword">catch</span>(System.exception e) &#123;</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种做法很不推荐，因为所有的异常将被隐藏，然而我们往往希望一些异常不要被捕获，例如一些可以访问冲突或者调用非法指令的异常，这时应该让程序在出现异常时退出来而不是由catch将所有的异常捕获，因为这些异常具有一定潜在的危险性。.NET 4中引入了新的特性，那就是在方法体上标注<code>[HandleProcessCorruptedStateExceptions]</code>，这样，当破坏状态的异常出现时，将不会被catch捕获了。</p>
+<p>那如果想捕获这些破坏状态的异常，比如将它传递到一个异常Logging类，好办，应用程序配置文件里加入这么一行：<code>LegacyCorruptedStateExceptionsPolicy = true</code>，catch就可以捕获到它了。</p>
+<h2 id="Dynamic的引入与DLR"><a href="#Dynamic的引入与DLR" class="headerlink" title="Dynamic的引入与DLR"></a>Dynamic的引入与DLR</h2><p>这个特性绝对是.NET 4的重头戏，将它与Parallel特性封为4上最重要的功能一点也不过分。</p>
+<p>先让我们来看一下先前版本的.NET对加入动态语言到.NET框架时是怎么做的：</p>
+<p><img src="/photos/2010-04-11-dotnet-4-changes-on-clr-and-bcl-2/2.jpg" alt="dynamic before"></p>
+<p>可以看的出，Python和Ruby等这些动态语言是通过直接原生的在CLR上编写而实现移植。我们有理由想像在一个非动态的运行时上实现动态语言的难度是何等之大！</p>
+<p>.NET 4提出的DLR是一个动态语言运行时，也就是说是微软官方提供的在CLR的基础上提供一层动态语言抽象层，来实现“门门语言为我，我为门门语言”的大友好框架主义，在此特性上，要移植一门动态语言到.NET平台上，好，去找DLR，那静态语言呢？直接去搞CLR。举个例子，今天我看上Javascript这姑娘了，想搞出个Javascript.NET，以实现我浏览器大友好.NET主义，理论上可行，可以联系DLR大哥；隔天又看上Java了……算了，我们换个例子，看上Scale了，好，给你张CLR的名片，我等.NET民众合谐友好。</p>
+<p>那么具体的DLR在.NET 4所处的处置就是下面这个样子：</p>
+<p><img src="/photos/2010-04-11-dotnet-4-changes-on-clr-and-bcl-2/3.jpg" alt="dynamic now"></p>
+<p>咦？C#和VB也可以使用DLR？当然了，为了交互的方便么。所以我们可以介绍怎样在C#等静态语言中使用动态语言的功能了。</p>
+<p>于是我们有理由相信，.NET 4上的语言会越来越多，事实从<a href="http://www.dotnetlanguages.net/DNL/Resources.aspx" target="_blank" rel="noopener">一些消息</a>上看，好像已经有二三十种的样子，著名的好像还是一些比较大的语言。当Python和Ruby在DLR上开始构建时，我相信可以实现的灵活度会大大提高。下面是官方的一张PPT：</p>
+<p><img src="/photos/2010-04-11-dotnet-4-changes-on-clr-and-bcl-2/4.jpg" alt="dynamic ppt"></p>
+<p>当然了，这是编程层面的东西，例如C#和VB.NET其实是构建在CLR上的，只不过可以通过DLR来实现一些动态编程的特性。</p>
+<p>.NET 4新加入的动态功能可以使我们方便的在运行时获取一个未知类型的对象并对其进行操作。同样的，构建在DLR基础上的动态语言也可以通过DLR -&gt; CLR的方式来使用.NET类库。所以我们有理由相信，在使用COM方面，也将更加的简化。</p>
+<p>动态语言是指在编译期不进行类型检查，在运行时动态的确定类型，这样的做的好处在于我们不必对未知的类型进行抽象，完全将其放在运行时动态的解析。然而其缺点也显而易见，那就是无法使用智能感知等强类型语言才拥有的特性，因此Debug也相对较困难一些。值得注意的是，动态语言的运行效率<strong>一定不会很高</strong>，因为在运行时进行解析是非常耗费资源的，并且对DLR来说，多一层抽象所带来的性能损失绝不对小视。我们可以想像一下将C#移植到Java平台上或者相反，理论上完全可行，因为.NET平台Java平台具有一定的相似性，对Java Bytecode和MSIL之间转换即可，然而效率问题确值得商榷。多一层抽象就多一层损耗，所以，在静态语言中使用动态特性一定要谨慎，不要滥用。</p>
+<p>但是如果好奇，那么我们可以写个用反射来使用动态特性的Demo：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">object</span> UsingReflection = Activator.CreateInstance(Type.GetType(<span class="string">"System.Text.StringBuilder"</span>));</span><br><span class="line">Type ObjectType = UsingReflection.GetType();</span><br><span class="line"></span><br><span class="line"><span class="comment">//Append有很多的重载，所以需要指定反射使用哪个重载</span></span><br><span class="line">Type[] TypeArray = <span class="keyword">new</span> Type[<span class="number">1</span>];</span><br><span class="line">TypeArray.SetValue(<span class="keyword">typeof</span>(<span class="keyword">string</span>), <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> ObjectMethodInfo = ObjectType.GetMethod(<span class="string">"Append"</span>, TypeArray);</span><br><span class="line">ObjectMethodInfo.Invoke(UsingReflection, <span class="keyword">new</span> <span class="keyword">object</span>[] &#123; <span class="string">"alex"</span> &#125;);</span><br><span class="line"></span><br><span class="line">Console.WriteLine(ObjectType</span><br><span class="line">	.GetMethod(<span class="string">"ToString"</span>, <span class="keyword">new</span> Type[<span class="number">0</span>])</span><br><span class="line">	.Invoke(UsingReflection, <span class="literal">null</span>));</span><br></pre></td></tr></table></figure>
+<p>上面是使用反射的方式来动态使用StringBuilder的Append和ToString的示例，不知道您看的怎么样，反正弄的我晕晕，不知道是写代码晕还是被凤姐吓的。</p>
+<p><img src="/photos/2010-04-11-dotnet-4-changes-on-clr-and-bcl-2/5.jpg" alt="yufeng luo"></p>
+<p>我们可不可以换个优美的方式，至少，能不能像我们平常使用StringBuilder一样呢？在.NET 4，有了，使用DLR的特性就可以优美和谐一些了：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dynamic</span> usingDynamic = Activator .CreateInstance(Type.GetType(<span class="string">"System.Text.StringBuilder"</span>));</span><br><span class="line">usingDynamic.Append(<span class="string">"Hello"</span>);</span><br><span class="line">Console.WriteLine(usingDynamic.ToString());</span><br></pre></td></tr></table></figure>
+<p>很好很强大不是么？但是要再次重申：性能，性能！不到一定的成本和效率的折中点时，不要用！</p>
+<p>也许很大人奇怪var关键字和dynamic关键字的异同，答案是：不同。var其实就是一个编译器魔法，在编译时将其替换成了强类型，所以我们可以使用智能感应来写代码，并提高了书写代码的效率，然而dynamic关键字的声明意味着您的代码将会在运行时进行真正的赋值（？解释有些模糊），所以在写上面代码时，例如<code>usingDynamic.Append(“Hello”)</code>;是完全没有智能感应的。我们可以期待微软在下一个版本将智能感应加进去，然后这将对机器性能是一个极大的考验，因为为了智能感应需要去实时的解析未知类型才能使我们优美的使用“.”来一路点下去……手指可以优美，机器不一定就优美了。</p>
+<p>我们还可以这么做：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System.Dynamic;</span><br><span class="line"><span class="keyword">dynamic</span> toCreateType = <span class="keyword">new</span> ExpandoObject();</span><br><span class="line"></span><br><span class="line">toCreateType.Name = <span class="string">"LuRongkai"</span>;</span><br><span class="line">toCreateType.Age = <span class="number">21</span>;</span><br><span class="line">toCreateType.ShowInfo = <span class="keyword">new</span> Action(() =&gt; Console.WriteLine(<span class="string">"My age:"</span>, toCreateType.Age));</span><br><span class="line"></span><br><span class="line">Console.WriteLine(toCreateType.Name);</span><br><span class="line">toCreateType.ShowInfo();</span><br><span class="line">Console.ReadKey();</span><br></pre></td></tr></table></figure>
+<p>结果显示：</p>
+<pre><code>LuRongkai
+My age:21
+</code></pre><p>Cool，不是么？如果想要进一步控制对象在运行时的特性，可以使用<code>System.Dynamic.DynamicObject</code>对象，可以继承它来使用，我写了个例子来说明一下这个对象的使用方式：</p>
+<p>首先，定义一定SimpleXML类：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">SimpleXML</span> : <span class="title">DynamicObject</span>&#123;</span><br><span class="line">	<span class="keyword">private</span> XDocument _xml = <span class="keyword">new</span> XDocument();</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">SimpleXML</span>(<span class="params"><span class="keyword">string</span> Xml</span>)</span>&#123;</span><br><span class="line">		<span class="keyword">this</span>._xml = XDocument.Parse(Xml);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">bool</span> <span class="title">TryGetMember</span>(<span class="params">GetMemberBinder binder, <span class="keyword">out</span> <span class="keyword">object</span> result</span>)</span>&#123;</span><br><span class="line">		<span class="keyword">string</span> nodeName = binder.Name;</span><br><span class="line">		result = _xml.Element(<span class="string">"root"</span>).Element(nodeName).Value;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面我们就可以使用动态的语言的特性来使用了，这里先简单的创建一个了测试的XML文件：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System.Dynamic;</span><br><span class="line"><span class="keyword">using</span> System.Xml.Linq;</span><br><span class="line"></span><br><span class="line"><span class="keyword">dynamic</span> simpleXML = <span class="keyword">new</span> SimpleXML(<span class="string">@"LuRongkai21"</span>);</span><br><span class="line"></span><br><span class="line">Console.WriteLine(simpleXML.data1);</span><br><span class="line">Console.WriteLine(simpleXML.data2);</span><br></pre></td></tr></table></figure>
+<p>优美，优美，优美！性能，性能，性能！</p>
+<p>.NET 4中的重头戏就是Parallel和Dynamic，我们有理由相信今天的VS2010的发布将会给世界带来震撼，虽然这几篇文章是要讨论CLR和BLR的，但是没能忍住，好吧，下一次讨论BCL的一些new features。</p>
+<p>相关链接：<a href="/blog/2010/04/12/dotnet-4-changes-on-clr-and-bcl-1/">.NET 4在CLR和BCL的一些变化(1)</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/dot-net/">dot-net</a>
+</div>
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://lurongkai.github.io/2010/04/12/dotnet-4-changes-on-clr-and-bcl-2/" data-title=".NET 4在CLR和BCL的一些变化(2) | lurongkai&#39;s blog" data-tsina="" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev">
+ <a href="/2010/04/12/dotnet-4-changes-on-clr-and-bcl-3/" title=".NET 4在CLR和BCL的一些变化(3)">
+  <strong>上一篇：</strong><br>
+  <span>
+  .NET 4在CLR和BCL的一些变化(3)</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2010/04/11/dotnet-4-changes-on-clr-and-bcl-1/" title=".NET 4在CLR和BCL的一些变化(1)">
+ <strong>下一篇：</strong><br> 
+ <span>.NET 4在CLR和BCL的一些变化(1)
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#安全"><span class="toc-number">1.</span> <span class="toc-text">安全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#监测与分析"><span class="toc-number">2.</span> <span class="toc-text">监测与分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Dynamic的引入与DLR"><span class="toc-number">3.</span> <span class="toc-text">Dynamic的引入与DLR</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/lurongkai" target="_blank" title="Github">Github</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="/software-designing-perspective" target="_blank" title="软件和设计">软件和设计</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="/human-being-and-life-perspective" target="_blank" title="人类和生活">人类和生活</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/productivity/" title="productivity">productivity<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/C/" title="C#">C#<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/collaboration/" title="collaboration">collaboration<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F/" title="F#">F#<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Functional-Programming/" title="Functional-Programming">Functional-Programming<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/asynchronous/" title="asynchronous">asynchronous<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/javascript/" title="javascript">javascript<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/asp-net/" title="asp-net">asp-net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/dot-net/" title="dot-net">dot-net<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/essays/" title="essays">essays<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/joke/" title="joke">joke<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/life/" title="life">life<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/other/" title="other">other<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/productivity/" title="productivity">productivity<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/reproduce/" title="reproduce">reproduce<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/tips/" title="tips">tips<sup>3</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer">
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m lurongkai on Github <br>
+			</p>
+	</section>
+	 
+	<div class="social-font">
+		
+		<a href="http://weibo.com/2176287895" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/lurongkai" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019 
+		
+		<a href="/about" target="_blank" title="Lu Rongkai">Lu Rongkai</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'lurongkai';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?74291727c50712cd2fcc785ef807bd0c";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

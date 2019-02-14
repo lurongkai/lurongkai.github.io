@@ -1,0 +1,418 @@
+
+  
+    <!DOCTYPE HTML>
+<html lang="default">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+  
+    <title>软件与设计 | lurongkai&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Lu Rongkai">
+    
+
+    
+    <meta name="description" content="我曾经面试过一个有10年工作经验的“.NET架构师”，也就是说比我年长很多的前辈，当时还挺不安的，但是当我拿到HR转给我的简历时，心里却犯起了嘀咕：这简历，能不能做的整齐一些？至少，每个段落的文本可不可以对齐？难道…… 顺利的按约定好的时间见面，聊起来发现原来还是半个老乡。我并没有准备什么面试的内容，而是对照简历和他细聊，因为我相信，优秀的工程师拥有的是解决问题的能力，所以我愿意按对方了解的东西去">
+<meta property="og:type" content="website">
+<meta property="og:title" content="软件与设计">
+<meta property="og:url" content="https://lurongkai.github.io/software-designing-perspective/index.html">
+<meta property="og:site_name" content="lurongkai&#39;s blog">
+<meta property="og:description" content="我曾经面试过一个有10年工作经验的“.NET架构师”，也就是说比我年长很多的前辈，当时还挺不安的，但是当我拿到HR转给我的简历时，心里却犯起了嘀咕：这简历，能不能做的整齐一些？至少，每个段落的文本可不可以对齐？难道…… 顺利的按约定好的时间见面，聊起来发现原来还是半个老乡。我并没有准备什么面试的内容，而是对照简历和他细聊，因为我相信，优秀的工程师拥有的是解决问题的能力，所以我愿意按对方了解的东西去">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-02-14T02:48:33.554Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="软件与设计">
+<meta name="twitter:description" content="我曾经面试过一个有10年工作经验的“.NET架构师”，也就是说比我年长很多的前辈，当时还挺不安的，但是当我拿到HR转给我的简历时，心里却犯起了嘀咕：这简历，能不能做的整齐一些？至少，每个段落的文本可不可以对齐？难道…… 顺利的按约定好的时间见面，聊起来发现原来还是半个老乡。我并没有准备什么面试的内容，而是对照简历和他细聊，因为我相信，优秀的工程师拥有的是解决问题的能力，所以我愿意按对方了解的东西去">
+
+    
+    <link rel="alternative" href="/atom.xml" title="lurongkai&#39;s blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+      <body>
+        <header>
+          
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="lurongkai&#39;s blog">lurongkai&#39;s blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
+						<input type="hidden" name="q" value="site:lurongkai.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</ul></nav>			
+</div>
+        </header>
+        <div id="container">
+          <div id="main" class="page" itemscope="" itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/software-designing-perspective/index.html" title="软件与设计" itemprop="url">软件与设计</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Lu Rongkai" target="_blank" itemprop="author">Lu Rongkai</a>
+		
+  </p><p class="article-time">
+    <time datetime="2015-10-11T05:27:16.000Z" itemprop="datePublished"> Published 2015-10-11</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<p>我曾经面试过一个有10年工作经验的“.NET架构师”，也就是说比我年长很多的前辈，当时还挺不安的，但是当我拿到HR转给我的简历时，心里却犯起了嘀咕：这简历，能不能做的整齐一些？至少，每个段落的文本可不可以对齐？难道……</p>
+<p>顺利的按约定好的时间见面，聊起来发现原来还是半个老乡。我并没有准备什么面试的内容，而是对照简历和他细聊，因为我相信，优秀的工程师拥有的是解决问题的能力，所以我愿意按对方了解的东西去发现，或者说在中途放置一个小路障看对方如何解决。</p>
+<p>当看到有丰富的优化经验时，我了解到之前的项目做了很多静态化的工作，于是我开始下绊子：为什么要考虑静态化？回答还是中规中矩的，比如访问慢啦、经常503啦。我灵机一动：你们是如何发现这个问题的？大哥抬头一脸疑惑的打量着我这个小后生：因为服务器上硬盘灯狂闪啊！当时我就草泥马奔腾了：你们都特么不用Profiler么……</p>
+<p>我于是放下了他“架构师”的头衔，开始问他作为一个.NET工程师最基础的：什么是Lambda表达式？和委托有什么不同？（其实完全就是一回事，我在故弄玄虚），大哥又开始迷茫了，内心好像在说：草泥马C#还有这东西？于是礼貌的告诉他会有人通知他面试结果的。之后大哥以半老乡的身份曾打电话给我跟我说：你要不帮我再说说好话？我说好的……</p>
+<p>当年的这场面试在我幼小的心灵留下了阴影，我突然发现这行业里的水还是深的。而随着时间的流逝面试了更多的人后，我习惯了……</p>
+<p>我对软件开发是抱有一种尊敬的态度的，它应该是美的、理性的。和你一起战斗的同事可以有鲜明的个性，也可以以任何邋遢的形像出现，但是终归到底，对待自己写出的东西要起码抱有一丝负责的态度。允许写出的软件不漂亮，但是既不漂亮也不想办法改善就是你的不对了，盖楼的偷工减料害的是人命，软件偷梁换柱虽然不致命，但是这事儿谋财啊亲！！</p>
+<p>什么是态度？或者说什么是优秀工程师的态度？</p>
+<h2 id="对待软件的态度"><a href="#对待软件的态度" class="headerlink" title="对待软件的态度"></a>对待软件的态度</h2><p>软件是要给人用的，是一种服务产品，所以我们从事的是服务行业。假如我们是厨子，做出的菜里有头发这事儿能忍吗？请摸着你的胸想想……</p>
+<p>有点弄不太懂的是，有一大批工程师正在仰天长叹：“小bug不用修、小细节不用在意，只要产品能上线！”，真特么闹心，工程师操产品经理的心，产品经理操投资人的心。赚的卖白菜的钱操的卖白粉心，长此下去要亡国的呀！（友情提示，操字请读一声）</p>
+<p>能不能认真点？能不能走点心？小细节问题还能饶一条小命，bug简直应该鞭尸，为什么有bug却不改？都不写测试吗？</p>
+<p>每个工程师可以不完美也允许不完美，可以有缺陷，但是得有态度，这种态度就是对不完美的不断修正，是情怀。一个面对不完美，却完全不动容的工程师那绝B是个好销售。如果连工程师们都不去修正不完美，那这工程或项目可以洗洗睡了。</p>
+<p>作为工程师，编写代码时要时刻提醒自己：我打算让全世界的工程师来看我的代码！这样一来，你便不好意思使用过多的<code>Magic Number</code>，不会在一个方法内写一坨屎一般的嵌套<code>if</code>，因为这样很害羞，有种扒光了被弹小鸡鸡的耻辱感！随着对代码下手越来越慎重，质量也会逐步提高，当你老了的时候也不会拉着孙子的手忏悔过去：爷爷当年犯过大错，写了很多超过1000行代码的函数……</p>
+<p>我甚至有时候觉得，人就是得被收拾才行，Linus在邮件列表狂喷时，我每次都是心里叫好，然后对别人说：Linus说话还是太冲动，Too Naive。每当团队内的成员有写出翔码时，我都是以一种衣冠禽兽的面目出现：xx啊，这段代码我看着有些吃力，应该有更好的办法，你能想办法重构一下吗？然后自己默默念《清心咒》10遍以克制体内的洪荒之力爆发……</p>
+<p>软件，应该视为脑力的结晶，工程师们应该不希望别人说这结晶长的像翔吧？要知道这可是脑力的结晶……</p>
+<h2 id="对待开发的态度"><a href="#对待开发的态度" class="headerlink" title="对待开发的态度"></a>对待开发的态度</h2><p>软件是复杂的，编写质量优秀的软件不是件容易的事儿。现代的软件或者叫应用已经越来越复杂和庞大，单枪匹马撸出个软件的事儿也越来越不现实，经常需要很多人共同的参与才能将事情做好。</p>
+<p>不谈浮躁的环境，单从开发本身来讲，这就是一件严肃的事儿。有的工程师在遇到问题时，马上google解决方案然后copy/paste过来以期望马上可以使用，没有思考没有考虑是否会对现有的设计造成影响。不断的尝试google不断的重复，心塞的工程师们总结出这门语言/平台不适合做这件事，还是原来用过的东西好……之后论坛掀起又一波语言圣战。</p>
+<p>对待开发，究竟是什么态度？</p>
+<p>经常有工程师抱怨：</p>
+<ul>
+<li>项目进度很紧，根本来不及停下来反思</li>
+<li>copy/paste能马上解决的事儿，干嘛要提取出共性的东西</li>
+<li>我先临时对付一下，回头再来改</li>
+</ul>
+<p>墨菲法则告诉我们，越担心的事情就越会发生，如果不一步一步的踏实前进，将来清理技术债务的成本将远大于投机取巧带来的短期收益。我大中华也有类似的谚语：偷鸡不成把蚀一把米。</p>
+<p>不要有技术债务，不要抱有幻想，尽可能的将自己在做的事情做到极致，不给其它同事带来困扰，冷静的思考，这是开发应有的态度。</p>
+<h2 id="对待技术的态度"><a href="#对待技术的态度" class="headerlink" title="对待技术的态度"></a>对待技术的态度</h2><p>不管你承认与否，每门技术或语言的表达能力都是相同的，所以不要幻想我在使用的东西别的技术做不了，大家都是图灵完备的。这同时告诉我们，做.NET的不要看不起做Java的，做Java的不要看不起搞Ruby的，各有所长，以诚相待。</p>
+<p>但是还有一个重要事实，就是每种技术侧重的场景是不一样的，SQL侧重数据的查询，RoR侧重快速开发，Node侧重高IO场景……大家都有自己的看家本领，没必要非要用一种技术统一天下，这不现实。</p>
+<p>几乎所有的技术社区，每过一段时间就会出现唱衰某种技术的帖子，绝大部分并不是从技术本身分析，而是从自身出发，发现自己使用的某项技术赚钱太少，吵吵着要转型。何必呢，用筷子的没必要看不起用刀叉的，况且自己筷子也没怎么用好。搞技术嘛，就不要像娱乐圈那么乱了，天天撕有什么意思呢，有本事出去打一架……</p>
+<p>面对层出不穷的新技术，我觉得一个优秀的工程师并不会排斥了解它们，而且一个有能力的工程师能够结合自己的经验快速的学习，当作自己的知识储备。从我个人角度来看，应该有三个视角用来审视一门新技术：</p>
+<ul>
+<li><code>What</code>: 这门技术是什么？它用来解决什么样的问题？</li>
+<li><code>Why</code>: 这门技术为什么会出现？在它出现以前是什么解决的？它能更好的解决吗？</li>
+<li><code>When</code>: 这门技术在什么状态（上下文）下发挥作用？有什么限制条件？</li>
+</ul>
+<p>举个例子，对<code>TypeScript</code>的审视：</p>
+<ul>
+<li><code>What</code>: 是javascript的超集，并添加了一些关键特性用于支持大规模的javascript应用开发，用来解决在应用规模变大时，javascript组织应用程序变的困难的痛点。</li>
+<li><code>Why</code>: javascript并没有包、类的概念，所以难于组织大规模应用，在这之前有CoffeeScript，或者纯靠人力。TypeScript更友好一些是因为它并非像CoffeeScript创造一门新语言，而是在现有javascript的基础上无痛的升级，并且编译成javascript来用，所以兼容性是完全保障的。</li>
+<li><code>When</code>: 几乎所有的javascript开发都可以使用TypeScript来做，借助静态类型系统甚至可以提供智能提示以提高开发效率，并同时避免错误拼写。限制条件是，如果想要获得完整的静态类型系统，需要针对现有的库编写definition文件，然而最怀的情况也就是在编写普通的javascript。</li>
+</ul>
+<p>冷静的对待每一门技术，让他服务于人，而不要将事情反过来，这是对技术应有的态度。</p>
+<h2 id="对待设计的态度"><a href="#对待设计的态度" class="headerlink" title="对待设计的态度"></a>对待设计的态度</h2><p>没有设计的软件是可耻的。这里的设计是指软件本身的设计、结构，并不涉及UI/UX。</p>
+<p>有非常多的优秀书籍在讨论如何设计软件，但似乎读的人很少。冲动的工程师们读过Gof23就想在每个项目里挨个试一遍，说用过MVC却在Controller里写所有的业务逻辑，一说架构就是三层架构……这个路子有点太飘逸，打法不对。</p>
+<p>我认为的设计有两方面：架构设计和代码设计。</p>
+<p>架构设计就是指在高层上对一个软件工作方式的约定，比如服务层设计、读写分离等，这些是架构设计，往往是架构师们做出的决策。</p>
+<p>代码设计是工程师们更多接触到的，比如一个方法/类的实现，一组API的设计等等，与每个人日常相关。</p>
+<p>我见到过很多遗留代码里N多的静态类和伪静态类（意思是，虽然不是静态类，但是用起来和静态类没什么不同），最牛逼的是有个大哥一进项目先不问项目的情况，而是直接拷贝了一个Helper工程（对，是上百个源文件，不是dll）并提交，里面五花八门什么都有，感觉能创造出一个宇宙的那种。还有的工程师一进项目第一件事，先让Presentation工程引用Persistence工程，说什么访问数据还得从服务层绕一下，不方便……</p>
+<p>我一直孜孜不倦的在内部普及一些基础的设计概念，讲什么是SoC、LSP、SRP、OCP、DIP、ISP，什么是DI，有什么优点以及为什么等等，效果还是很明显的，至少在面对需求的变化时，大家发现好的设计可以灵活很多，没以前那么痛苦了。</p>
+<p>作为一个工程师，肯定有很多你不理解的设计决策，不要试图先否决它，而是尝试理解它背后有着怎样的考虑。可能团队的架构师并没有义务给你一个合理的解释，但是请尝试学习它并思考，这对自身也是一种改善。</p>
+<p>同样的，不要只是为了完成任务而编写代码，它应该在脑海里被仔细的设计和评估过，你可以不断的重构它们，直到它们在满足功能性的基础上同时满足其它设计要求，例如可维护性、无二义性、性能满足等等。当别人在使用你的代码时，良好的设计使得他人没有理解上的障碍，这是一种合作的态度。</p>
+<p>每个工程师不必成为一流的艺术家，但是努力让自己负责的部分变的更加美好、通过慢慢变成熟的设计，让你和他人在开发过程中更加的愉悦，这是工程师对待设计应有的态度。</p>
+<h2 id="对待学习的态度"><a href="#对待学习的态度" class="headerlink" title="对待学习的态度"></a>对待学习的态度</h2><p>只有不追求进步的人才会在一颗树上吊死，好的工程师会不断的学习。</p>
+<p>人心啊，还是太浮躁，习惯性的用自己知道的东西解决问题，而不考虑这样的方式是不是最好最优的。在过去的岁月里，我经常发现很难说服一个使用SQL多年的工程师尝试ORM，摆事实讲道理都没用，经常还会被教育：Lu啊，你还是太Naive……当我提出存储过程应该尽可能的避免使用，因为不管从效率还是业务逻辑设计角度上看，它都不占便宜时，感觉有种去砸场子的既视感。</p>
+<p>只有不断的学习，才能感知这个世界的变化；只有不断的学习，才能让自己变的更有生产力、竞争力。作为一流的工程师，要不断学习，持续的学习才能带来专业上的提高。如果没有思考，那么就并没有积累经验这一说；如果没有学习，则进步就是空话。</p>
+<p>还在看21天通xx？烧了它吧。程序员面试宝典？卧槽，还杜拉拉升职记呢！要读好书，因为每年出的好书其实也不多。至于时间嘛，就像乳沟，挤挤还是有的，每天1小时，一年也能读至少8本书呢。学习可能并不能让我们在工作中马上见到成效，但是如果没有这种积累，遇见问题时就无从下手了，亡羊补牢为时晚矣。</p>
+<p>优秀的工程师持续积累，总能给人惊喜，这才是核心竞争力。</p>
+<hr>
+<p>你的看法是怎样的呢？</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://lurongkai.github.io/software-designing-perspective/index.html" data-title="软件与设计 | lurongkai&#39;s blog" data-tsina="" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+
+
+</div>  
+        </div>
+        <footer><div id="footer">
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m lurongkai on Github <br>
+			</p>
+	</section>
+	 
+	<div class="social-font">
+		
+		<a href="http://weibo.com/2176287895" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/lurongkai" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019 
+		
+		<a href="/about" target="_blank" title="Lu Rongkai">Lu Rongkai</a>
+		
+		
+		</p>
+</div>
+</footer>
+        <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'lurongkai';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?74291727c50712cd2fcc785ef807bd0c";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+      </body>
+     </html>
+     

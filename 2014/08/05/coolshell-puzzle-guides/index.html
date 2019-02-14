@@ -1,0 +1,604 @@
+
+ <!DOCTYPE HTML>
+<html lang="default">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+  
+    <title>coolshell puzzle guides | lurongkai&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Lu Rongkai">
+    
+
+    
+    <meta name="description" content="CoolShell博主陈皓做了一个在线的puzzle很有意思，链接在这里，这里记录一下解题的一些步骤。 Puzzle 01++++++++[&amp;gt;+&amp;gt;++&amp;gt;+++&amp;gt;++++&amp;gt;+++++&amp;gt;++++++&amp;gt;+++++++&amp;gt;++++++++&amp;gt;+++++++++&amp;gt;++++++++++&amp;gt;+++++++++++&amp;gt;++++++++++++&amp;gt;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="coolshell puzzle guides">
+<meta property="og:url" content="https://lurongkai.github.io/2014/08/05/coolshell-puzzle-guides/index.html">
+<meta property="og:site_name" content="lurongkai&#39;s blog">
+<meta property="og:description" content="CoolShell博主陈皓做了一个在线的puzzle很有意思，链接在这里，这里记录一下解题的一些步骤。 Puzzle 01++++++++[&amp;gt;+&amp;gt;++&amp;gt;+++&amp;gt;++++&amp;gt;+++++&amp;gt;++++++&amp;gt;+++++++&amp;gt;++++++++&amp;gt;+++++++++&amp;gt;++++++++++&amp;gt;+++++++++++&amp;gt;++++++++++++&amp;gt;">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://lurongkai.github.io/photos/2014-08/pigpen_cipher_key.png">
+<meta property="og:updated_time" content="2019-02-14T02:48:33.444Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="coolshell puzzle guides">
+<meta name="twitter:description" content="CoolShell博主陈皓做了一个在线的puzzle很有意思，链接在这里，这里记录一下解题的一些步骤。 Puzzle 01++++++++[&amp;gt;+&amp;gt;++&amp;gt;+++&amp;gt;++++&amp;gt;+++++&amp;gt;++++++&amp;gt;+++++++&amp;gt;++++++++&amp;gt;+++++++++&amp;gt;++++++++++&amp;gt;+++++++++++&amp;gt;++++++++++++&amp;gt;">
+<meta name="twitter:image" content="https://lurongkai.github.io/photos/2014-08/pigpen_cipher_key.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="lurongkai&#39;s blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="lurongkai&#39;s blog">lurongkai&#39;s blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
+						<input type="hidden" name="q" value="site:lurongkai.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</ul></nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/08/05/coolshell-puzzle-guides/" title="coolshell puzzle guides" itemprop="url">coolshell puzzle guides</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Lu Rongkai" target="_blank" itemprop="author">Lu Rongkai</a>
+		
+  </p><p class="article-time">
+    <time datetime="2014-08-05T02:14:41.000Z" itemprop="datePublished"> Published 2014-08-05</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Puzzle-0"><span class="toc-number">1.</span> <span class="toc-text">Puzzle 0</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Puzzle-welcome-html"><span class="toc-number">2.</span> <span class="toc-text">Puzzle welcome.html</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Puzzle-81648-html"><span class="toc-number">3.</span> <span class="toc-text">Puzzle 81648.html</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Puzzle-unix-html"><span class="toc-number">4.</span> <span class="toc-text">Puzzle unix.html</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Puzzle-furyy-html"><span class="toc-number">5.</span> <span class="toc-text">Puzzle furyy.html</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Puzzle-variables-html"><span class="toc-number">6.</span> <span class="toc-text">Puzzle variables.html</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Puzzle-tree-html"><span class="toc-number">7.</span> <span class="toc-text">Puzzle tree.html</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Puzzle-nqueens-html"><span class="toc-number">8.</span> <span class="toc-text">Puzzle nqueens.html</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Puzzle-953172864-html"><span class="toc-number">9.</span> <span class="toc-text">Puzzle 953172864.html</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Puzzle-DUYO-html"><span class="toc-number">10.</span> <span class="toc-text">Puzzle DUYO.html</span></a></li></ol>
+		
+		</div>
+		
+		<p><a href="http://www.coolshell.cn" target="_blank" rel="noopener">CoolShell</a>博主<a href="http://weibo.com/haoel" target="_blank" rel="noopener">陈皓</a>做了一个在线的puzzle很有意思，链接在<a href="http://fun.coolshell.cn" target="_blank" rel="noopener">这里</a>，这里记录一下解题的一些步骤。</p>
+<h2 id="Puzzle-0"><a href="#Puzzle-0" class="headerlink" title="Puzzle 0"></a>Puzzle 0</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">++++++++[&gt;+&gt;++&gt;+++&gt;++++&gt;+++++&gt;++++++&gt;+++++++&gt;++++++++&gt;+++++++++&gt;++++++++++&gt;+++++++++++&gt;++++++++++++&gt;+++++++++++++&gt;++++++++++++++&gt;+++++++++++++++&gt;++++++++++++++++&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;-]&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;-.+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;---.+++&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;----.++++&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;+++.---&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;-.+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;---.+++&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;---.+++&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&gt;&gt;&gt;&gt;&gt;&gt;--.++&lt;&lt;&lt;&lt;&lt;&lt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;.&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;----.++++&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;---.+++&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;----.++++&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;.</span><br></pre></td></tr></table></figure>
+<p>如果之前没有听说过变态的编程语言，就让你见识一下。<a href="http://www.muppetlabs.com/~breadbox/bf/" target="_blank" rel="noopener">BrainFuck</a>也称BF，是一门只有8个指令构成的图灵完备的语言。<a href="http://www.coolshell.cn" target="_blank" rel="noopener">CoolShell</a>博主<a href="http://weibo.com/haoel" target="_blank" rel="noopener">陈皓</a>写过一篇简单的介绍在<a href="http://coolshell.cn/articles/1142.html" target="_blank" rel="noopener">这里</a><br>具体的指令解释不多说了，直接打长<a href="http://esoteric.sange.fi/brainfuck/impl/interp/i.html" target="_blank" rel="noopener">这里</a>，把上面的指令粘进去，运行得到下一关的地址：<code>welcome.html</code>。</p>
+<h2 id="Puzzle-welcome-html"><a href="#Puzzle-welcome-html" class="headerlink" title="Puzzle welcome.html"></a>Puzzle welcome.html</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">X * Y</span><br><span class="line">2, 3, 6, 18, 108, ?</span><br><span class="line">What is the meaning of life, the universe and everything?</span><br><span class="line">生命、宇宙以及任何事情的终极答案</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>这题有两个线索，首先是这串数字，其次是<code>生命、宇宙以及任何事情的终极答案</code>。数字序列找规律并不复杂，每个数字是前两个数字之积，那么直接用<code>18 * 108</code>的结果<code>1944</code>尝试进入下一关，发现只找到了一个答案。第二个答案很有意思，或者说很<code>极客</code>很<code>宅</code>，直接google发现和《银河系漫游指南》有关，wiki地址在<a href="http://en.wikipedia.org/wiki/Answer_to_Life,_the_Universe,_and_Everything" target="_blank" rel="noopener">这里</a>。</p>
+<p>用<code>1944 * 42</code>的答案<code>81648</code>进入下一关。</p>
+<h2 id="Puzzle-81648-html"><a href="#Puzzle-81648-html" class="headerlink" title="Puzzle 81648.html"></a>Puzzle 81648.html</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">macb() ? lpcbyu(&amp;gbcq/_\021%ocq\012\0_=w(gbcq)/_dak._=&#125;_ugb_[0q60)s+</span><br></pre></td></tr></table></figure>
+<p>放眼忘去是<code>Dvorak</code>键盘，点图片可以看到详细信息。那么意图很明显了，<code>Dvorak</code>和<code>QWERTY</code>键盘转换一下看看会怎么样？这里有个在线的<a href="http://wbic16.xedoloh.com/dvorak.html" target="_blank" rel="noopener">转换工具</a>，然后：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">main() &#123; <span class="built_in">printf</span>(&amp;unix[<span class="string">"\021%six\012\0"</span>],(unix)[<span class="string">"have"</span>]+<span class="string">"fun"</span><span class="number">-0x60</span>);&#125;</span><br></pre></td></tr></table></figure>
+<p>WTF……搜了一下，这是87年国际C语言混乱大赛的一段代码。C语言了解不多，趁这个机会了解了解戳<a href="http://blog.csdn.net/jishu360/article/details/8104499" target="_blank" rel="noopener">这里</a>，还有<a href="http://blog.itpub.net/12443821/viewspace-671745" target="_blank" rel="noopener">这里</a>，列一些解此题的关键知识点。</p>
+<ul>
+<li>unix关键字相当于<code>#define unix 1</code></li>
+<li>数组的引用，array[num]和num[array]效果相同，所以(unix)[“have”] 等于”have”[unix]，结果是<code>a</code>，ASCII是0x61</li>
+<li><code>0x61 + &quot;fun&quot; - 0x60</code>相当于对<code>fun</code>右移<code>0x61</code>指针再左移<code>0x60</code>指针，也就是说<code>fun</code>右称一位，结果是<code>un</code></li>
+<li>\021是换页，于是<code>&amp;unix[&quot;\021%six\012\0&quot;]</code>约为<code>&amp;unix[&quot;\n%six\n\0&quot;]</code>，<code>%s</code>被替为前面的<code>un</code>，<code>&amp;unix</code>再跳过了第一个<code>\n</code>，所以结果是<code>unix</code></li>
+</ul>
+<p>使用<code>unix</code>，进入下一题。</p>
+<h2 id="Puzzle-unix-html"><a href="#Puzzle-unix-html" class="headerlink" title="Puzzle unix.html"></a>Puzzle unix.html</h2><p>微信扫码，得到：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[abcdefghijklmnopqrstuvwxyz] &lt;=&gt; [pvwdgazxubqfsnrhocitlkeymj]</span><br></pre></td></tr></table></figure>
+<p>看来是一个简单的替代，请出大shell</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo Wxgcg txgcg ui p ixgff, txgcg ui p epm. I gyhgwt mrl lig txg ixgff wrsspnd tr irfkg txui hcrvfgs, nre, hfgpig tcm liunz txg crt13 ra &quot;ixgff&quot; tr gntgc ngyt fgkgf. | tr &quot;pvwdgazxubqfsnrhocitlkeymj&quot; &quot;abcdefghijklmnopqrstuvwxyz&quot;</span><br></pre></td></tr></table></figure>
+<p>得到：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Where there is a shell, there is a way. I expect you use the shell command to solve this problem, now, please try using the rot13 of shell to enter next level.</span><br></pre></td></tr></table></figure>
+<p>这里我脑抽了一下，没看仔细以为是用shell命令，尝试各种<code>tr</code>以及<code>tr xxx xxx</code>都不行，后来出去跑了个步，回来再读一遍发现是用<code>rot13</code>转换一下<code>shell</code>这个字符串，wtf……</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;shell&quot; | tr &quot;[A-Za-z]&quot; &quot;[N-ZA-Mn-za-m]&quot;</span><br></pre></td></tr></table></figure>
+<p>顺利得到下一关地址：<code>furyy</code></p>
+<h2 id="Puzzle-furyy-html"><a href="#Puzzle-furyy-html" class="headerlink" title="Puzzle furyy.html"></a>Puzzle furyy.html</h2><p>啊回文，差点一口老血死在这里……</p>
+<p>刚开始思路有点歪，总以为是用<code>cat</code>再加上什么关键字得出一个单词，<code>cat</code>的规律其实已经注意到了，只是在纠结于怎么找到后续字母的规律……妈的走的有点远扯着蛋了。</p>
+<p>后来又是认真读了下揭示语<code>The answer has been lost in the source</code>，咦……</p>
+<p><code>Ctrl + Shift + I</code>打开Chrome的源代码查看工具（IE F12），看见一坨乱码躺在那里，就是它了，很明确，正则表达式。把乱码扔到一个文本文件里，然后执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat data.txt | grep -E &quot;([A-Z])(\d&#123;1&#125;)[a-z](\2)(\1)|(\d&#123;1&#125;)([A-Z])[a-z](\6)(\5)&quot; -o</span><br></pre></td></tr></table></figure>
+<p>输出<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">E1v1E</span><br><span class="line">4FaF4</span><br><span class="line">9XrX9</span><br><span class="line">O3i3O</span><br><span class="line">0MaM0</span><br><span class="line">4GbG4</span><br><span class="line">M5l5M</span><br><span class="line">0WeW0</span><br><span class="line">Y0s0Y</span><br></pre></td></tr></table></figure></p>
+<p>使用所有中间的字母<code>variables</code>过关。</p>
+<h2 id="Puzzle-variables-html"><a href="#Puzzle-variables-html" class="headerlink" title="Puzzle variables.html"></a>Puzzle variables.html</h2><p>点图片，进入<code>http://fun.coolshell.cn/n/2014</code>，显示了一个数字，这时候我脑残的用显示的数据作为answer，显然不行。<br>看到url里的<code>2014</code>了吗？用网页里的数字替换<code>2014</code>，然后又出现一个新数据，哦原来是这样……接下来就简单多了，上bash脚本。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">baseUrl=<span class="string">"http://fun.coolshell.cn/n"</span></span><br><span class="line">result=<span class="string">"2014"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> [[ <span class="variable">$result</span> -ne <span class="string">""</span> ]]; <span class="keyword">do</span></span><br><span class="line">    result=$(curl -s <span class="variable">$baseUrl</span>/<span class="variable">$result</span>)</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"=&gt; <span class="variable">$result</span>"</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<p>输出片断：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">=&gt; 32722</span><br><span class="line">=&gt; 13310</span><br><span class="line">...</span><br><span class="line">=&gt; 16626</span><br><span class="line">=&gt; 20446</span><br><span class="line">=&gt; Cool! the next level is &quot;tree&quot;</span><br><span class="line">run.sh: line 6: [[: Cool! the next level is &quot;tree&quot;: syntax error in expression (error token is &quot;! the next level is &quot;tree&quot;&quot;)</span><br></pre></td></tr></table></figure></p>
+<p>虽然脚本不完美，但是没办法，因为不知道最后会输出什么，这样看来搞出error也是不错的选择……使用<code>tree</code>过关。</p>
+<h2 id="Puzzle-tree-html"><a href="#Puzzle-tree-html" class="headerlink" title="Puzzle tree.html"></a>Puzzle tree.html</h2><p>这道题很直白，纯考功底。先还原二叉树，然后找出最深路径，使用此关键字解密字符串<code>U2FsdGVkX1+gxunKbemS2193vhGGQ1Y8pc5gPegMAcg=</code>。</p>
+<p>由于只有中序的后序的遍历序列，所以需要先从后序序列倒着取出根节点，然后再通过中序序列和后序序列来确立左子树和右子树，此过程递归完成。用js写了一段代码来还原二叉树：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> inOrderSeq   = [<span class="string">"T"</span>, <span class="string">"b"</span>, <span class="string">"H"</span>, <span class="string">"V"</span>, <span class="string">"h"</span>, <span class="string">"3"</span>, <span class="string">"o"</span>, <span class="string">"g"</span>, <span class="string">"P"</span>, <span class="string">"W"</span>, <span class="string">"F"</span>, <span class="string">"L"</span>, <span class="string">"u"</span>, <span class="string">"A"</span>, <span class="string">"f"</span>, <span class="string">"G"</span>, <span class="string">"r"</span>, <span class="string">"m"</span>, <span class="string">"1"</span>, <span class="string">"x"</span>, <span class="string">"J"</span>, <span class="string">"7"</span>, <span class="string">"w"</span>, <span class="string">"e"</span>, <span class="string">"0"</span>, <span class="string">"i"</span>, <span class="string">"Q"</span>, <span class="string">"Y"</span>, <span class="string">"n"</span>, <span class="string">"Z"</span>, <span class="string">"8"</span>, <span class="string">"K"</span>, <span class="string">"v"</span>, <span class="string">"q"</span>, <span class="string">"k"</span>, <span class="string">"9"</span>, <span class="string">"y"</span>, <span class="string">"5"</span>, <span class="string">"C"</span>, <span class="string">"N"</span>, <span class="string">"B"</span>, <span class="string">"D"</span>, <span class="string">"2"</span>, <span class="string">"4"</span>, <span class="string">"U"</span>, <span class="string">"l"</span>, <span class="string">"c"</span>, <span class="string">"p"</span>, <span class="string">"I"</span>, <span class="string">"E"</span>, <span class="string">"M"</span>, <span class="string">"a"</span>, <span class="string">"j"</span>, <span class="string">"6"</span>, <span class="string">"S"</span>, <span class="string">"R"</span>, <span class="string">"O"</span>, <span class="string">"X"</span>, <span class="string">"s"</span>, <span class="string">"d"</span>, <span class="string">"z"</span>, <span class="string">"t"</span>];</span><br><span class="line"><span class="keyword">var</span> postOrderSeq = [<span class="string">"T"</span>, <span class="string">"V"</span>, <span class="string">"H"</span>, <span class="string">"o"</span>, <span class="string">"3"</span>, <span class="string">"h"</span>, <span class="string">"P"</span>, <span class="string">"g"</span>, <span class="string">"b"</span>, <span class="string">"F"</span>, <span class="string">"f"</span>, <span class="string">"A"</span>, <span class="string">"u"</span>, <span class="string">"m"</span>, <span class="string">"r"</span>, <span class="string">"7"</span>, <span class="string">"J"</span>, <span class="string">"x"</span>, <span class="string">"e"</span>, <span class="string">"w"</span>, <span class="string">"1"</span>, <span class="string">"Y"</span>, <span class="string">"Q"</span>, <span class="string">"i"</span>, <span class="string">"0"</span>, <span class="string">"Z"</span>, <span class="string">"n"</span>, <span class="string">"G"</span>, <span class="string">"L"</span>, <span class="string">"K"</span>, <span class="string">"y"</span>, <span class="string">"9"</span>, <span class="string">"k"</span>, <span class="string">"q"</span>, <span class="string">"v"</span>, <span class="string">"N"</span>, <span class="string">"D"</span>, <span class="string">"B"</span>, <span class="string">"C"</span>, <span class="string">"5"</span>, <span class="string">"4"</span>, <span class="string">"c"</span>, <span class="string">"l"</span>, <span class="string">"U"</span>, <span class="string">"2"</span>, <span class="string">"8"</span>, <span class="string">"E"</span>, <span class="string">"I"</span>, <span class="string">"R"</span>, <span class="string">"S"</span>, <span class="string">"6"</span>, <span class="string">"j"</span>, <span class="string">"d"</span>, <span class="string">"s"</span>, <span class="string">"X"</span>, <span class="string">"O"</span>, <span class="string">"a"</span>, <span class="string">"M"</span>, <span class="string">"p"</span>, <span class="string">"W"</span>, <span class="string">"t"</span>, <span class="string">"z"</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">parseTree</span>(<span class="params">inOrder, postOrder</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (inOrder.length == <span class="number">0</span> || postOrder.length == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> root = postOrder[postOrder.length - <span class="number">1</span>];</span><br><span class="line">    <span class="keyword">var</span> inOrderIndex = inOrder.indexOf(root);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> leftTreeInOrder = inOrder.slice(<span class="number">0</span>, inOrderIndex);</span><br><span class="line">    <span class="keyword">var</span> leftTreePostOrder = postOrder.slice(<span class="number">0</span>, inOrderIndex);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> rightTreeInOrder = inOrder.slice(inOrderIndex + <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">var</span> rightTreePostOrder = postOrder.slice(inOrderIndex, <span class="number">-1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> node = &#123;</span><br><span class="line">        node: root,</span><br><span class="line">        left: parseTree(leftTreeInOrder, leftTreePostOrder),</span><br><span class="line">        right: parseTree(rightTreeInOrder, rightTreePostOrder)</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> node;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> tree = parseTree(inOrderSeq, postOrderSeq);</span><br></pre></td></tr></table></figure>
+<p>OK，树还原出来了，还需要进行最深路径查找脑中瞬间闪出DFS，完全由于<code>深度优先</code>四个字。</p>
+<p>，这个和深度优先搜索有点像但并不是搜索，通过递归的方式得到最长的路径。顺便提一嘴，BFS(广度优先)借助队列实现，DFS(深度优先)借助栈实现。好了，大学课程回忆完毕，上代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">findDeepestPath</span>(<span class="params">selfNode</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (selfNode == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> [];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (selfNode.left == <span class="literal">null</span> || selfNode.right == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> [selfNode];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> leftPathSeq  = findDeepestPath(selfNode.left);</span><br><span class="line">    <span class="keyword">var</span> rightPathSeq = findDeepestPath(selfNode.right);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (leftPathSeq.length &gt; rightPathSeq.length) &#123;</span><br><span class="line">        <span class="keyword">return</span> [selfNode].concat(leftPathSeq);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> [selfNode].concat(rightPathSeq);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>得到结果<code>zWp8LGn01wxJ7</code>，保留这个结果，因为下道题还用的到。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo U2FsdGVkX1+gxunKbemS2193vhGGQ1Y8pc5gPegMAcg= | openssl enc -aes-128-cbc -a -d -pass pass:zWp8LGn01wxJ7</span><br></pre></td></tr></table></figure>
+<p><code>nqueens</code>，进入下一题。</p>
+<h2 id="Puzzle-nqueens-html"><a href="#Puzzle-nqueens-html" class="headerlink" title="Puzzle nqueens.html"></a>Puzzle nqueens.html</h2><p>这个倒是简单粗暴，考回溯算法，求解n后，然后暴力穷举出答案。写求n后解。本想用C#写个小程序，然后生成一个带有所有解txt文件，后来想想何必呢，还是继续用js吧，有node呢……</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> crypto = <span class="built_in">require</span>(<span class="string">'crypto'</span>);</span><br><span class="line"><span class="keyword">var</span> passwd = <span class="string">"zWp8LGn01wxJ7"</span>;</span><br><span class="line"><span class="keyword">var</span> target = <span class="string">"e48d316ed573d3273931e19f9ac9f9e6039a4242"</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">writeResult</span>(<span class="params">results</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> resultStr = results.map(<span class="function"><span class="keyword">function</span> (<span class="params">v</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> v + <span class="number">1</span>;</span><br><span class="line">    &#125;).join(<span class="string">""</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> hashString = passwd + resultStr + <span class="string">"\n"</span>;</span><br><span class="line">    <span class="keyword">var</span> sha1 = crypto.createHash(<span class="string">'sha1'</span>);</span><br><span class="line">    sha1.update(hashString)</span><br><span class="line">    <span class="keyword">var</span> digest = sha1.digest(<span class="string">'hex'</span>) ;</span><br><span class="line">    <span class="keyword">if</span>(digest == target) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(resultStr);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">conflict</span>(<span class="params">results, theLocation</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> row = <span class="number">0</span>; row &lt; results.length; row++) &#123;</span><br><span class="line">        <span class="keyword">var</span> queenLoction = results[row];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (queenLoction == theLocation) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> rowDiff = results.length - row;</span><br><span class="line">        <span class="keyword">var</span> locationDiff = <span class="built_in">Math</span>.abs(theLocation - queenLoction);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (rowDiff == locationDiff) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">solveQueens</span>(<span class="params">size, results</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> results === <span class="string">"undefined"</span>) &#123; results = []; &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> pos = <span class="number">0</span>; pos &lt; size; pos++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (conflict(results, pos)) &#123;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// pos is good.</span></span><br><span class="line">        <span class="keyword">var</span> newResults = results.slice(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">if</span> (newResults.length == size - <span class="number">1</span>) &#123;</span><br><span class="line">            newResults.push(pos);</span><br><span class="line">            writeResult(newResults);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            newResults.push(pos);</span><br><span class="line">            solveQueens(size, newResults);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用<code>solveQueens(9)</code>并在node下运行即可。<br>最终的代码合并了计算sha1的部分，注意sha1字符串的最后一定要加<code>\n</code>，否则是算不出结果的。<br>顺利拿到下一关入口<code>953172864</code>。</p>
+<h2 id="Puzzle-953172864-html"><a href="#Puzzle-953172864-html" class="headerlink" title="Puzzle 953172864.html"></a>Puzzle 953172864.html</h2><p>通过对第一列的观察，发现这是一个26进制/10进制的对应表。那么接下来的总是就是如果将<code>COOLSHELL / SHELL</code>转化为10进制并转换回26进制对应的字母的问题。</p>
+<p>首先COOLSHELL对应的10进制数字分别为<code>3 15 15 12 19 8 5 12 12</code>，计算公式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3*26^8+15*26^7+15*26^6+12*26^5+19*26^4+8*26^3+5*26^2+12*26^1+12*26^0</span><br></pre></td></tr></table></figure>
+<p>使用Excel或Google计算结果为<code>751743486376</code>。同理，<code>SHELL</code>结果为<code>8826856</code>。<br>接下来将两个数相除的结果<code>85165</code>（这个数是带小数，但是因为除数和被除数都是整数所以结果也是整数）转回26进制，即<code>辗转相除法</code>，重复<code>模</code>26并取余数，得到<code>15 25 21 4</code>，对应的字母为<code>DUYO</code>，Bingo进入最后一题。</p>
+<h2 id="Puzzle-DUYO-html"><a href="#Puzzle-DUYO-html" class="headerlink" title="Puzzle DUYO.html"></a>Puzzle DUYO.html</h2><p>最后一关是最轻松的一关，从图片得出线索是<a href="http://en.wikipedia.org/wiki/Pigpen_cipher" target="_blank" rel="noopener">猪圈密码</a>，然后通过一幅简单的图可轻松逆向出答案：<code>helloworld</code>.<br>ps: 通过图形的形状找图中该图形所对应的字母。</p>
+<img src="/photos/2014-08/pigpen_cipher_key.png" width="800">
+<p>pps: 昨天答完的时候通过<a href="http://fun.coolshell.cn/top100.html" target="_blank" rel="noopener">Top100</a>看到是六十多名，今天再打开发现自己的成绩不见了很奇怪，耗子叔叔我没作弊啊……</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/other/">other</a>
+</div>
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://lurongkai.github.io/2014/08/05/coolshell-puzzle-guides/" data-title="coolshell puzzle guides | lurongkai&#39;s blog" data-tsina="" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev">
+ <a href="/2014/12/03/async-programming/" title="使用异步编程">
+  <strong>上一篇：</strong><br>
+  <span>
+  使用异步编程</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/07/31/sports-change-thought/" title="运动改变思维">
+ <strong>下一篇：</strong><br> 
+ <span>运动改变思维
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Puzzle-0"><span class="toc-number">1.</span> <span class="toc-text">Puzzle 0</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Puzzle-welcome-html"><span class="toc-number">2.</span> <span class="toc-text">Puzzle welcome.html</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Puzzle-81648-html"><span class="toc-number">3.</span> <span class="toc-text">Puzzle 81648.html</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Puzzle-unix-html"><span class="toc-number">4.</span> <span class="toc-text">Puzzle unix.html</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Puzzle-furyy-html"><span class="toc-number">5.</span> <span class="toc-text">Puzzle furyy.html</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Puzzle-variables-html"><span class="toc-number">6.</span> <span class="toc-text">Puzzle variables.html</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Puzzle-tree-html"><span class="toc-number">7.</span> <span class="toc-text">Puzzle tree.html</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Puzzle-nqueens-html"><span class="toc-number">8.</span> <span class="toc-text">Puzzle nqueens.html</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Puzzle-953172864-html"><span class="toc-number">9.</span> <span class="toc-text">Puzzle 953172864.html</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Puzzle-DUYO-html"><span class="toc-number">10.</span> <span class="toc-text">Puzzle DUYO.html</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/lurongkai" target="_blank" title="Github">Github</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="/software-designing-perspective" target="_blank" title="软件和设计">软件和设计</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="/human-being-and-life-perspective" target="_blank" title="人类和生活">人类和生活</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/productivity/" title="productivity">productivity<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/C/" title="C#">C#<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/collaboration/" title="collaboration">collaboration<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F/" title="F#">F#<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Functional-Programming/" title="Functional-Programming">Functional-Programming<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/asynchronous/" title="asynchronous">asynchronous<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/javascript/" title="javascript">javascript<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/asp-net/" title="asp-net">asp-net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/dot-net/" title="dot-net">dot-net<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/essays/" title="essays">essays<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/joke/" title="joke">joke<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/life/" title="life">life<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/other/" title="other">other<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/productivity/" title="productivity">productivity<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/reproduce/" title="reproduce">reproduce<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/tips/" title="tips">tips<sup>3</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer">
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m lurongkai on Github <br>
+			</p>
+	</section>
+	 
+	<div class="social-font">
+		
+		<a href="http://weibo.com/2176287895" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/lurongkai" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019 
+		
+		<a href="/about" target="_blank" title="Lu Rongkai">Lu Rongkai</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'lurongkai';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?74291727c50712cd2fcc785ef807bd0c";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

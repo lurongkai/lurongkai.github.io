@@ -1,0 +1,606 @@
+
+ <!DOCTYPE HTML>
+<html lang="default">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+  
+    <title>.NET 4在CLR和BCL的一些变化(3) | lurongkai&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Lu Rongkai">
+    
+
+    
+    <meta name="description" content="VS2010正式版发布了，从海报中我们可以看到.NET 4在BCL上的改进还是很大的，这一次主要讨论比较Core的变化。">
+<meta property="og:type" content="article">
+<meta property="og:title" content=".NET 4在CLR和BCL的一些变化(3)">
+<meta property="og:url" content="https://lurongkai.github.io/2010/04/12/dotnet-4-changes-on-clr-and-bcl-3/index.html">
+<meta property="og:site_name" content="lurongkai&#39;s blog">
+<meta property="og:description" content="VS2010正式版发布了，从海报中我们可以看到.NET 4在BCL上的改进还是很大的，这一次主要讨论比较Core的变化。">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://lurongkai.github.io/photos/2010-04-11-dotnet-4-changes-on-clr-and-bcl-3/1.jpg">
+<meta property="og:image" content="https://lurongkai.github.io/photos/2010-04-11-dotnet-4-changes-on-clr-and-bcl-3/2.png">
+<meta property="og:updated_time" content="2019-02-14T02:48:33.432Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content=".NET 4在CLR和BCL的一些变化(3)">
+<meta name="twitter:description" content="VS2010正式版发布了，从海报中我们可以看到.NET 4在BCL上的改进还是很大的，这一次主要讨论比较Core的变化。">
+<meta name="twitter:image" content="https://lurongkai.github.io/photos/2010-04-11-dotnet-4-changes-on-clr-and-bcl-3/1.jpg">
+
+    
+    <link rel="alternative" href="/atom.xml" title="lurongkai&#39;s blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="lurongkai&#39;s blog">lurongkai&#39;s blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
+						<input type="hidden" name="q" value="site:lurongkai.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</ul></nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2010/04/12/dotnet-4-changes-on-clr-and-bcl-3/" title=".NET 4在CLR和BCL的一些变化(3)" itemprop="url">.NET 4在CLR和BCL的一些变化(3)</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Lu Rongkai" target="_blank" itemprop="author">Lu Rongkai</a>
+		
+  </p><p class="article-time">
+    <time datetime="2010-04-12T14:25:00.000Z" itemprop="datePublished"> Published 2010-04-12</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#System-Collections-Generic"><span class="toc-number">1.</span> <span class="toc-text">System.Collections.Generic</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#System-IO-MemoryMappedFiles"><span class="toc-number">2.</span> <span class="toc-text">System.IO.MemoryMappedFiles</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#System-Numerics"><span class="toc-number">3.</span> <span class="toc-text">System.Numerics</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#System-Tuple结构"><span class="toc-number">4.</span> <span class="toc-text">System.Tuple结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#System-Runtiime-InteropServices"><span class="toc-number">5.</span> <span class="toc-text">System.Runtiime.InteropServices</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#已有类的改进"><span class="toc-number">6.</span> <span class="toc-text">已有类的改进</span></a></li></ol>
+		
+		</div>
+		
+		<p>VS2010正式版发布了，从<a href="http://www.cnblogs.com/gnielee/archive/2010/04/12/dot-net-framework-4-namespace.html" target="_blank" rel="noopener">海报</a>中我们可以看到.NET 4在BCL上的改进还是很大的，这一次主要讨论比较Core的变化。<br><a id="more"></a></p>
+<p>就照海报的顺序说吧。</p>
+<h2 id="System-Collections-Generic"><a href="#System-Collections-Generic" class="headerlink" title="System.Collections.Generic"></a>System.Collections.Generic</h2><p>.NET 4中新加入了名为<code>SortedSet&lt;T&gt;</code>的结构，这是一个很有用的结构，它在内部维护一个集合，使用Add()向SortedSet中添加已存在的项时会被忽略，并且返回false。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SortedSet sortedSetDemo = new SortedSet &#123; 8, 2, 1, 5, 10, 5, 10, 8 &#125;;</span><br></pre></td></tr></table></figure>
+<p>SortedSet<t>和HashSet<t>均实现了新引入的ISet<t>接口，其实可以看下ISet<t>的签名：</t></t></t></t></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public interface ISet&lt;T&gt; : ICollection&lt;T&gt;, IEnumerable&lt;T&gt;, IEnumerable</span><br></pre></td></tr></table></figure>
+<p>于是可以知道SortedSet<t>是一个集合，同时可遍历，可……</t></p>
+<h2 id="System-IO-MemoryMappedFiles"><a href="#System-IO-MemoryMappedFiles" class="headerlink" title="System.IO.MemoryMappedFiles"></a>System.IO.MemoryMappedFiles</h2><p>这个结构的作用在于将一个文映射到内存中，以达到快速“IO”的目的。其实<code>MemoryMappedFiles</code>的真正作用是用作进程间或应用程序间的通信，在内存映射文件中存储相关的信息然后传递。下面这个例子简单演示了如何使用MemoryMappedFiles：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">using System.IO;</span><br><span class="line">using System.IO.MemoryMappedFiles;</span><br><span class="line"></span><br><span class="line">using (MemoryMappedFile MemoryMappedFile = MemoryMappedFile.CreateNew(&quot;MemoryMappedFileDemo&quot;, 100))&#123;</span><br><span class="line">	MemoryMappedViewStream stream = MemoryMappedFile.CreateViewStream();</span><br><span class="line">	using (BinaryWriter writer = new BinaryWriter(stream))&#123;</span><br><span class="line">		writer.Write(&quot;hello cnblogs&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样我们就将一个名为<code>MemoryMappedFileDemo</code>的“文件”写入到了内存，下面的代码说明怎样将它读出来，要注意的是，两段代码不要写在一个应用程序内，否则会报错。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">using (MemoryMappedFile MemoryMappedFile = MemoryMappedFile.OpenExisting(&quot;MemoryMappedFileDemo&quot;))</span><br><span class="line">&#123;</span><br><span class="line">	using (MemoryMappedViewStream Stream = MemoryMappedFile.CreateViewStream())</span><br><span class="line">	&#123;</span><br><span class="line">		BinaryReader reader = new BinaryReader(Stream);</span><br><span class="line">		Console.WriteLine(reader.ReadString());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>难能可贵的是，VS2010对<code>MemoryMappedFileDemo</code>提供Debug支持。</p>
+<p><img src="/photos/2010-04-11-dotnet-4-changes-on-clr-and-bcl-3/1.jpg" alt="Debug Support"></p>
+<h2 id="System-Numerics"><a href="#System-Numerics" class="headerlink" title="System.Numerics"></a>System.Numerics</h2><p>.NET 4新加入的命名空间，里面包含了两个数据结构：BigInteger和Complex。BigInteger提供了比整型长度更长的数值表示范围，默认值为0，且为不可变类型，如果一些比较特殊的场景整型满足不了需求，可以考虑使用BigInteger，相关的辅助方法也会加快的开发效率。</p>
+<p>需要注意的是，很多情况下需要手动的引用System.Numberics所在的程序集：</p>
+<p><img src="/photos/2010-04-11-dotnet-4-changes-on-clr-and-bcl-3/2.png" alt="Debug Support"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">BigInteger bigIntegerDemo = new BigInteger(9999999999999999);</span><br><span class="line">if (bigIntegerDemo.IsZero) &#123;</span><br><span class="line">	Console.WriteLine(&quot;Equal 0&quot;);</span><br><span class="line">&#125;</span><br><span class="line">Console.WriteLine(bigIntegerDemo);</span><br></pre></td></tr></table></figure>
+<p>而Complex则是我们常说的复数类。就像平学数学中的定义一样，一个复数由一个实部与虚部构成：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Complex n1 = new Complex(8, 2);</span><br><span class="line">Complex n2 = new Complex(8, 2);</span><br><span class="line">Complex n3 = n1 + n2;</span><br></pre></td></tr></table></figure>
+<h2 id="System-Tuple结构"><a href="#System-Tuple结构" class="headerlink" title="System.Tuple结构"></a>System.Tuple结构</h2><p><code>Tuple</code>(元组)是一个大小固定的集合主要被设计为与F#，IronPython等互操作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var primes = Tuple.Create(2, 3, 5, 7, 11, 13, 17, 19);</span><br></pre></td></tr></table></figure>
+<p>这是一个MSDN官方的例子，完整的元组使用应该是这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Tuple&lt;int, int, int, int, int, int, int, Tuple&lt;int&gt;&gt; primes = Tuple.Create(2, 3, 5, 7, 11, 13, 17, 19);</span><br></pre></td></tr></table></figure>
+<p>因为一个元组最大为6，所以想扩展元组必须在最后一个位置上再加一个元组。有了var关键字，便使整个过程更简单了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var multiTuple = new Tuple&lt;int, int, int, int, int, int, int,Tuple&lt;int,int,int&gt;&gt;(</span><br><span class="line">	2, 4, 6, 8, 10, 12, 14,</span><br><span class="line">	new Tuple&lt;int,int,int&gt;(3,6,9));</span><br></pre></td></tr></table></figure>
+<p>访问也简单：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">primes.Item1;//2</span><br><span class="line">primes.Item2;//3</span><br><span class="line">//...</span><br><span class="line">multiTuple.Rest.Item1;//3</span><br></pre></td></tr></table></figure>
+<h2 id="System-Runtiime-InteropServices"><a href="#System-Runtiime-InteropServices" class="headerlink" title="System.Runtiime.InteropServices"></a>System.Runtiime.InteropServices</h2><p>新提供的<code>TypeIdentifierAttribute</code>特性，可以为一些在类型库中没有GUID的类型提供等价类型支持，只需在类型上加<code>[TypeIdentifier]</code>即可。</p>
+<p>关于.NET 4中Parallel的部分在这个系列的第一篇有部分介绍，我打算将详细的部分例如PLINQ，放到后面的系列来具体讨论。</p>
+<h2 id="已有类的改进"><a href="#已有类的改进" class="headerlink" title="已有类的改进"></a>已有类的改进</h2><ul>
+<li><p><code>Stopwatch</code>: Stopwathc中新加入了<code>Restart()</code>方法，方便我们重置计时器。</p>
+</li>
+<li><p><code>Environment</code>： 加入了关于CPU和OS是否为64位的属性：<code>Is64BitProcess</code>，<code>Is64BitOperatingSystem</code>，并且为了便于使用系统文件夹，新增了一个名为<code>SpecialFolder</code>的枚举类型，<code>Environment.SpecialFolder.Desktop</code>则表示桌面，<code>Environment.SpecialFolder.CommonMusic</code>表示公用音乐文件夹。</p>
+</li>
+<li><p><code>Stream</code>：加入<code>CopyTo</code>方法，可以快捷的从一个流拷贝数据到另一个流。</p>
+</li>
+<li><p><code>Enum</code>：过去判断一个<code>[Flag]</code>枚举是否包含某个标志时，通常会使用&amp;运算判断是否为空，.NET 4为Enum提供了一个更为简便的方法：<code>HasFlag()</code>，例如：</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[Flags]</span><br><span class="line">public enum DataOptions</span><br><span class="line">&#123;</span><br><span class="line">	Data1 = 1,</span><br><span class="line">	Data2 = 2,</span><br><span class="line">	Data3 = 4</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后可以使用<code>HasFlag()</code>来判断是否存在某个标志：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DataOptions data = DataOptions.Data1 | DataOptions.Data2 | DataOptions.Data3;</span><br><span class="line">Console.WriteLine(&quot;Have Data2? &#123;0&#125;&quot;, data.HasFlag(DataOptions.Data2));</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><code>Guid</code>，<code>Version</code>，<code>Enum</code>: 现在均增加了对应的<code>TryParse</code>方法。</p>
+</li>
+<li><p><code>String</code>: 新增支持IEnumerable的<code>Concat()</code>，<code>Join()</code>方法，使用LINQ更加的方便，<code>IsNullOrWhiteSpace()</code>方法的加入也使对字符串的判断上更加的严谨。</p>
+</li>
+<li><p><code>File</code>：新增支持IEnumerable的<code>ReadLines()</code>方法，<code>WriteAllLines()</code>，<code>AppendAllLines()</code>也做为配合而出现，接受IEnumerable参数。有理由相信Directory是否也有相关的变化，答案是有，具体参见MSDN。</p>
+</li>
+</ul>
+<p>.NET 4的变化很多，一些新特性有待大家一起发掘，更多的内容还是需要在实际的实用中慢慢的体会。下一次如果机会恰当，将研究一些.NET 4特定的技术例如PLINQ等等，不完全局限于CLR和BCL，因为这个话题真正写起来了才发现很空泛，很寂寞……</p>
+<p>相关链接：</p>
+<ol>
+<li><p><a href="/blog/2010/04/12/dotnet-4-changes-on-clr-and-bcl-1/">.NET 4在CLR和BCL的一些变化(1)</a></p>
+</li>
+<li><p><a href="/blog/2010/04/12/dotnet-4-changes-on-clr-and-bcl-2/">.NET 4在CLR和BCL的一些变化(2)</a></p>
+</li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/dot-net/">dot-net</a>
+</div>
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://lurongkai.github.io/2010/04/12/dotnet-4-changes-on-clr-and-bcl-3/" data-title=".NET 4在CLR和BCL的一些变化(3) | lurongkai&#39;s blog" data-tsina="" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev">
+ <a href="/2010/04/19/dotnet-parallel-programming-1/" title=".NET 4中的并行编程(上)">
+  <strong>上一篇：</strong><br>
+  <span>
+  .NET 4中的并行编程(上)</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2010/04/12/dotnet-4-changes-on-clr-and-bcl-2/" title=".NET 4在CLR和BCL的一些变化(2)">
+ <strong>下一篇：</strong><br> 
+ <span>.NET 4在CLR和BCL的一些变化(2)
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#System-Collections-Generic"><span class="toc-number">1.</span> <span class="toc-text">System.Collections.Generic</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#System-IO-MemoryMappedFiles"><span class="toc-number">2.</span> <span class="toc-text">System.IO.MemoryMappedFiles</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#System-Numerics"><span class="toc-number">3.</span> <span class="toc-text">System.Numerics</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#System-Tuple结构"><span class="toc-number">4.</span> <span class="toc-text">System.Tuple结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#System-Runtiime-InteropServices"><span class="toc-number">5.</span> <span class="toc-text">System.Runtiime.InteropServices</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#已有类的改进"><span class="toc-number">6.</span> <span class="toc-text">已有类的改进</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/lurongkai" target="_blank" title="Github">Github</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="/software-designing-perspective" target="_blank" title="软件和设计">软件和设计</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="/human-being-and-life-perspective" target="_blank" title="人类和生活">人类和生活</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/productivity/" title="productivity">productivity<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/C/" title="C#">C#<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/collaboration/" title="collaboration">collaboration<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F/" title="F#">F#<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Functional-Programming/" title="Functional-Programming">Functional-Programming<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/asynchronous/" title="asynchronous">asynchronous<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/javascript/" title="javascript">javascript<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/asp-net/" title="asp-net">asp-net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/dot-net/" title="dot-net">dot-net<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/essays/" title="essays">essays<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/joke/" title="joke">joke<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/life/" title="life">life<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/other/" title="other">other<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/productivity/" title="productivity">productivity<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/reproduce/" title="reproduce">reproduce<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/tips/" title="tips">tips<sup>3</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer">
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m lurongkai on Github <br>
+			</p>
+	</section>
+	 
+	<div class="social-font">
+		
+		<a href="http://weibo.com/2176287895" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/lurongkai" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019 
+		
+		<a href="/about" target="_blank" title="Lu Rongkai">Lu Rongkai</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'lurongkai';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?74291727c50712cd2fcc785ef807bd0c";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

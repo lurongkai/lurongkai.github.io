@@ -1,0 +1,634 @@
+
+ <!DOCTYPE HTML>
+<html lang="default">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+  
+    <title>.NET 4中的并行编程(下) | lurongkai&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Lu Rongkai">
+    
+
+    
+    <meta name="description" content="接上篇。上一次主要讨论了在.NET 4中如何编写并行程序，这次继续上次的话题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content=".NET 4中的并行编程(下)">
+<meta property="og:url" content="https://lurongkai.github.io/2010/04/20/dotnet-parallel-programming-2/index.html">
+<meta property="og:site_name" content="lurongkai&#39;s blog">
+<meta property="og:description" content="接上篇。上一次主要讨论了在.NET 4中如何编写并行程序，这次继续上次的话题。">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-02-14T02:48:33.436Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content=".NET 4中的并行编程(下)">
+<meta name="twitter:description" content="接上篇。上一次主要讨论了在.NET 4中如何编写并行程序，这次继续上次的话题。">
+
+    
+    <link rel="alternative" href="/atom.xml" title="lurongkai&#39;s blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="lurongkai&#39;s blog">lurongkai&#39;s blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
+						<input type="hidden" name="q" value="site:lurongkai.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</ul></nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2010/04/20/dotnet-parallel-programming-2/" title=".NET 4中的并行编程(下)" itemprop="url">.NET 4中的并行编程(下)</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Lu Rongkai" target="_blank" itemprop="author">Lu Rongkai</a>
+		
+  </p><p class="article-time">
+    <time datetime="2010-04-20T00:12:00.000Z" itemprop="datePublished"> Published 2010-04-20</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			
+		
+		</div>
+		
+		<p>接<a href="/blog/2010/04/19/dotnet-parallel-programming-1/">上篇</a>。上一次主要讨论了在.NET 4中如何编写并行程序，这次继续上次的话题。<br><a id="more"></a></p>
+<p>当我们有能力使用前面所介绍的一些结构来构建我们的应用程序时，一个需要考虑的场景是：假如一个并行过程已经开始，在它没有完成前想取消它的话应该怎么做呢？其实这个问题很现实，在多线程程序中也会遇到，当然了，多线程编程时我们可以用<code>Thread.Abort()</code>来终结它，那么在并行中该如何实现呢？老规矩，上Demo：</p>
+<pre><code>CancellationTokenSource tokenSource = new CancellationTokenSource();
+CancellationToken token = tokenSource.Token;
+Task task1 = Task.Factory.StartNew(() =&gt; {
+    int i = 0;
+    while (!token.IsCancellationRequested) {
+        Thread.Sleep(500);
+        Console.WriteLine(&quot;Task1,{0}&quot;, i++);
+    }
+}, token);
+token.Register(() =&gt; {
+    Console.WriteLine(&quot;Task1 has been canceled&quot;);
+});
+
+Console.ReadLine();
+tokenSource.Cancel();
+</code></pre><p>首先实例化一个<code>CancellationTokenSource</code>对象，这个对象用于管理并行过程中的取消动作。当创建一个Task的时候，传入一个<code>CancellationToken</code>对象，而这个对象可以由<code>CancellationTokenSource.Token</code>属性来获得。当Task开开始执行时，如果想取消这个Task，那么就可以调用<code>CancellationTokenSource.Cancel()</code>来取消与之相关的Task了。</p>
+<p>其实，我们可以将<code>CancellationTokenSource</code>理解为一个犯罪团伙的头目，然后这个头目管理着<code>CancellationToken</code>小兵，然后当一个Task创建时将这个小兵安插在其中(无间道？)，当头目发指令Cancel()时，小兵在Task内部上演无间道，嗯……</p>
+<p>然而，出来混，迟早要还的。Task能不能无异常的执行完毕还是个未知数。在.NET 4中，现在可以用<code>AggregateException</code>来处理这些异常了，它提供一种异常汇总机制，可以对未知的异常进行处理，上一个Demo：</p>
+<pre><code>Task task1 = Task.Factory.StartNew(() =&gt; {
+    Console.WriteLine(&quot;Task1 completed.&quot;);
+});
+Task task2 = Task.Factory.StartNew(() =&gt; {
+    Console.WriteLine(&quot;Task2 processing.&quot;);
+    throw new ArgumentOutOfRangeException(&quot;task2&quot;);
+});
+
+try {
+    Task.WaitAll(task1, task2);
+}
+catch (AggregateException aggex) {
+    aggex.Handle(ex =&gt; {
+        Console.WriteLine(ex);
+        return true;
+    });
+}
+</code></pre><p>可以将具体的异常处理写在<code>AggregateException.Handle</code>方法内，Handle方法传入一个Func委托，用于处理具体的异常，例如上面，我们只是在Task内简单的抛出了一个<code>ArgumentOutOfRangeException</code>异常，当调用<code>Task.WaitAll</code>时异常被捕获，然后在aggex.Handle中具体处理。当然，可以将上述中传入的ex进行is判断来确定具体的异常，例如：<code>if (ex is ArgumentOutOfRangeException) {…}</code>。</p>
+<p>聊完异常处理，接着聊访问安全。</p>
+<p>访问安全的问题其实很显然，在多线程环境下要注意的问题无疑都是要在并行环境下考虑。这里，其实可以用线程安全来讲，因为不管是多线程还是并行，CPU调度的最小单位都是线程，所以，以下都用线程安全来说明。</p>
+<p>要求线程安全，首先想到的肯定就是上锁。过去的一些手段就不说了，我们着重说一下.NET 4中的SpinLock互斥锁。</p>
+<pre><code>SpinLock spinLock = new SpinLock();
+bool locked = false;
+try {
+    spinLock.Enter(ref locked);
+    // Do something.
+}
+finally {
+    if (locked) {
+        spinLock.Exit();
+    }
+}
+</code></pre><p>其实不用解释也看的懂了。线程安全操作多用于对资源的访问控制上，例如<code>IO</code>，<code>Stream</code>等，而我们往往需要面对的其实是内存中的数据，例如集合，例如队列等。.NET 4为了并行，引入了一个新的命名空间：<code>System.Collections.Concurrent</code>;在这个空间之下有很多经过处理的基础结构，例如<code>ConcurrentDictionary</code>、<code>ConcurrentQueue</code>等，它们都是线程安全的，或者说是并行安全的，而且在使用方法上和见的<code>System.Collections.Generic</code>下的结构无异。接下来演示一个<code>BlockingCollection</code>结构的使用Demo：</p>
+<pre><code>BlockingCollection&lt;string&gt; blockCollection = new BlockingCollection&lt;string&gt;();
+ThreadPool.QueueUserWorkItem(o =&gt; {
+    for (int i = 0; i &lt; 200; i++) {
+        blockCollection.Add(&quot;String&quot; + i);
+        Thread.Sleep(1000);
+    }
+});
+ThreadPool.QueueUserWorkItem(o =&gt; {
+    foreach (var i in blockCollection.GetConsumingEnumerable()) {
+        Console.WriteLine(&quot;Read:{0}&quot;, i);
+    }
+});
+</code></pre><p>我们用的是线程池的做法，当然，在并行编程中的做法也是一样的(有做法么？好像没有耶……)。可以看的出，Concurrent相关的结构可以大大简化并行编程中需要考虑的线程安全问题。</p>
+<p>最后要讨论的是.NET 4中很NB的一个东西：PLINQ。并行并行，就是要多CPU协作同时执行，其实有理由相信多CPU可以提高查询的效率(没有说一定是DB查询，不涉及IO性能)，尤其是在内存中集合的查询，PLINQ就是Parallel化的LINQ，使我们的查询可以在多个CPU上同时执行，藉此提高查询效率。</p>
+<p>要想在一个自定义的集合中实现LINQ功能，常用的做法就是实现IEnumerable<t>，这样就可以使用LINQ的查询语法来实现类似SQL的“漂漂”代码，在.NET 4中要想实现一个能并行查询(PLINQ)的自定义集合，可以实现IParallelEnumerable<t>，IParallelEnumerable<t>继承于IEnumerable<t>，实现起来其实也不困难。</t></t></t></t></p>
+<p>怎样去用PLINQ呢？上一个Demo看看：</p>
+<pre><code>var dataSet = new string[] { &quot;data1&quot;, &quot;data2&quot;, &quot;data3&quot;, &quot;data4&quot; };
+var results = from d in dataSet.AsParallel&lt;string&gt;()
+                let result = d.ToUpper()
+                select result;
+foreach (var r in results) {
+    Console.WriteLine(r);
+}
+</code></pre><p>只是简单的.AsParallel即可，很好很强大。我们可以使用.AsOrdered来实现在排序前进行缓存。</p>
+<pre><code>var queryByOrder = from d in dataSet.AsParallel&lt;string&gt;().AsOrdered&lt;string&gt;()
+                    orderby d descending
+                    let result = d.ToUpper()
+                    select result;
+</code></pre><p>这次我们换个方面来将queryByOrder输出：</p>
+<pre><code>queryByOrder.ForAll&lt;string&gt;(q =&gt; {
+    Console.WriteLine(q);
+});
+</code></pre><p>看来扩展方法这块糖的确很好吃……</p>
+<p>其实在普通的开发中，.AsParallel一下就OK了，我们来猜一下上面代码的结果是怎么样的？答案是不一定有顺序(即使在第二个示例中排序过)，详情请参见<a href="/blog/2010/04/19/dotnet-parallel-programming-1/">上篇</a>中的解释。</p>
+<p>通过两篇文章，我们讨论了一些.NET 4中并于并行开发的基础，在实际的开发中，是否选择并行仍然是一个有待商榷的问题，我们往往关心的是，并行究竟能为开发带来多大的复杂度，能为效率带来多大的提升，下一次我将对并行的效率进行讨论，欢迎大家一起加入。</p>
+<p>相关链接： <a href="/blog/2010/04/19/dotnet-parallel-programming-1/">.NET 4中的并行编程(上)</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/dot-net/">dot-net</a>
+</div>
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://lurongkai.github.io/2010/04/20/dotnet-parallel-programming-2/" data-title=".NET 4中的并行编程(下) | lurongkai&#39;s blog" data-tsina="" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev">
+ <a href="/2010/07/21/razor-quick-glance/" title="初探Razor视图引擎">
+  <strong>上一篇：</strong><br>
+  <span>
+  初探Razor视图引擎</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2010/04/19/dotnet-parallel-programming-1/" title=".NET 4中的并行编程(上)">
+ <strong>下一篇：</strong><br> 
+ <span>.NET 4中的并行编程(上)
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ 
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/lurongkai" target="_blank" title="Github">Github</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="/software-designing-perspective" target="_blank" title="软件和设计">软件和设计</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="/human-being-and-life-perspective" target="_blank" title="人类和生活">人类和生活</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/productivity/" title="productivity">productivity<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/C/" title="C#">C#<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/collaboration/" title="collaboration">collaboration<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F/" title="F#">F#<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Functional-Programming/" title="Functional-Programming">Functional-Programming<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/asynchronous/" title="asynchronous">asynchronous<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/javascript/" title="javascript">javascript<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/asp-net/" title="asp-net">asp-net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/dot-net/" title="dot-net">dot-net<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/essays/" title="essays">essays<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/joke/" title="joke">joke<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/life/" title="life">life<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/other/" title="other">other<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/productivity/" title="productivity">productivity<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/reproduce/" title="reproduce">reproduce<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/tips/" title="tips">tips<sup>3</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer">
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m lurongkai on Github <br>
+			</p>
+	</section>
+	 
+	<div class="social-font">
+		
+		<a href="http://weibo.com/2176287895" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/lurongkai" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019 
+		
+		<a href="/about" target="_blank" title="Lu Rongkai">Lu Rongkai</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'lurongkai';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?74291727c50712cd2fcc785ef807bd0c";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
