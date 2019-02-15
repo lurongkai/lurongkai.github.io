@@ -11,20 +11,20 @@
     
 
     
-    <meta name="description" content="「关注软件开发中的安全」  18年10月底的时候，我在Shinetech Software内部做了一场在线的培训，主要关注的是在软件开发过程中，对于安全方面的工程实践，并不算是很深入的探讨，更多的是一些极不易察觉但又很常见的疏忽，这篇博客整理出来。  一切漏洞都可以是注入漏洞不要相信来自用户的数据e.g. SQL 如果我们碰到了如下一段代码片断，用于实现将用户通过id从数据库中查询出来，有经验的你">
+    <meta name="description" content="「关注软件开发中的安全」  18年10月底的时候，我在Shinetech Software内部做了一场在线的培训，主要关注的是在软件开发过程中，对于安全方面的工程实践，并不算是很深入的探讨，更多的是一些极不易察觉但又很常见的疏忽，这篇博客整理出来。">
 <meta name="keywords" content="security">
 <meta property="og:type" content="article">
 <meta property="og:title" content="shinetech 2018 security training summary">
 <meta property="og:url" content="https://lurongkai.github.io/2019/02/15/shinetech-2018-security-training-summary/index.html">
 <meta property="og:site_name" content="lurongkai&#39;s blog">
-<meta property="og:description" content="「关注软件开发中的安全」  18年10月底的时候，我在Shinetech Software内部做了一场在线的培训，主要关注的是在软件开发过程中，对于安全方面的工程实践，并不算是很深入的探讨，更多的是一些极不易察觉但又很常见的疏忽，这篇博客整理出来。  一切漏洞都可以是注入漏洞不要相信来自用户的数据e.g. SQL 如果我们碰到了如下一段代码片断，用于实现将用户通过id从数据库中查询出来，有经验的你">
+<meta property="og:description" content="「关注软件开发中的安全」  18年10月底的时候，我在Shinetech Software内部做了一场在线的培训，主要关注的是在软件开发过程中，对于安全方面的工程实践，并不算是很深入的探讨，更多的是一些极不易察觉但又很常见的疏忽，这篇博客整理出来。">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://lurongkai.github.io/photos/2019-01-15-shinetech-2018-security-training-summary/op_hijack1.png">
 <meta property="og:image" content="https://lurongkai.github.io/photos/2019-01-15-shinetech-2018-security-training-summary/op_hijack2.png">
-<meta property="og:updated_time" content="2019-02-15T05:19:54.068Z">
+<meta property="og:updated_time" content="2019-02-15T05:22:45.644Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="shinetech 2018 security training summary">
-<meta name="twitter:description" content="「关注软件开发中的安全」  18年10月底的时候，我在Shinetech Software内部做了一场在线的培训，主要关注的是在软件开发过程中，对于安全方面的工程实践，并不算是很深入的探讨，更多的是一些极不易察觉但又很常见的疏忽，这篇博客整理出来。  一切漏洞都可以是注入漏洞不要相信来自用户的数据e.g. SQL 如果我们碰到了如下一段代码片断，用于实现将用户通过id从数据库中查询出来，有经验的你">
+<meta name="twitter:description" content="「关注软件开发中的安全」  18年10月底的时候，我在Shinetech Software内部做了一场在线的培训，主要关注的是在软件开发过程中，对于安全方面的工程实践，并不算是很深入的探讨，更多的是一些极不易察觉但又很常见的疏忽，这篇博客整理出来。">
 <meta name="twitter:image" content="https://lurongkai.github.io/photos/2019-01-15-shinetech-2018-security-training-summary/op_hijack1.png">
 
     
@@ -103,6 +103,7 @@
 <blockquote>
 <p>18年10月底的时候，我在Shinetech Software内部做了一场在线的培训，主要关注的是在软件开发过程中，对于安全方面的工程实践，并不算是很深入的探讨，更多的是一些极不易察觉但又很常见的疏忽，这篇博客整理出来。</p>
 </blockquote>
+<a id="more"></a>
 <h2 id="一切漏洞都可以是注入漏洞"><a href="#一切漏洞都可以是注入漏洞" class="headerlink" title="一切漏洞都可以是注入漏洞"></a>一切漏洞都可以是注入漏洞</h2><h3 id="不要相信来自用户的数据"><a href="#不要相信来自用户的数据" class="headerlink" title="不要相信来自用户的数据"></a>不要相信来自用户的数据</h3><p><strong>e.g. SQL</strong></p>
 <p>如果我们碰到了如下一段代码片断，用于实现将用户通过id从数据库中查询出来，有经验的你一定知道有什么严重的问题：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var id = ctx.query['id'];</span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">USERS</span> <span class="keyword">WHERE</span> <span class="keyword">ID</span> = <span class="keyword">id</span>;</span><br></pre></td></tr></table></figure>
