@@ -19,7 +19,7 @@
 <meta property="og:site_name" content="lurongkai&#39;s blog">
 <meta property="og:description" content="在Closure、Haskell、Python、Ruby这些语言越来越流行的今天，我们撇开其在数学纯度性上的不同，单从它们都拥有一类函数特性来讲，讨论函数式编程也显得很有意义。 一类函数为函数式编程打下了基础，虽然这并不能表示可以完整发挥函数式编程的优势，但是如果能掌握一些基础的函数式编程技巧，那么仍将对并行编程、声明性编程以及测试等方面提供新的思路。 很多开发者都有听过函数式编程，但更多是抱怨它">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-02-14T02:48:33.451Z">
+<meta property="og:updated_time" content="2019-04-15T06:17:14.534Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="函数式编程中的常用技巧">
 <meta name="twitter:description" content="在Closure、Haskell、Python、Ruby这些语言越来越流行的今天，我们撇开其在数学纯度性上的不同，单从它们都拥有一类函数特性来讲，讨论函数式编程也显得很有意义。 一类函数为函数式编程打下了基础，虽然这并不能表示可以完整发挥函数式编程的优势，但是如果能掌握一些基础的函数式编程技巧，那么仍将对并行编程、声明性编程以及测试等方面提供新的思路。 很多开发者都有听过函数式编程，但更多是抱怨它">
@@ -107,7 +107,7 @@
 <blockquote>
 <p>在计算机科学中，函数式编程是一种编程范式，一种构建计算机结构和元素的风格，它将计算看作是对数学函数的求值，并避免改变状态以及可变数据。</p>
 </blockquote>
-<p>关键的其实就两点：不可变数据以及函数求值（表达式求值）。由这两点引申出了一些重要的方面。<br><a id="more"></a></p>
+<p>关键的其实就两点：不可变数据以及函数求值（表达式求值）。由这两点引申出了一些重要的方面。</p>
 <h3 id="不变性"><a href="#不变性" class="headerlink" title="不变性"></a>不变性</h3><p>FP中并没有变量的概念，东西一旦创建后就不能再变化，所以在FP中经常使用“值”这一术语而非“变量”。</p>
 <p>不变性对程序并行化有着深远的影响，因为一切不可变意味着可以就地并行，不涉及竞态，也就没有了锁的概念。</p>
 <p>不变性还对测试有了新的启发，函数的输入和输出不改变任何状态，于是我们可以随时使用REPL工具来测试函数，测试通过即可使用，不用担心行为的异常，不变性保证了该函数在任何地方都能以同样的方式工作。事实上，在函数式编程实践中，“编写函数、使用REPL工具测试，使用”三步曲有着强大的生产力。</p>
@@ -122,9 +122,9 @@
 <p>再比如，对于一个整型数据集合，我们要通过C#遍历并拿到所有的偶数，典型的命令式编程会这么做：</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// csharp</span></span><br><span class="line"><span class="keyword">var</span> result = <span class="keyword">new</span> List&lt;<span class="keyword">int</span>&gt;();</span><br><span class="line"><span class="keyword">foreach</span>(<span class="keyword">var</span> item <span class="keyword">in</span> sourceList) &#123;</span><br><span class="line">    <span class="keyword">if</span>(item % <span class="number">2</span> == <span class="number">0</span>) &#123;</span><br><span class="line">        result.Add(item);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> result;</span><br></pre></td></tr></table></figure>
 <p>这对很多人来说都很轻松，因为就是在按照计算机的思维一步一步的指挥。那么声明性的风格呢？</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// csharp</span><br><span class="line">return sourceList.Where(item =&gt; item %2 == 0);</span><br><span class="line">// or LINQ style</span><br><span class="line">return from item in sourceList where item % 2 == 0 select item;</span><br></pre></td></tr></table></figure>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// csharp</span></span><br><span class="line"><span class="keyword">return</span> sourceList.Where(item =&gt; item %<span class="number">2</span> == <span class="number">0</span>);</span><br><span class="line"><span class="comment">// or LINQ style</span></span><br><span class="line"><span class="keyword">return</span> <span class="keyword">from</span> item <span class="keyword">in</span> sourceList <span class="keyword">where</span> item % <span class="number">2</span> == <span class="number">0</span> <span class="keyword">select</span> item;</span><br></pre></td></tr></table></figure>
 <p>甚至更进一步，假设我们有声明性原语，可以做到更好：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// csharp</span><br><span class="line">// if we already defined an atom function like below:</span><br><span class="line">public bool NumberIsEven(int number) &#123;</span><br><span class="line">    return number % 2 == 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// then we can re-use it directly.</span><br><span class="line">return sourceList.Where(NumberIsEven);</span><br></pre></td></tr></table></figure>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// csharp</span></span><br><span class="line"><span class="comment">// if we already defined an atom function like below:</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">bool</span> <span class="title">NumberIsEven</span>(<span class="params"><span class="keyword">int</span> number</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> number % <span class="number">2</span> == <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// then we can re-use it directly.</span></span><br><span class="line"><span class="keyword">return</span> sourceList.Where(NumberIsEven);</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>说句题外话，我有个数据库背景很深的C#工程师同事，第一次见到LINQ时一脸不屑的说：C#的LINQ就是抄SQL的。其实我并没有告诉它C#的LINQ借鉴的是FP的高阶函数以及monad，只是和SQL长的比较像而已。当然我并不排除这可能是为了避免新的学习成本所以选用了和SQL相近的关键字，但是LINQ的启蒙却真的不是SQL。</p>
 </blockquote>
@@ -169,7 +169,7 @@
 <p>这段定义有些拗口，我们借助前面的一个例子，并通过javascript来解释一下：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// javascript</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">addBy</span>(<span class="params">value</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">n</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> n + value;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> add10 = addBy(<span class="number">10</span>);</span><br><span class="line"><span class="keyword">var</span> result11 = add10(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
 <p>javascript版本完全是F#版本的复刻，如果我们想换个方式来使用它呢？</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var result11 = addBy(10, 1);</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> result11 = addBy(<span class="number">10</span>, <span class="number">1</span>);</span><br></pre></td></tr></table></figure>
 <p>这明显是不可以的（并不是说不能调用，而是说结果并非所期望的），因为<code>addBy</code>函数只接收一个参数。但是柯里化要求我们函数只能接受一个参数，该如何处理呢？</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> result11 = addBy(<span class="number">10</span>)(<span class="number">1</span>);</span><br><span class="line"><span class="comment">//             ~~~~~~~~~    return an anonymous fn(anonymousFn, e.g)</span></span><br></pre></td></tr></table></figure>
 <p>如此就可以了，<code>addBy(10)</code>将被正常调用没有问题，返回的匿名函数又立即被调用<code>anonymousFn(1)</code>，结果正是我们所期望的。</p>
@@ -178,7 +178,7 @@
 <p>闭包（Closure）是词法闭包（Lexical Closure）或函数闭包（function closures）的简称，可参见<a href="https://en.wikipedia.org/wiki/Closure_(computer_programming" target="_blank" rel="noopener">wikipedia</a>)上的详细解释。</p>
 </blockquote>
 <p>如此看来，是不是所有的多参数函数都能被柯里化呢？我们假想一个这样的例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">function fakeAddFn(n1) &#123;</span><br><span class="line">    return function(n2) &#123;</span><br><span class="line">        return function(n3) &#123;</span><br><span class="line">            return function(n4) &#123;</span><br><span class="line">                return n1 + n2 + n3 + n4;</span><br><span class="line">            &#125;;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var result = fakeAddFn(1)(2)(3)(4);</span><br><span class="line">//           ~~~~~~~~~~~~           now is function(n2)</span><br><span class="line">//                       ~~~        now is function(n3)</span><br><span class="line">//                          ~~~     now is function(n4)</span><br><span class="line">//                             ~~~  return n1 + n2 + n3 + n4</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fakeAddFn</span>(<span class="params">n1</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">n2</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">n3</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">n4</span>) </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> n1 + n2 + n3 + n4;</span><br><span class="line">            &#125;;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> result = fakeAddFn(<span class="number">1</span>)(<span class="number">2</span>)(<span class="number">3</span>)(<span class="number">4</span>);</span><br><span class="line"><span class="comment">//           ~~~~~~~~~~~~           now is function(n2)</span></span><br><span class="line"><span class="comment">//                       ~~~        now is function(n3)</span></span><br><span class="line"><span class="comment">//                          ~~~     now is function(n4)</span></span><br><span class="line"><span class="comment">//                             ~~~  return n1 + n2 + n3 + n4</span></span><br></pre></td></tr></table></figure>
 <p>但是这样又显得非常麻烦并且经常会出现智商不够用的情况，如果语言能够内建支持currying，那么情况将乐观许多，例如F#可以这样做：</p>
 <figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> fakeAddFn n1 n2 n3 n4 = n1 + n2 + n3 + n4</span><br></pre></td></tr></table></figure>
 <p>编译器将自动进行柯里化，完全展开形式如下：</p>
@@ -187,7 +187,7 @@
 <p>由于编译器自动进行currying，所以每一个函数本身是可以部分调用的，举个例子，F#中的<code>+</code>运算符其实是一个函数，定义如下：</p>
 <figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> (+) a b = a + b</span><br></pre></td></tr></table></figure>
 <p>利用前面的知识我们知道它的完全形式是这样：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">let (+) a = fun b -&gt; a + b</span><br></pre></td></tr></table></figure>
+<figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> (+) a = <span class="keyword">fun</span> b -&gt; a + b</span><br></pre></td></tr></table></figure>
 <p>所以我们自然可以编写一个表达式只给<code>+</code>运算符一个参数，这样返回的结果是另一个接受一个参数的函数，之后，再传入剩余一个参数。</p>
 <figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> add10partial = (+) <span class="number">10</span></span><br><span class="line"><span class="keyword">let</span> result = add10partial <span class="number">1</span></span><br></pre></td></tr></table></figure>
 <p>同时，由于<code>add10partial</code>函数的签名是<code>int -&gt; int</code>，所以可以直接用于<code>List.map</code>函数，如下：</p>
@@ -235,7 +235,7 @@
 <p>假如我们需要将表达式<code>n % 2 == 0 ? &quot;right&quot; : &quot;wrong&quot;</code>绑定到标识（即变量名）<code>isEven</code>上，例如<code>var isEven = n % 2 == 0 ? &quot;right&quot; : &quot;wrong&quot;;</code>，那么整个表达式是立即求值的，但是<code>isEven</code>可能在某种状况下不会被使用，有没有什么办法能在我们确定需要<code>isEven</code>时再计算表达式的值呢？</p>
 <p>假如我们将<code>isEven</code>绑定到某种结构上，这个结构知道如何求值，并且是按需求值的，那么我们的目的就达到了。</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// csharp</span></span><br><span class="line"><span class="keyword">var</span> isEven = <span class="keyword">new</span> Lazy&lt;<span class="keyword">string</span>&gt; (() =&gt; n % <span class="number">2</span> == <span class="number">0</span> ? <span class="string">"right"</span> : <span class="string">"wrong"</span>);</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// fsharp</span><br><span class="line">let isEven = lazy (if n % 2 = 0 then &quot;right&quot; else &quot;wrong&quot;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// fsharp</span></span><br><span class="line"><span class="keyword">let</span> isEven = <span class="keyword">lazy</span> (<span class="keyword">if</span> n % <span class="number">2</span> = <span class="number">0</span> <span class="keyword">then</span> <span class="string">"right"</span> <span class="keyword">else</span> <span class="string">"wrong"</span>)</span><br></pre></td></tr></table></figure>
 <p>当使用<code>isEven</code>时，C#可以直接使用<code>isEven.Value</code>来即时求值并返回结果，而F#的使用方式也是一样的<code>isEven.Value</code>。</p>
 <p>还有一种更加通用的方式来实现惰性求值，就是通过函数，函数表达了某种可以得到值的方式，但是需要调用才能得到，这和惰性求值的思想不谋而合。我们可以改写上面的例子：</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// csharp</span></span><br><span class="line"><span class="keyword">var</span> isEven = (Func&lt;<span class="keyword">string</span>&gt;)(() =&gt; n % <span class="number">2</span> == <span class="number">0</span> ? <span class="string">"right"</span> : <span class="string">"wrong"</span>);</span><br></pre></td></tr></table></figure>
@@ -270,7 +270,7 @@
 <p>C#的LINQ里<code>SelectMany</code>对应的就是<code>from</code>语句，比如下面：</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> result = <span class="keyword">from</span> a <span class="keyword">in</span> l1</span><br><span class="line">             <span class="keyword">from</span> b <span class="keyword">in</span> l2</span><br><span class="line">             <span class="keyword">from</span> c <span class="keyword">in</span> l3</span><br><span class="line">             <span class="keyword">select</span> &#123; a, b &#125;</span><br></pre></td></tr></table></figure>
 <p>这将转换成一系统嵌套的<code>SelectMany</code>调用，而<code>select</code>将转换为某种类似于<code>Return&lt;T&gt;()</code>的操作。对于F#来说，类似的代码可以用计算表达式（或者更加具体的序列表达式）：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">let result = seq &#123;</span><br><span class="line">    let! a = l1</span><br><span class="line">    let! b = l2</span><br><span class="line">    let! c = l3</span><br><span class="line">    return (a, b)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> result = seq &#123;</span><br><span class="line">    <span class="keyword">let!</span> a = l1</span><br><span class="line">    <span class="keyword">let!</span> b = l2</span><br><span class="line">    <span class="keyword">let!</span> c = l3</span><br><span class="line">    <span class="keyword">return</span> (a, b)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>到这里，似乎差不多该结束了，我们不打算继续深究<code>bind</code>，因为再往下走就到了<code>monad</code>了。事实上，大家已经看到了<code>monad</code>，F#的序列表达式以及C#中LINQ的一部分操作，就是<code>monad</code>。</p>
 <hr>
 <p>希望本文讲述的一些浅显的函数式编程概念可以在实践中对你有所帮助。最重要的是通过对思维的训练，可以从更加抽象的角度思考问题，提取问题最核心的部分以复用，将可变部分提出，从而使问题可组合，并且获得更好的表达性。</p>
@@ -397,11 +397,11 @@
 			
 		
 			
-				<li><a href="/tags/collaboration/" title="collaboration">collaboration<sup>1</sup></a></li>
+				<li><a href="/tags/security/" title="security">security<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/security/" title="security">security<sup>1</sup></a></li>
+				<li><a href="/tags/microservice/" title="microservice">microservice<sup>1</sup></a></li>
 			
 		
 			
@@ -409,7 +409,7 @@
 			
 		
 			
-				<li><a href="/tags/Functional-Programming/" title="Functional-Programming">Functional-Programming<sup>1</sup></a></li>
+				<li><a href="/tags/collaboration/" title="collaboration">collaboration<sup>1</sup></a></li>
 			
 		
 			
@@ -418,6 +418,18 @@
 		
 			
 				<li><a href="/tags/javascript/" title="javascript">javascript<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Golang/" title="Golang">Golang<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/error-handling/" title="error-handling">error-handling<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Functional-Programming/" title="Functional-Programming">Functional-Programming<sup>1</sup></a></li>
 			
 		
 		</ul>

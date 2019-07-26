@@ -19,7 +19,7 @@
 <meta property="og:site_name" content="lurongkai&#39;s blog">
 <meta property="og:description" content="导言现代的应用程序面临着诸多的挑战，如何构建具有可伸缩性和高性能的应用成为越来越多软件开发者思考的问题。随着应用规模的不断增大，业务复杂性的增长以及实时处理需求的增加，开发者不断尝试榨取硬件资源、优化。 在不断的探索中，出现了很多简化场景的工具，比如提供可伸缩计算资源的Amazon S3、Windows Azure，针对大数据的数据挖掘工具MapReduce，各种CDN服务，云存储服务等等。还有很">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-02-14T02:48:33.447Z">
+<meta property="og:updated_time" content="2019-04-15T02:05:39.654Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用异步编程">
 <meta name="twitter:description" content="导言现代的应用程序面临着诸多的挑战，如何构建具有可伸缩性和高性能的应用成为越来越多软件开发者思考的问题。随着应用规模的不断增大，业务复杂性的增长以及实时处理需求的增加，开发者不断尝试榨取硬件资源、优化。 在不断的探索中，出现了很多简化场景的工具，比如提供可伸缩计算资源的Amazon S3、Windows Azure，针对大数据的数据挖掘工具MapReduce，各种CDN服务，云存储服务等等。还有很">
@@ -92,32 +92,17 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#导言"><span class="toc-number">1.</span> <span class="toc-text">导言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么使用异步"><span class="toc-number">2.</span> <span class="toc-text">为什么使用异步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#异步的使用场景"><span class="toc-number">3.</span> <span class="toc-text">异步的使用场景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#计算密集型应用"><span class="toc-number">3.1.</span> <span class="toc-text">计算密集型应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#I-O密集型应用"><span class="toc-number">3.2.</span> <span class="toc-text">I/O密集型应用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一些概念的区别"><span class="toc-number">4.</span> <span class="toc-text">一些概念的区别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#多核与多线程"><span class="toc-number">4.1.</span> <span class="toc-text">多核与多线程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#并行与并发"><span class="toc-number">4.2.</span> <span class="toc-text">并行与并发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#阻塞与非阻塞"><span class="toc-number">4.3.</span> <span class="toc-text">阻塞与非阻塞</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#异步编程的挑战"><span class="toc-number">5.</span> <span class="toc-text">异步编程的挑战</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#回调函数地狱"><span class="toc-number">5.1.</span> <span class="toc-text">回调函数地狱</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异常处理"><span class="toc-number">5.2.</span> <span class="toc-text">异常处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异步流程控制"><span class="toc-number">5.3.</span> <span class="toc-text">异步流程控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#反人类的编程思维"><span class="toc-number">5.4.</span> <span class="toc-text">反人类的编程思维</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#扩展阅读"><span class="toc-number">6.</span> <span class="toc-text">扩展阅读</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise-Deferred"><span class="toc-number">6.1.</span> <span class="toc-text">Promise/Deferred</span></a></li></ol></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#导言"><span class="toc-number">1.</span> <span class="toc-text">导言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么使用异步"><span class="toc-number">2.</span> <span class="toc-text">为什么使用异步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#异步的使用场景"><span class="toc-number">3.</span> <span class="toc-text">异步的使用场景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#计算密集型应用"><span class="toc-number">3.1.</span> <span class="toc-text">计算密集型应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#I-O密集型应用"><span class="toc-number">3.2.</span> <span class="toc-text">I/O密集型应用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一些概念的区别"><span class="toc-number">4.</span> <span class="toc-text">一些概念的区别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#多核与多线程"><span class="toc-number">4.1.</span> <span class="toc-text">多核与多线程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#并行与并发"><span class="toc-number">4.2.</span> <span class="toc-text">并行与并发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#阻塞与非阻塞"><span class="toc-number">4.3.</span> <span class="toc-text">阻塞与非阻塞</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#异步编程的挑战"><span class="toc-number">5.</span> <span class="toc-text">异步编程的挑战</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#回调函数地狱"><span class="toc-number">5.1.</span> <span class="toc-text">回调函数地狱</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异常处理"><span class="toc-number">5.2.</span> <span class="toc-text">异常处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异步流程控制"><span class="toc-number">5.3.</span> <span class="toc-text">异步流程控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#反人类的编程思维"><span class="toc-number">5.4.</span> <span class="toc-text">反人类的编程思维</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#扩展阅读"><span class="toc-number">6.</span> <span class="toc-text">扩展阅读</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise-Deferred"><span class="toc-number">6.1.</span> <span class="toc-text">Promise/Deferred</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pull-vs-Push"><span class="toc-number">6.2.</span> <span class="toc-text">Pull vs. Push</span></a></li></ol></li></ol>
 		
 		</div>
 		
 		<h2 id="导言"><a href="#导言" class="headerlink" title="导言"></a>导言</h2><p>现代的应用程序面临着诸多的挑战，如何构建具有可伸缩性和高性能的应用成为越来越多软件开发者思考的问题。随着应用规模的不断增大，业务复杂性的增长以及实时处理需求的增加，开发者不断尝试榨取硬件资源、优化。</p>
 <p>在不断的探索中，出现了很多简化场景的工具，比如提供可伸缩计算资源的<a href="http://aws.amazon.com/cn/s3/" target="_blank" rel="noopener">Amazon S3</a>、<a href="http://azure.microsoft.com/" target="_blank" rel="noopener">Windows Azure</a>，针对大数据的数据挖掘工具<a href="http://research.google.com/archive/mapreduce.html" target="_blank" rel="noopener">MapReduce</a>，各种CDN服务，云存储服务等等。还有很多的工程实践例如<a href="http://agilemanifesto.org/" target="_blank" rel="noopener">敏捷</a>、<a href="http://www.domaindrivendesign.org/" target="_blank" rel="noopener">DDD</a>等提供了指导。可以看到，将每个关注层面以服务的方式提供，成为了越来越流行的一种模式，或许我们可以激进的认为，这就是<a href="http://en.wikipedia.org/wiki/Service-oriented_architecture/" target="_blank" rel="noopener">SOA</a>。</p>
-<p>开发者需要将不同的资源粘合在一起来提供最终的应用，这就需要协调不同的资源。<br><a id="more"></a><br>我们可以设想一个大的场景，开发者正在开发的一个用例会从用户的浏览器接收到请求，该请求会先从一个开放主机服务(OHS)获取必要的资源res1，然后调用本机的服务s1对资源res1进行适应的转换产生资源res2，接着以res2为参数调用远程的数据仓库服务rs1获取业务数据bs1，最后以bs1为参数调用本机的计算服务calc并经过10s产生最终的数据。</p>
+<p>开发者需要将不同的资源粘合在一起来提供最终的应用，这就需要协调不同的资源。</p>
+<p>我们可以设想一个大的场景，开发者正在开发的一个用例会从用户的浏览器接收到请求，该请求会先从一个开放主机服务(OHS)获取必要的资源res1，然后调用本机的服务s1对资源res1进行适应的转换产生资源res2，接着以res2为参数调用远程的数据仓库服务rs1获取业务数据bs1，最后以bs1为参数调用本机的计算服务calc并经过10s产生最终的数据。</p>
 <p>简单的用ASP.NET MVC 5表示就是这样的（这些代码是我瞎掰的）：</p>
-<pre><code>// notes: ASP.NET vNext changed MVC 5 usage, 
-// ActionResult now became IActionResult
-public IActionResult CrazyCase(UserData userData) {
-    var ticket = CrazyApplication.Ticket;
-
-    var ohsFactory = new OpenHostServiceFactory(ticket);
-    var ohs = ohsFactory.CreateService();
-
-    var ohsAdapter = new OhsAdapter(userData);
-
-    var rs1 = ohs.RetrieveResource(ohsAdapter);
-    var rs2 = _localConvertingService.Unitize(rs1);
-    var bs1 = _remoteRepository.LoadBusinessData(rs2);
-    var result = _calculationService.DoCalculation(bs1);
-
-    return View(result);
-}
-</code></pre><p>这可能是中等复杂度的一个场景，但是相信开发者已经意识到了这其中所涉及的复杂度。我们看到每一步都是依赖于前者所产生的数据，在这样一种场景之下，传统的多线程技术将极度受限，并且最顶层的协调服务将始终占用一个线程来协调每一步。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// notes: ASP.NET vNext changed MVC 5 usage, </span></span><br><span class="line"><span class="comment">// ActionResult now became IActionResult</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> IActionResult <span class="title">CrazyCase</span>(<span class="params">UserData userData</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> ticket = CrazyApplication.Ticket;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> ohsFactory = <span class="keyword">new</span> OpenHostServiceFactory(ticket);</span><br><span class="line">    <span class="keyword">var</span> ohs = ohsFactory.CreateService();</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> ohsAdapter = <span class="keyword">new</span> OhsAdapter(userData);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> rs1 = ohs.RetrieveResource(ohsAdapter);</span><br><span class="line">    <span class="keyword">var</span> rs2 = _localConvertingService.Unitize(rs1);</span><br><span class="line">    <span class="keyword">var</span> bs1 = _remoteRepository.LoadBusinessData(rs2);</span><br><span class="line">    <span class="keyword">var</span> result = _calculationService.DoCalculation(bs1);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> View(result);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这可能是中等复杂度的一个场景，但是相信开发者已经意识到了这其中所涉及的复杂度。我们看到每一步都是依赖于前者所产生的数据，在这样一种场景之下，传统的多线程技术将极度受限，并且最顶层的协调服务将始终占用一个线程来协调每一步。</p>
 <p>线程是要增加开销的，尤其是上下文的转换，别扯什么线程池了，创建线程的开销是节省了，上下文切换的开销才是要命的。</p>
 <blockquote>
 <p>经济不景气，能省点儿资源就省点儿吧。</p>
@@ -126,98 +111,25 @@ public IActionResult CrazyCase(UserData userData) {
 <p>所以我们该怎么办？纵向扩展给服务器加多点内存？横向扩展上负载均衡？别闹了我们又不是民工，想问题不要太简单粗暴。解决的办法就是，异步，而且我们这篇也只讨论异步这一种技术。</p>
 <h2 id="为什么使用异步"><a href="#为什么使用异步" class="headerlink" title="为什么使用异步"></a>为什么使用异步</h2><p>那么，异步的优势在哪里？这首先要和同步做一个对比。</p>
 <p>还是开头那个场景，示例代码所展示的是使用同步阻塞的方式来一步一步的执行，如下示意：</p>
-<pre><code>main) +++$----$------$--------$----------$+++
-         |   /|     /|       /|         /
-ohs )    $++$ |    / |      / |        /
-              |   /  |     /  |       /
-rs1 )         $++$   |    /   |      /
-                     |   /    |     /
-s1  )                $++$     |    /
-                              |   /
-calc)                         $++$
-
-notes:
-$ code point
-+ thread busy
-- thread blocked(means, wasted)
-</code></pre><p>可以明显的看到，当主线程发起各个service请求后，完全处于闲置占用的状态，所做的无非是协调任务间的依赖顺序。这里所说的占用，其实就是CPU的时间片。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">main) +++$----$------$--------$----------$+++</span><br><span class="line">         |   /|     /|       /|         /</span><br><span class="line">ohs )    $++$ |    / |      / |        /</span><br><span class="line">              |   /  |     /  |       /</span><br><span class="line">rs1 )         $++$   |    /   |      /</span><br><span class="line">                     |   /    |     /</span><br><span class="line">s1  )                $++$     |    /</span><br><span class="line">                              |   /</span><br><span class="line">calc)                         $++$</span><br><span class="line"></span><br><span class="line">notes:</span><br><span class="line">$ code point</span><br><span class="line">+ thread busy</span><br><span class="line">- thread blocked(means, wasted)</span><br></pre></td></tr></table></figure>
+<p>可以明显的看到，当主线程发起各个service请求后，完全处于闲置占用的状态，所做的无非是协调任务间的依赖顺序。这里所说的占用，其实就是CPU的时间片。</p>
 <p>我们为什么要等所有的子任务结束？因为任务间有先后顺序依赖。有没有更好的方式来规避等待所带来的损耗呢？考虑一个场景，正上着班呢，突然想起要在网上买个东西，那么打开京东你就顺利的下单了，事情并没有结束，你不会等快递的小哥给你送来东西以后再接着今天的工作吧？你会给快递留下你的联系方式，让他<strong>到了给你打电话</strong>(耗时的I/O任务)，然后你继续今天烧脑的编程任务(CPU密集型)。从人类的角度来看，这一定是最正常不过的，也就是要讨论的异步的方式。</p>
 <blockquote>
 <p>一定有人会提议单开一个线程做收快递的任务，我同意这是一种解决方案，但是如果用等效的人类角度的语言来说，就是你将大脑的资源分成了两半，一半在烧脑编程，一半在盯着手机发呆，脑利用率下降太明显。而用异步的方式，你不需要关注手机，因为手机响了你就自然得到了通知。<br>当然，你也可以任性的说，我就喜欢等快递来了再干活。if so，我们就不要做朋友了。</p>
 </blockquote>
 <p>所以我们可以有一个推论：异步所解决的，就是节省低速的IO所阻塞的CPU计算时间。</p>
 <p>转换一下思路，我们使用异步非阻塞的方式来构建这段业务，并借助异步思想早已深入人心的<code>javascript</code>语言来解释，可以是这样的：</p>
-<pre><code>// express
-
-var ohs = require(&apos;./anticorruption/OpenHostService&apos;);
-var localConvertingService = require(&apos;./services/LocalConverting&apos;);
-var remoteRepository = require(&apos;./repositories/BusinessData&apos;);
-var calculationService = require(&apos;./services/Calculation&apos;);
-
-function(req, res) {
-    var userData = req.body;
-
-    // level1 nest
-    ohs.retrieveResource(userData, function(err, rs1) {
-        if(err) {
-            // error handling
-        }
-        // level2 nest
-        localConvertingService.unitize(rs1, function(err, rs2) {
-            if(err) {
-                // error handling
-            }
-            //level3 nest
-            remoteRepository.loadBusinessData(rs2, function(err, bs1) {
-                if(err) {
-                    // error handling
-                }
-                //level4 nest
-                calculationService.doCalculation(bs1, function(err, result) {
-                    if(err) {
-                        // error handling
-                    }
-                    res.view(result);
-                });
-            });
-        });
-    });
-}
-</code></pre><p>看着一层又一层的花括号也是醉了，我们之后会讨论如何解嵌套。那么这段代码所反应的是怎样的事实呢？如下示意：</p>
-<pre><code>main) +++$                           $+++
-          \                         /
-ohs )      $++$                    /
-               \                  /
-rs1 )           $++$             /
-                    \           /
-s1  )                $++$      /
-                         \    /
-calc)                     $++$
-
-notes:
-$ code point
-+ thread busy
-- thread blocked(means, wasted)
-</code></pre><p>由于异步解放了原始的工作线程，使CPU资源可以不被线程的阻塞而被浪费，从而可以有效的提高吞吐率。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// express</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> ohs = <span class="built_in">require</span>(<span class="string">'./anticorruption/OpenHostService'</span>);</span><br><span class="line"><span class="keyword">var</span> localConvertingService = <span class="built_in">require</span>(<span class="string">'./services/LocalConverting'</span>);</span><br><span class="line"><span class="keyword">var</span> remoteRepository = <span class="built_in">require</span>(<span class="string">'./repositories/BusinessData'</span>);</span><br><span class="line"><span class="keyword">var</span> calculationService = <span class="built_in">require</span>(<span class="string">'./services/Calculation'</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> userData = req.body;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// level1 nest</span></span><br><span class="line">    ohs.retrieveResource(userData, <span class="function"><span class="keyword">function</span>(<span class="params">err, rs1</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(err) &#123;</span><br><span class="line">            <span class="comment">// error handling</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// level2 nest</span></span><br><span class="line">        localConvertingService.unitize(rs1, <span class="function"><span class="keyword">function</span>(<span class="params">err, rs2</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(err) &#123;</span><br><span class="line">                <span class="comment">// error handling</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//level3 nest</span></span><br><span class="line">            remoteRepository.loadBusinessData(rs2, <span class="function"><span class="keyword">function</span>(<span class="params">err, bs1</span>) </span>&#123;</span><br><span class="line">                <span class="keyword">if</span>(err) &#123;</span><br><span class="line">                    <span class="comment">// error handling</span></span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//level4 nest</span></span><br><span class="line">                calculationService.doCalculation(bs1, <span class="function"><span class="keyword">function</span>(<span class="params">err, result</span>) </span>&#123;</span><br><span class="line">                    <span class="keyword">if</span>(err) &#123;</span><br><span class="line">                        <span class="comment">// error handling</span></span><br><span class="line">                    &#125;</span><br><span class="line">                    res.view(result);</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看着一层又一层的花括号也是醉了，我们之后会讨论如何解嵌套。那么这段代码所反应的是怎样的事实呢？如下示意：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">main) +++$                           $+++</span><br><span class="line">          \                         /</span><br><span class="line">ohs )      $++$                    /</span><br><span class="line">               \                  /</span><br><span class="line">rs1 )           $++$             /</span><br><span class="line">                    \           /</span><br><span class="line">s1  )                $++$      /</span><br><span class="line">                         \    /</span><br><span class="line">calc)                     $++$</span><br><span class="line"></span><br><span class="line">notes:</span><br><span class="line">$ code point</span><br><span class="line">+ thread busy</span><br><span class="line">- thread blocked(means, wasted)</span><br></pre></td></tr></table></figure>
+<p>由于异步解放了原始的工作线程，使CPU资源可以不被线程的阻塞而被浪费，从而可以有效的提高吞吐率。</p>
 <h2 id="异步的使用场景"><a href="#异步的使用场景" class="headerlink" title="异步的使用场景"></a>异步的使用场景</h2><blockquote>
 <p>技术和选择和使用场景有着很大的关系，每项技术不都是银弹，使用对的工具/技术解决对的问题是开发者的义务。</p>
 </blockquote>
 <p>开发者最多关注的是计算密集和I/O密集这两个维度，对于这两个维度往往有着不同的技术选型。</p>
 <h3 id="计算密集型应用"><a href="#计算密集型应用" class="headerlink" title="计算密集型应用"></a>计算密集型应用</h3><p>何为计算密集型应用？下面两个人畜皆知的函数都是计算密集型的。</p>
-<pre><code>// F#
-let fibonacci n =
-    let rec f a b n =
-        match n with
-        | 0 -&gt; a
-        | 1 -&gt; b
-        | n -&gt; (f b (a + b) (n - 1))
-    f 0 1 n
-
-let rec factorial n = 
-    match n with
-    | 0 -&gt; 1
-    | n -&gt; n * factorial (n - 1)
-</code></pre><p>尤其是第二个阶乘函数，如果在调用的时候不小心手抖多加了几个0，基本上可以出去喝个咖啡谈谈理想聊聊人生玩一天再回来看看有没有算完了。</p>
+<figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// F#</span></span><br><span class="line"><span class="keyword">let</span> fibonacci n =</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">rec</span> f a b n =</span><br><span class="line">        <span class="keyword">match</span> n <span class="keyword">with</span></span><br><span class="line">        | <span class="number">0</span> -&gt; a</span><br><span class="line">        | <span class="number">1</span> -&gt; b</span><br><span class="line">        | n -&gt; (f b (a + b) (n - <span class="number">1</span>))</span><br><span class="line">    f <span class="number">0</span> <span class="number">1</span> n</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="keyword">rec</span> factorial n = </span><br><span class="line">    <span class="keyword">match</span> n <span class="keyword">with</span></span><br><span class="line">    | <span class="number">0</span> -&gt; <span class="number">1</span></span><br><span class="line">    | n -&gt; n * factorial (n - <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<p>尤其是第二个阶乘函数，如果在调用的时候不小心手抖多加了几个0，基本上可以出去喝个咖啡谈谈理想聊聊人生玩一天再回来看看有没有算完了。</p>
 <p>简而言之，计算密集型的任务是典型的重度依赖CPU/GPU，不涉及磁盘、网络、输入输出的任务。游戏中场景渲染是计算密集的，MapReduce中的<code>Reduce</code>部分是计算密集的，视频处理软件的实时渲染是计算密集的，等等。</p>
 <p>在这样的场景之下，异步是没有太大的优势的，因为计算资源就那么多，不增不减，用多线程也好用异步流也好，CPU永远处于高负荷状态，这病不能治，解决方案只能是：</p>
 <ul>
@@ -264,182 +176,32 @@ let rec factorial n =
 <h2 id="异步编程的挑战"><a href="#异步编程的挑战" class="headerlink" title="异步编程的挑战"></a>异步编程的挑战</h2><p>异步编程的主要困难在于，构建程序的执行逻辑时是非线性的，这需要将任务流分解成很多小的步骤，再通过异步回调函数的形式组合起来。在异步大行其道的<code>javascript</code>界经常可以看到很多层的<code>});</code>，简单酸爽到妙不可言。这一节将讨论一些常用的处理异步的技术手段。</p>
 <h3 id="回调函数地狱"><a href="#回调函数地狱" class="headerlink" title="回调函数地狱"></a>回调函数地狱</h3><p>开头的那个例子使用了4层的嵌套回调函数，如果流程更加复杂的话，还需要嵌套更多，这不是一个好的实践。而且以回调的方式组织流程，在视觉上并不是很直白，我们需要更加优雅的方式来解耦和组织异步流。</p>
 <p>使用传统的<code>javascript</code>技术，可以展平回调层次，例如我们可以改写之前的例子：</p>
-<pre><code>var ohs = require(&apos;./anticorruption/OpenHostService&apos;);
-var localConvertingService = require(&apos;./services/LocalConverting&apos;);
-var remoteRepository = require(&apos;./repositories/BusinessData&apos;);
-var calculationService = require(&apos;./services/Calculation&apos;);
-
-function(req, res) {
-    var userData = req.body;
-
-    ohs.retrieveResource(userData, ohsCb);
-
-    function ohsCb(err, rs1) {
-        if(err) {
-            // error handling
-        }
-        localConvertingService.unitize(rs1, convertingCb);
-    }
-
-    function convertingCb(err, rs2) {
-        if(err) {
-            // error handling
-        }
-        remoteRepository.loadBusinessData(rs2, loadDataCb);
-    }
-
-    function loadDataCb(err, bs1) {
-        if(err) {
-            // error handling
-        }
-        calculationService.doCalculation(bs1 , calclationCb);
-    }
-
-    function calclationCb(err, result) {
-        if(err) {
-            // error handling
-        }
-        res.view(result);
-    }
-}
-</code></pre><p>解嵌套的关键在于如何处理函数作用域，之后金字塔厄运迎刃而解。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ohs = <span class="built_in">require</span>(<span class="string">'./anticorruption/OpenHostService'</span>);</span><br><span class="line"><span class="keyword">var</span> localConvertingService = <span class="built_in">require</span>(<span class="string">'./services/LocalConverting'</span>);</span><br><span class="line"><span class="keyword">var</span> remoteRepository = <span class="built_in">require</span>(<span class="string">'./repositories/BusinessData'</span>);</span><br><span class="line"><span class="keyword">var</span> calculationService = <span class="built_in">require</span>(<span class="string">'./services/Calculation'</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> userData = req.body;</span><br><span class="line"></span><br><span class="line">    ohs.retrieveResource(userData, ohsCb);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">ohsCb</span>(<span class="params">err, rs1</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(err) &#123;</span><br><span class="line">            <span class="comment">// error handling</span></span><br><span class="line">        &#125;</span><br><span class="line">        localConvertingService.unitize(rs1, convertingCb);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">convertingCb</span>(<span class="params">err, rs2</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(err) &#123;</span><br><span class="line">            <span class="comment">// error handling</span></span><br><span class="line">        &#125;</span><br><span class="line">        remoteRepository.loadBusinessData(rs2, loadDataCb);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">loadDataCb</span>(<span class="params">err, bs1</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(err) &#123;</span><br><span class="line">            <span class="comment">// error handling</span></span><br><span class="line">        &#125;</span><br><span class="line">        calculationService.doCalculation(bs1 , calclationCb);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">calclationCb</span>(<span class="params">err, result</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(err) &#123;</span><br><span class="line">            <span class="comment">// error handling</span></span><br><span class="line">        &#125;</span><br><span class="line">        res.view(result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>解嵌套的关键在于如何处理函数作用域，之后金字塔厄运迎刃而解。</p>
 <p>还有一种更为优雅的<code>javascript</code>回调函数处理方式，可以参考后面的<code>Promise</code>部分。</p>
 <p>而对于像<code>C#</code>之类的内建异步支持的语言，那么上述问题更加的不是问题，例如：</p>
-<pre><code>public async IActionResult CrazyCase(UserData userData) {
-    var ticket = CrazyApplication.Ticket;
-
-    var ohsFactory = new OpenHostServiceFactory(ticket);
-    var ohs = ohsFactory.CreateService();
-
-    var ohsAdapter = new OhsAdapter(userData);
-
-    var rs1 = await ohs.RetrieveResource(ohsAdapter);
-    var rs2 = await _localConvertingService.Unitize(rs1);
-    var bs1 = await _remoteRepository.LoadBusinessData(rs2);
-    var result = await _calculationService.DoCalculation(bs1);
-
-    return View(result);
-}
-</code></pre><p><code>async/await</code>这糖简直不能更甜了，其它<code>C#</code>的编译器还是生成了使用<code>TPL</code>特性的代码来做异步，说白了就是一些<code>Task&lt;T&gt;</code>在做后台的任务，当遇到<code>async/await</code>关键字后，编译器将该方法编译为状态机，所以该方法就可以在<code>await</code>的地方挂起和恢复了。整个的开发体验几乎完全是同步式的思维在做异步的事儿。后面有关于<code>TPL</code>的简单介绍。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">async</span> IActionResult <span class="title">CrazyCase</span>(<span class="params">UserData userData</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> ticket = CrazyApplication.Ticket;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> ohsFactory = <span class="keyword">new</span> OpenHostServiceFactory(ticket);</span><br><span class="line">    <span class="keyword">var</span> ohs = ohsFactory.CreateService();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> ohsAdapter = <span class="keyword">new</span> OhsAdapter(userData);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> rs1 = <span class="keyword">await</span> ohs.RetrieveResource(ohsAdapter);</span><br><span class="line">    <span class="keyword">var</span> rs2 = <span class="keyword">await</span> _localConvertingService.Unitize(rs1);</span><br><span class="line">    <span class="keyword">var</span> bs1 = <span class="keyword">await</span> _remoteRepository.LoadBusinessData(rs2);</span><br><span class="line">    <span class="keyword">var</span> result = <span class="keyword">await</span> _calculationService.DoCalculation(bs1);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> View(result);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>async/await</code>这糖简直不能更甜了，其它<code>C#</code>的编译器还是生成了使用<code>TPL</code>特性的代码来做异步，说白了就是一些<code>Task&lt;T&gt;</code>在做后台的任务，当遇到<code>async/await</code>关键字后，编译器将该方法编译为状态机，所以该方法就可以在<code>await</code>的地方挂起和恢复了。整个的开发体验几乎完全是同步式的思维在做异步的事儿。后面有关于<code>TPL</code>的简单介绍。</p>
 <h3 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h3><p>由于异步执行采用非阻塞的方式，所以当前的执行线程在调用后捕获不到异步执行栈，因此传统的异步处理将不再适用。举两个例子：</p>
-<pre><code>try {
-    Task.Factory.StartNew(() =&gt; {
-        throw new InvalidOperationException(&quot;diablo coming.&quot;);
-    });
-} catch(InvalidOperationException e) {
-    // nothing captured.
-    throw;
-}
-</code></pre><hr>
-<pre><code>try {
-    process.nextTick(function() {
-        throw new Error(&apos;diablo coming.&apos;);
-    });
-} catch(e) {
-    // nothing captured.
-    throw e;
-}
-</code></pre><p>在这两个例子中，<code>try</code>语句块中的调用会立即返回，不会触发<code>catch</code>语句。那么如何在异步中处理异常呢？我们考虑异步执行结束后会触发回调函数，那么这便是处理异常的最佳地点。<code>node</code>的回调函数几乎总是接受一个错误作为其首个参数，例如：</p>
-<pre><code>fs.readFile(&apos;file.txt&apos;, &apos;utf-8&apos;, function(err, data) { });
-</code></pre><p>其中的<code>err</code>是由异步任务本身产生的，这是一种自然的处理异步异常的方式。那么回到<code>C#</code>中，因为有了好用的<code>async/await</code>，我们可以使用同步式的思维来处理异常：</p>
-<pre><code>try {
-    await Task.Factory.StartNew(() =&gt; {
-        throw new InvalidOperationException(&quot;diablo coming.&quot;);
-    });
-} catch(InvalidOperationException e) {
-    // exception handling.
-}
-</code></pre><p>编译器所构建的状态机可以支持异常的处理，简直是强大到无与伦比。当然，对于<code>TPL</code>的处理也有其专属的支持，类似于<code>node</code>的处理方式：</p>
-<pre><code>Task.Factory.StartNew(() =&gt; {
-    throw new InvalidOperationException(&quot;diablo coming.&quot;);
-})
-.ContinueWith(parent =&gt; {
-    var parentException = parent.Exception;
-});
-</code></pre><p>注意这里访问到的<code>parent.Exception</code>是一个<code>AggregateException</code>类型，对应的处理方式也较传统的异常处理也稍有不同：</p>
-<pre><code>parentException.Handle(e =&gt; {
-    if(e is InvalidOperationException) {
-        // exception handling.
-        return true;
-    }
-
-    return false;
-});
-</code></pre><h3 id="异步流程控制"><a href="#异步流程控制" class="headerlink" title="异步流程控制"></a>异步流程控制</h3><p>异步的技术也许明白了，但是遇到更复杂的异步场景呢？假设我们需要异步并行的将目录下的3个文件读出，全部完成后进行内容拼接，那么就需要更细粒度的流程控制。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    Task.Factory.StartNew(() =&gt; &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> InvalidOperationException(<span class="string">"diablo coming."</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125; <span class="keyword">catch</span>(InvalidOperationException e) &#123;</span><br><span class="line">    <span class="comment">// nothing captured.</span></span><br><span class="line">    <span class="keyword">throw</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    process.nextTick(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'diablo coming.'</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125; <span class="keyword">catch</span>(e) &#123;</span><br><span class="line">    <span class="comment">// nothing captured.</span></span><br><span class="line">    <span class="keyword">throw</span> e;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这两个例子中，<code>try</code>语句块中的调用会立即返回，不会触发<code>catch</code>语句。那么如何在异步中处理异常呢？我们考虑异步执行结束后会触发回调函数，那么这便是处理异常的最佳地点。<code>node</code>的回调函数几乎总是接受一个错误作为其首个参数，例如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fs.readFile(<span class="string">'file.txt'</span>, <span class="string">'utf-8'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>) </span>&#123; &#125;);</span><br></pre></td></tr></table></figure>
+<p>其中的<code>err</code>是由异步任务本身产生的，这是一种自然的处理异步异常的方式。那么回到<code>C#</code>中，因为有了好用的<code>async/await</code>，我们可以使用同步式的思维来处理异常：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">await</span> Task.Factory.StartNew(() =&gt; &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> InvalidOperationException(<span class="string">"diablo coming."</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125; <span class="keyword">catch</span>(InvalidOperationException e) &#123;</span><br><span class="line">    <span class="comment">// exception handling.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译器所构建的状态机可以支持异常的处理，简直是强大到无与伦比。当然，对于<code>TPL</code>的处理也有其专属的支持，类似于<code>node</code>的处理方式：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Task.Factory.StartNew(() =&gt; &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> InvalidOperationException(<span class="string">"diablo coming."</span>);</span><br><span class="line">&#125;)</span><br><span class="line">.ContinueWith(parent =&gt; &#123;</span><br><span class="line">    <span class="keyword">var</span> parentException = parent.Exception;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>注意这里访问到的<code>parent.Exception</code>是一个<code>AggregateException</code>类型，对应的处理方式也较传统的异常处理也稍有不同：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">parentException.Handle(e =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span>(e <span class="keyword">is</span> InvalidOperationException) &#123;</span><br><span class="line">        <span class="comment">// exception handling.</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="异步流程控制"><a href="#异步流程控制" class="headerlink" title="异步流程控制"></a>异步流程控制</h3><p>异步的技术也许明白了，但是遇到更复杂的异步场景呢？假设我们需要异步并行的将目录下的3个文件读出，全部完成后进行内容拼接，那么就需要更细粒度的流程控制。</p>
 <p>我们可以借鉴<a href="https://github.com/caolan/async" target="_blank" rel="noopener">async.js</a>这款优秀的异步流程控制库所带来的便捷。</p>
-<pre><code>async.parallel([
-    function(callback) {
-         fs.readFile(&apos;f1.txt&apos;, &apos;utf-8&apos;, callback)
-    },
-    function(callback) {
-         fs.readFile(&apos;f2.txt&apos;, &apos;utf-8&apos;, callback)
-    },
-    function(callback) {
-         fs.readFile(&apos;f3.txt&apos;, &apos;utf-8&apos;, callback)
-    }
-], function (err, fileResults) {
-    // concat the content of each files
-});
-</code></pre><p>如果使用<code>C#</code>并配合<code>TPL</code>，那么这个场景可以这么实现：</p>
-<pre><code>public async void AsyncDemo() {
-    var files = new []{
-        &quot;f1.txt&quot;,
-        &quot;f2.txt&quot;,
-        &quot;f3.txt&quot;
-    };
-
-    var tasks = files.Select(file =&gt; {
-        return Task.Factory.StartNew(() =&gt; {
-            return File.ReadAllText(file);
-        });
-    });
-
-    await Task.WhenAll(tasks);
-
-    var fileContents = tasks.Select(t =&gt; t.Result);
-
-    // concat the content of each files
-}
-</code></pre><p>我们再回到我们开头遇到到的那个场景，可以使用<code>async.js</code>的<code>waterfall</code>来简化：</p>
-<pre><code>var ohs = require(&apos;./anticorruption/OpenHostService&apos;);
-var localConvertingService = require(&apos;./services/LocalConverting&apos;);
-var remoteRepository = require(&apos;./repositories/BusinessData&apos;);
-var calculationService = require(&apos;./services/Calculation&apos;);
-var async = require(&apos;async&apos;);
-
-function(req, res) {
-    var userData = req.body;
-
-    async.waterfall([
-        function(callback) {
-            ohs.retrieveResource(userData, function(err, rs1) {
-                callback(err, rs1);
-            });
-        },
-        function(rs1, callback) {
-            localConvertingService.unitize(rs1, function(err, rs2) {
-                callback(err, rs2);
-            });
-        },
-        function(rs2, callback) {
-            remoteRepository.loadBusinessData(rs2, function(err, bs1) {
-                callback(err, bs1);
-            });
-        },
-        function(bs1, callback) {
-            calculationService.doCalculation(bs1, function(err, result) {
-                callback(err, result);
-            });
-        }
-    ],
-    function(err, result) {
-        if(err) {
-            // error handling
-        }
-        res.view(result);
-    });
-}
-</code></pre><p>如果需要处理前后无依赖的异步任务流可以使用<code>async.series()</code>来串行异步任务，例如先开电源再开热水器电源最后亮起红灯，并没有数据的依赖，但有先后的顺序。用法和之前的<code>parallel()</code>及<code>waterfall()</code>大同小异。另外还有优秀的轻量级方案<a href="https://github.com/creationix/step" target="_blank" rel="noopener">step</a>，以及为<code>javascript</code>提供monadic扩展的<a href="https://github.com/JeffreyZhao/wind" target="_blank" rel="noopener">wind.js</a>（特别像<code>C#</code>提供的方案），有兴趣可以深入了解。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span>.parallel([</span><br><span class="line">    <span class="function"><span class="keyword">function</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">            fs.readFile(<span class="string">'f1.txt'</span>, <span class="string">'utf-8'</span>, callback)</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="function"><span class="keyword">function</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">            fs.readFile(<span class="string">'f2.txt'</span>, <span class="string">'utf-8'</span>, callback)</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="function"><span class="keyword">function</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">            fs.readFile(<span class="string">'f3.txt'</span>, <span class="string">'utf-8'</span>, callback)</span><br><span class="line">    &#125;</span><br><span class="line">], <span class="function"><span class="keyword">function</span> (<span class="params">err, fileResults</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// concat the content of each files</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>如果使用<code>C#</code>并配合<code>TPL</code>，那么这个场景可以这么实现：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">async</span> <span class="keyword">void</span> <span class="title">AsyncDemo</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> files = <span class="keyword">new</span> []&#123;</span><br><span class="line">        <span class="string">"f1.txt"</span>,</span><br><span class="line">        <span class="string">"f2.txt"</span>,</span><br><span class="line">        <span class="string">"f3.txt"</span></span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> tasks = files.Select(file =&gt; &#123;</span><br><span class="line">        <span class="keyword">return</span> Task.Factory.StartNew(() =&gt; &#123;</span><br><span class="line">            <span class="keyword">return</span> File.ReadAllText(file);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">await</span> Task.WhenAll(tasks);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> fileContents = tasks.Select(t =&gt; t.Result);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// concat the content of each files</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们再回到我们开头遇到到的那个场景，可以使用<code>async.js</code>的<code>waterfall</code>来简化：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ohs = <span class="built_in">require</span>(<span class="string">'./anticorruption/OpenHostService'</span>);</span><br><span class="line"><span class="keyword">var</span> localConvertingService = <span class="built_in">require</span>(<span class="string">'./services/LocalConverting'</span>);</span><br><span class="line"><span class="keyword">var</span> remoteRepository = <span class="built_in">require</span>(<span class="string">'./repositories/BusinessData'</span>);</span><br><span class="line"><span class="keyword">var</span> calculationService = <span class="built_in">require</span>(<span class="string">'./services/Calculation'</span>);</span><br><span class="line"><span class="keyword">var</span> <span class="keyword">async</span> = <span class="built_in">require</span>(<span class="string">'async'</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> userData = req.body;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">async</span>.waterfall([</span><br><span class="line">        <span class="function"><span class="keyword">function</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">            ohs.retrieveResource(userData, <span class="function"><span class="keyword">function</span>(<span class="params">err, rs1</span>) </span>&#123;</span><br><span class="line">                callback(err, rs1);</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="function"><span class="keyword">function</span>(<span class="params">rs1, callback</span>) </span>&#123;</span><br><span class="line">            localConvertingService.unitize(rs1, <span class="function"><span class="keyword">function</span>(<span class="params">err, rs2</span>) </span>&#123;</span><br><span class="line">                callback(err, rs2);</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="function"><span class="keyword">function</span>(<span class="params">rs2, callback</span>) </span>&#123;</span><br><span class="line">            remoteRepository.loadBusinessData(rs2, <span class="function"><span class="keyword">function</span>(<span class="params">err, bs1</span>) </span>&#123;</span><br><span class="line">                callback(err, bs1);</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="function"><span class="keyword">function</span>(<span class="params">bs1, callback</span>) </span>&#123;</span><br><span class="line">            calculationService.doCalculation(bs1, <span class="function"><span class="keyword">function</span>(<span class="params">err, result</span>) </span>&#123;</span><br><span class="line">                callback(err, result);</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="function"><span class="keyword">function</span>(<span class="params">err, result</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(err) &#123;</span><br><span class="line">            <span class="comment">// error handling</span></span><br><span class="line">        &#125;</span><br><span class="line">        res.view(result);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果需要处理前后无依赖的异步任务流可以使用<code>async.series()</code>来串行异步任务，例如先开电源再开热水器电源最后亮起红灯，并没有数据的依赖，但有先后的顺序。用法和之前的<code>parallel()</code>及<code>waterfall()</code>大同小异。另外还有优秀的轻量级方案<a href="https://github.com/creationix/step" target="_blank" rel="noopener">step</a>，以及为<code>javascript</code>提供monadic扩展的<a href="https://github.com/JeffreyZhao/wind" target="_blank" rel="noopener">wind.js</a>（特别像<code>C#</code>提供的方案），有兴趣可以深入了解。</p>
 <h3 id="反人类的编程思维"><a href="#反人类的编程思维" class="headerlink" title="反人类的编程思维"></a>反人类的编程思维</h3><blockquote>
 <p>异步是反人类的</p>
 </blockquote>
@@ -452,124 +214,21 @@ function(req, res) {
 </blockquote>
 <p>在<code>jQuery 1.5+</code>之后出现了一种新的API调用方式，相比于旧的API，新的方式更好的解耦了关注点，并带来了更好的组合能力。</p>
 <p>我们看一个传统的使用<code>ajax</code>的例子：</p>
-<pre><code>$.get(&apos;/api/service1&apos;, {
-    success: onSuccess,
-    failure: onFailure,
-    always:  onAlways
-});
-</code></pre><p>使用新的API后，调用的方式变成了：</p>
-<pre><code>$.get(&apos;/api/service1&apos;)
-    .done(onSussess)
-    .fail(onFailure)
-    .always(onAlways);
-</code></pre><p><code>get</code>方法返回的是一个<code>promise</code>对象，表示这个方法会在未来某个时刻执行完毕。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$.<span class="keyword">get</span>('/api/service1', &#123;</span><br><span class="line">    success: onSuccess,</span><br><span class="line">    failure: onFailure,</span><br><span class="line">    always:  onAlways</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>使用新的API后，调用的方式变成了：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$.<span class="keyword">get</span>('/api/service1')</span><br><span class="line">    .done(onSussess)</span><br><span class="line">    .fail(onFailure)</span><br><span class="line">    .always(onAlways);</span><br></pre></td></tr></table></figure>
+<p><code>get</code>方法返回的是一个<code>promise</code>对象，表示这个方法会在未来某个时刻执行完毕。</p>
 <p><code>Promise</code>是<a href="http://wiki.commonjs.org/wiki/Promises/A" target="_blank" rel="noopener">CommonJS</a>提出的规范，而<code>jQuery</code>的实现在其基础上有所扩展，旗舰级的实现可以参考<a href="https://github.com/kriskowal" target="_blank" rel="noopener">Kris Kowal</a>的<a href="https://github.com/kriskowal/q" target="_blank" rel="noopener">Q.js</a>。</p>
 <p>我们使用<code>jQuery</code>来构建一个<code>promise</code>对象：</p>
-<pre><code>var longTimeOperation = function() {
-    var deferred = $.Deferred();
-
-    // taste like setTimeout()
-    process.nextTick(function() {
-        // do operation.
-        deferred.resolve();
-        // if need error handling, use deferred.reject();
-    });
-
-    return deferred.promise();
-}
-
-$.when(longTimeOperation())
-    .done(success)
-    .fail(failure);
-</code></pre><p>由于<code>jQuery</code>生成的<code>Deferred</code>可以自由的进行<code>resolve()</code>和<code>reject()</code>，所以在返回时我们使用<code>.promise()</code>生成不含这个两方法的对象，从而更好的封装逻辑。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> longTimeOperation = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> deferred = $.Deferred();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// taste like setTimeout()</span></span><br><span class="line">    process.nextTick(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="comment">// do operation.</span></span><br><span class="line">        deferred.resolve();</span><br><span class="line">        <span class="comment">// if need error handling, use deferred.reject();</span></span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> deferred.promise();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$.when(longTimeOperation())</span><br><span class="line">    .done(success)</span><br><span class="line">    .fail(failure);</span><br></pre></td></tr></table></figure>
+<p>由于<code>jQuery</code>生成的<code>Deferred</code>可以自由的进行<code>resolve()</code>和<code>reject()</code>，所以在返回时我们使用<code>.promise()</code>生成不含这个两方法的对象，从而更好的封装逻辑。</p>
 <p>那么<code>Promise</code>究竟带给我们的便利是什么？<code>Promise</code>表示在未来这个任务会成功或失败，可以使用1和0来表示，那么开发者马上就开始欢呼了，给我布尔运算我能撬动地球！于是，我们可以写出如下的代码：</p>
-<pre><code>$.when(uploadPromise, downloadPromise)
-    .done(function() {
-        // do animation.
-    });
-</code></pre><p>对于开头的那个例子我们说过有着更优雅的解回调函数嵌套的方案，那就是使用<code>promise</code>，我们来尝试改写开头的那个例子：</p>
-<pre><code>var ohs = require(&apos;./anticorruption/OpenHostService&apos;);
-var localConvertingService = require(&apos;./services/LocalConverting&apos;);
-var remoteRepository = require(&apos;./repositories/BusinessData&apos;);
-var calculationService = require(&apos;./services/Calculation&apos;);
-var $ = require(&apos;jquery&apos;);
-
-function(req, res) {
-    var userData = req.body;
-
-    function deferredCallback(deferred) {
-        return function(err) {
-            if(err) {
-                deferred.reject(err);
-            } else {
-                var args = Array.prototype.slice.call(arguments, 1);
-                deferred.resolve(args);
-            }
-        };
-    }
-
-    function makeDeferred(fn) {
-        var deferred = $.Deferred();
-        var callback = deferredCallback(deferred);
-        fn(callback);
-        return deferred.promise();
-    }
-
-    var retrieveResourcePromise = makeDeferred(function(callback) {
-        ohs.retrieveResource(userData, callback);
-    });
-
-    var convertingPromise = makeDeferred(function(callback) {
-        localConvertingService.unitize(rs1, callback);
-    });
-
-    var loadBusinessDataPromise = makeDeferred(function(callback) {
-        remoteRepository.loadBusinessData(rs2, callback);
-    });
-
-    var calculationPromise = makeDeferred(function(callback) {
-        calculationService.doCalculation(bs1 , callback);
-    });
-
-    var pipedPromise = retrieveResourcePromise
-        .pipe(convertingPromise)
-        .pipe(loadBusinessDataPromise)
-        .pipe(calculationPromise);
-
-    pipedPromise
-        .done(function(result) {
-            res.view(result);
-        })
-        .fail(function(err) {
-            // error handling
-        });
-}
-</code></pre><p>我们使用了一个高阶函数来生成可以兼容<code>deferred</code>构造的回调函数，进而使用<code>jQuery</code>的<code>pipe</code>特性(在<code>Q.js</code>里可以使用<code>then()</code>组合每个<code>promise</code>)，使解决方案优雅了很多，而这个工具函数在<code>Q.js</code>里直接提供，于是新的解决方案可以如下：</p>
-<pre><code>var ohs = require(&apos;./anticorruption/OpenHostService&apos;);
-var localConvertingService = require(&apos;./services/LocalConverting&apos;);
-var remoteRepository = require(&apos;./repositories/BusinessData&apos;);
-var calculationService = require(&apos;./services/Calculation&apos;);
-var Q = require(&apos;q&apos;);
-
-function(req, res) {
-    var userData = req.body;
-
-    var retrieveResourceFn = Q.denodeify(ohs.retrieveResource)
-    var convertingFn = Q.denodeify(localConvertingService.unitize);
-    var loadBusinessDataFn = Q.denodeify(remoteRepository.loadBusinessData);
-    var calculationFn = Q.denodeify(calculationService.doCalculation);
-
-    retrieveResourceFn(userData)
-        .then(convertingFn)
-        .then(loadBusinessDataFn)
-        .then(calculationFn)
-        .then(function(result) {
-            res.view(result);
-        }, function(err) {
-            // error handling
-        });
-}
-</code></pre><p>那我们如何看待<code>TPL</code>特性呢？我们看看<code>TPL</code>可以做什么：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$.when(uploadPromise, downloadPromise)</span><br><span class="line">    .done(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="comment">// do animation.</span></span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+<p>对于开头的那个例子我们说过有着更优雅的解回调函数嵌套的方案，那就是使用<code>promise</code>，我们来尝试改写开头的那个例子：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ohs = <span class="built_in">require</span>(<span class="string">'./anticorruption/OpenHostService'</span>);</span><br><span class="line"><span class="keyword">var</span> localConvertingService = <span class="built_in">require</span>(<span class="string">'./services/LocalConverting'</span>);</span><br><span class="line"><span class="keyword">var</span> remoteRepository = <span class="built_in">require</span>(<span class="string">'./repositories/BusinessData'</span>);</span><br><span class="line"><span class="keyword">var</span> calculationService = <span class="built_in">require</span>(<span class="string">'./services/Calculation'</span>);</span><br><span class="line"><span class="keyword">var</span> $ = <span class="built_in">require</span>(<span class="string">'jquery'</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> userData = req.body;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">deferredCallback</span>(<span class="params">deferred</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">err</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(err) &#123;</span><br><span class="line">                deferred.reject(err);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">var</span> args = <span class="built_in">Array</span>.prototype.slice.call(<span class="built_in">arguments</span>, <span class="number">1</span>);</span><br><span class="line">                deferred.resolve(args);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">makeDeferred</span>(<span class="params">fn</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> deferred = $.Deferred();</span><br><span class="line">        <span class="keyword">var</span> callback = deferredCallback(deferred);</span><br><span class="line">        fn(callback);</span><br><span class="line">        <span class="keyword">return</span> deferred.promise();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> retrieveResourcePromise = makeDeferred(<span class="function"><span class="keyword">function</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">        ohs.retrieveResource(userData, callback);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> convertingPromise = makeDeferred(<span class="function"><span class="keyword">function</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">        localConvertingService.unitize(rs1, callback);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> loadBusinessDataPromise = makeDeferred(<span class="function"><span class="keyword">function</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">        remoteRepository.loadBusinessData(rs2, callback);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> calculationPromise = makeDeferred(<span class="function"><span class="keyword">function</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">        calculationService.doCalculation(bs1 , callback);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> pipedPromise = retrieveResourcePromise</span><br><span class="line">        .pipe(convertingPromise)</span><br><span class="line">        .pipe(loadBusinessDataPromise)</span><br><span class="line">        .pipe(calculationPromise);</span><br><span class="line"></span><br><span class="line">    pipedPromise</span><br><span class="line">        .done(<span class="function"><span class="keyword">function</span>(<span class="params">result</span>) </span>&#123;</span><br><span class="line">            res.view(result);</span><br><span class="line">        &#125;)</span><br><span class="line">        .fail(<span class="function"><span class="keyword">function</span>(<span class="params">err</span>) </span>&#123;</span><br><span class="line">            <span class="comment">// error handling</span></span><br><span class="line">        &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们使用了一个高阶函数来生成可以兼容<code>deferred</code>构造的回调函数，进而使用<code>jQuery</code>的<code>pipe</code>特性(在<code>Q.js</code>里可以使用<code>then()</code>组合每个<code>promise</code>)，使解决方案优雅了很多，而这个工具函数在<code>Q.js</code>里直接提供，于是新的解决方案可以如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ohs = <span class="built_in">require</span>(<span class="string">'./anticorruption/OpenHostService'</span>);</span><br><span class="line"><span class="keyword">var</span> localConvertingService = <span class="built_in">require</span>(<span class="string">'./services/LocalConverting'</span>);</span><br><span class="line"><span class="keyword">var</span> remoteRepository = <span class="built_in">require</span>(<span class="string">'./repositories/BusinessData'</span>);</span><br><span class="line"><span class="keyword">var</span> calculationService = <span class="built_in">require</span>(<span class="string">'./services/Calculation'</span>);</span><br><span class="line"><span class="keyword">var</span> Q = <span class="built_in">require</span>(<span class="string">'q'</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> userData = req.body;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> retrieveResourceFn = Q.denodeify(ohs.retrieveResource)</span><br><span class="line">    <span class="keyword">var</span> convertingFn = Q.denodeify(localConvertingService.unitize);</span><br><span class="line">    <span class="keyword">var</span> loadBusinessDataFn = Q.denodeify(remoteRepository.loadBusinessData);</span><br><span class="line">    <span class="keyword">var</span> calculationFn = Q.denodeify(calculationService.doCalculation);</span><br><span class="line"></span><br><span class="line">    retrieveResourceFn(userData)</span><br><span class="line">        .then(convertingFn)</span><br><span class="line">        .then(loadBusinessDataFn)</span><br><span class="line">        .then(calculationFn)</span><br><span class="line">        .then(<span class="function"><span class="keyword">function</span>(<span class="params">result</span>) </span>&#123;</span><br><span class="line">            res.view(result);</span><br><span class="line">        &#125;, <span class="function"><span class="keyword">function</span>(<span class="params">err</span>) </span>&#123;</span><br><span class="line">            <span class="comment">// error handling</span></span><br><span class="line">        &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那我们如何看待<code>TPL</code>特性呢？我们看看<code>TPL</code>可以做什么：</p>
 <ul>
 <li>以<code>Task</code>为基本构造单位，执行时不阻塞调用线程</li>
 <li>每个<code>Task</code>是独立的，<code>Task</code>有不同的状态，可以使用<code>Task.Status</code>获取</li>
@@ -582,22 +241,13 @@ function(req, res) {
 <li><code>Promise</code>可以组合，使用<code>.then()</code>、<code>.pipe()</code>以及<code>.when()</code>来组合执行流程</li>
 </ul>
 <p>可以看到，不论是<code>Promise</code>还是<code>TPL</code>，在设计上都有着惊人的相似性。我们有理由猜想在其它的的语言或平台都存在着类似的构造，因为异步说白了，就是让未来完成的事情自己触发后续的步骤。</p>
-<p>###Pull vs. Push<br>在<a href="http://en.wikipedia.org/wiki/Design_Patterns" target="_blank" rel="noopener">GoF32</a>中没有提到迭代器模式(Iterator)与观察者模式(Observer)的区别和联系，其实这两个模式有着千丝万缕的联系。</p>
+<h3 id="Pull-vs-Push"><a href="#Pull-vs-Push" class="headerlink" title="Pull vs. Push"></a>Pull vs. Push</h3><p>在<a href="http://en.wikipedia.org/wiki/Design_Patterns" target="_blank" rel="noopener">GoF32</a>中没有提到迭代器模式(Iterator)与观察者模式(Observer)的区别和联系，其实这两个模式有着千丝万缕的联系。</p>
 <p>Iterator反映的是一种Pull模型，数据通过同步的方式从生产者那里拉过来，我们通过它的定义便可看到这一事实：</p>
-<pre><code>interface IEnumerator&lt;out T&gt;: IDisposable
-{
-    bool MoveNext();
-    T Current { get; }
-}
-</code></pre><p>通过阻塞的方式调用<code>MoveNext()</code>，数据一个一个的拉取到本地。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">interface IEnumerator&lt;out T&gt;: IDisposable &#123;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">MoveNext</span>(<span class="params"></span>)</span>;</span><br><span class="line">    T Current &#123; <span class="keyword">get</span>; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过阻塞的方式调用<code>MoveNext()</code>，数据一个一个的拉取到本地。</p>
 <p>而Observer反映的是一种Push模型，通过注册一个观察者（类似于回调函数），当生产者有数据时，主动的推送到观察者手里。观察者注册结束后，本地代码没有阻塞，推送数据的整个过程是异步执行的。我们通过它的定义来对比Iterator：</p>
-<pre><code>interface IObserver&lt;in T&gt;
-{
-    void OnCompleted();
-    void OnError(Exception exception);
-    void OnNext(T value);
-}
-</code></pre><p>我们发现，其实这两个接口是完全对偶的（参见<a href="http://en.wikipedia.org/wiki/Erik_Meijer_(computer_scientist)" target="_blank" rel="noopener">Erik Meijer</a>大大的论文<a href="http://csl.stanford.edu/~christos/pldi2010.fit/meijer.duality.pdf" target="_blank" rel="noopener">Subject/Observer is Dual to Iterator</a>）：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">interface IObserver&lt;in T&gt; &#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">OnCompleted</span>(<span class="params"></span>)</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">OnError</span>(<span class="params">Exception exception</span>)</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">OnNext</span>(<span class="params">T <span class="keyword">value</span></span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们发现，其实这两个接口是完全对偶的（参见<a href="http://en.wikipedia.org/wiki/Erik_Meijer_(computer_scientist)" target="_blank" rel="noopener">Erik Meijer</a>大大的论文<a href="http://csl.stanford.edu/~christos/pldi2010.fit/meijer.duality.pdf" target="_blank" rel="noopener">Subject/Observer is Dual to Iterator</a>）：</p>
 <ul>
 <li><code>MoveNext()</code>拉取下一个数据，<code>OnNext(T)</code>推送下一个数据</li>
 <li><code>MoveNext()</code>返回值指示了有无剩余数据（完成与否），<code>OnCompleted()</code>指示了数据已完成（推送数据完成的消息）</li>
@@ -614,39 +264,10 @@ function(req, res) {
 <p>好，我们重复一遍：事件，非阻塞触发（并带有事件数据）。Push，非阻塞通知订阅者。</p>
 <p>其实，这是同一种模式，语言中对事件（就是<code>event</code>关键字）的支持其实就是对Observer模式的支持，而<code>foreach</code>则实现了对Iterator模式的语言内建支持。所谓设计模式，就是因为语言的内建支持不够而出现的，说白了，是语言的补丁。</p>
 <p>那么我们来看一看异常强大的<a href="https://github.com/Reactive-Extensions/" target="_blank" rel="noopener">Rx</a>如何改变事件。</p>
-<pre><code>// unitized event
-var mouseDown = Observable
-    .FromEventPattern&lt;MouseEventArgs&gt;(this.myPictureBox, &quot;MouseDown&quot;)
-    .Select(x =&gt;x.EventArgs);
-
-// unitized APM model
-var request = WebRequest.Create(&quot;http://www.shinetechchina.com&quot;);
-var webRequest = Observable
-    .FromAsyncPattern&lt;WebResponse&gt;(request.BeginGetResponse, request.EndGetResponse);
-</code></pre><p>最后我们看一个更加复杂的组合事件的例子，也就是之前一直讨论的异步流组合问题。Drag and Drop这个场景做<code>Winform</code>的同学不会陌生，需要多少代码冷暖自知，如果借助<code>Rx</code>，那么事情就简单很多：</p>
-<pre><code>var mouseDown = Observable
-    .FromEventPattern&lt;MouseEventArgs&gt;(this.controlSource, &quot;MouseDown&quot;)
-    .Select(x =&gt; x.EventArgs.GetPosition(this));
-var mouseUp = Observable
-    .FromEventPattern&lt;MouseEventArgs&gt;(this.controlSource, &quot;MouseUp&quot;)
-    .Select(x =&gt; x.EventArgs.GetPosition(this));
-var mouseMove = Observable
-    .FromEventPattern&lt;MouseEventArgs&gt;(this.controlSource, &quot;MouseMove&quot;)
-    .Select(x =&gt; x.EventArgs.GetPosition(this));
-var dragandDrop = 
-    from down in mouseDown
-    from move in mouseMove.StartWith(down).TakeUntil(mouseUp)
-    select new {
-        X = move.X - down.X,
-        Y = move.Y - down.Y
-    };
-
-dragandDrop.Subscribe(value =&gt;
-{
-    DesktopCanvas.SetLeft(this.controlSource, value.X);
-    DesktopCanvas.SetTop(this.controlSource, value.Y);
-});
-</code></pre><p><code>Rx</code>也提供了<code>javascript</code>扩展，有兴趣可以深入研究。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// unitized event</span></span><br><span class="line"><span class="keyword">var</span> mouseDown = Observable</span><br><span class="line">    .FromEventPattern&lt;MouseEventArgs&gt;(<span class="keyword">this</span>.myPictureBox, <span class="string">"MouseDown"</span>)</span><br><span class="line">    .Select(x =&gt;x.EventArgs);</span><br><span class="line"></span><br><span class="line"><span class="comment">// unitized APM model</span></span><br><span class="line"><span class="keyword">var</span> request = WebRequest.Create(<span class="string">"https://www.shinetechchina.org"</span>);</span><br><span class="line"><span class="keyword">var</span> webRequest = Observable</span><br><span class="line">    .FromAsyncPattern&lt;WebResponse&gt;(request.BeginGetResponse, request.EndGetResponse);</span><br></pre></td></tr></table></figure>
+<p>最后我们看一个更加复杂的组合事件的例子，也就是之前一直讨论的异步流组合问题。Drag and Drop这个场景做<code>Winform</code>的同学不会陌生，需要多少代码冷暖自知，如果借助<code>Rx</code>，那么事情就简单很多：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> mouseDown = Observable</span><br><span class="line">    .FromEventPattern&lt;MouseEventArgs&gt;(<span class="keyword">this</span>.controlSource, <span class="string">"MouseDown"</span>)</span><br><span class="line">    .Select(x =&gt; x.EventArgs.GetPosition(<span class="keyword">this</span>));</span><br><span class="line"><span class="keyword">var</span> mouseUp = Observable</span><br><span class="line">    .FromEventPattern&lt;MouseEventArgs&gt;(<span class="keyword">this</span>.controlSource, <span class="string">"MouseUp"</span>)</span><br><span class="line">    .Select(x =&gt; x.EventArgs.GetPosition(<span class="keyword">this</span>));</span><br><span class="line"><span class="keyword">var</span> mouseMove = Observable</span><br><span class="line">    .FromEventPattern&lt;MouseEventArgs&gt;(<span class="keyword">this</span>.controlSource, <span class="string">"MouseMove"</span>)</span><br><span class="line">    .Select(x =&gt; x.EventArgs.GetPosition(<span class="keyword">this</span>));</span><br><span class="line"><span class="keyword">var</span> dragandDrop = </span><br><span class="line">    <span class="keyword">from</span> down <span class="keyword">in</span> mouseDown</span><br><span class="line">    <span class="keyword">from</span> move <span class="keyword">in</span> mouseMove.StartWith(down).TakeUntil(mouseUp)</span><br><span class="line">    <span class="keyword">select</span> <span class="keyword">new</span> &#123;</span><br><span class="line">        X = move.X - down.X,</span><br><span class="line">        Y = move.Y - down.Y</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">dragandDrop.Subscribe(<span class="keyword">value</span> =&gt;</span><br><span class="line">&#123;</span><br><span class="line">    DesktopCanvas.SetLeft(<span class="keyword">this</span>.controlSource, <span class="keyword">value</span>.X);</span><br><span class="line">    DesktopCanvas.SetTop(<span class="keyword">this</span>.controlSource, <span class="keyword">value</span>.Y);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><code>Rx</code>也提供了<code>javascript</code>扩展，有兴趣可以深入研究。</p>
 <p>（完）</p>
   
 	</div>
@@ -718,7 +339,7 @@ dragandDrop.Subscribe(value =&gt;
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#导言"><span class="toc-number">1.</span> <span class="toc-text">导言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么使用异步"><span class="toc-number">2.</span> <span class="toc-text">为什么使用异步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#异步的使用场景"><span class="toc-number">3.</span> <span class="toc-text">异步的使用场景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#计算密集型应用"><span class="toc-number">3.1.</span> <span class="toc-text">计算密集型应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#I-O密集型应用"><span class="toc-number">3.2.</span> <span class="toc-text">I/O密集型应用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一些概念的区别"><span class="toc-number">4.</span> <span class="toc-text">一些概念的区别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#多核与多线程"><span class="toc-number">4.1.</span> <span class="toc-text">多核与多线程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#并行与并发"><span class="toc-number">4.2.</span> <span class="toc-text">并行与并发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#阻塞与非阻塞"><span class="toc-number">4.3.</span> <span class="toc-text">阻塞与非阻塞</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#异步编程的挑战"><span class="toc-number">5.</span> <span class="toc-text">异步编程的挑战</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#回调函数地狱"><span class="toc-number">5.1.</span> <span class="toc-text">回调函数地狱</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异常处理"><span class="toc-number">5.2.</span> <span class="toc-text">异常处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异步流程控制"><span class="toc-number">5.3.</span> <span class="toc-text">异步流程控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#反人类的编程思维"><span class="toc-number">5.4.</span> <span class="toc-text">反人类的编程思维</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#扩展阅读"><span class="toc-number">6.</span> <span class="toc-text">扩展阅读</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise-Deferred"><span class="toc-number">6.1.</span> <span class="toc-text">Promise/Deferred</span></a></li></ol></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#导言"><span class="toc-number">1.</span> <span class="toc-text">导言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么使用异步"><span class="toc-number">2.</span> <span class="toc-text">为什么使用异步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#异步的使用场景"><span class="toc-number">3.</span> <span class="toc-text">异步的使用场景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#计算密集型应用"><span class="toc-number">3.1.</span> <span class="toc-text">计算密集型应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#I-O密集型应用"><span class="toc-number">3.2.</span> <span class="toc-text">I/O密集型应用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一些概念的区别"><span class="toc-number">4.</span> <span class="toc-text">一些概念的区别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#多核与多线程"><span class="toc-number">4.1.</span> <span class="toc-text">多核与多线程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#并行与并发"><span class="toc-number">4.2.</span> <span class="toc-text">并行与并发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#阻塞与非阻塞"><span class="toc-number">4.3.</span> <span class="toc-text">阻塞与非阻塞</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#异步编程的挑战"><span class="toc-number">5.</span> <span class="toc-text">异步编程的挑战</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#回调函数地狱"><span class="toc-number">5.1.</span> <span class="toc-text">回调函数地狱</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异常处理"><span class="toc-number">5.2.</span> <span class="toc-text">异常处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异步流程控制"><span class="toc-number">5.3.</span> <span class="toc-text">异步流程控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#反人类的编程思维"><span class="toc-number">5.4.</span> <span class="toc-text">反人类的编程思维</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#扩展阅读"><span class="toc-number">6.</span> <span class="toc-text">扩展阅读</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise-Deferred"><span class="toc-number">6.1.</span> <span class="toc-text">Promise/Deferred</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pull-vs-Push"><span class="toc-number">6.2.</span> <span class="toc-text">Pull vs. Push</span></a></li></ol></li></ol>
  
   </div>
 
@@ -769,11 +390,11 @@ dragandDrop.Subscribe(value =&gt;
 			
 		
 			
-				<li><a href="/tags/collaboration/" title="collaboration">collaboration<sup>1</sup></a></li>
+				<li><a href="/tags/security/" title="security">security<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/security/" title="security">security<sup>1</sup></a></li>
+				<li><a href="/tags/microservice/" title="microservice">microservice<sup>1</sup></a></li>
 			
 		
 			
@@ -781,7 +402,7 @@ dragandDrop.Subscribe(value =&gt;
 			
 		
 			
-				<li><a href="/tags/Functional-Programming/" title="Functional-Programming">Functional-Programming<sup>1</sup></a></li>
+				<li><a href="/tags/collaboration/" title="collaboration">collaboration<sup>1</sup></a></li>
 			
 		
 			
@@ -790,6 +411,18 @@ dragandDrop.Subscribe(value =&gt;
 		
 			
 				<li><a href="/tags/javascript/" title="javascript">javascript<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Golang/" title="Golang">Golang<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/error-handling/" title="error-handling">error-handling<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Functional-Programming/" title="Functional-Programming">Functional-Programming<sup>1</sup></a></li>
 			
 		
 		</ul>

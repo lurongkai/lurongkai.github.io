@@ -2,6 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://lurongkai.github.io/2019/07/26/handle-error-gracefully-in-golang/</loc>
+    
+    <lastmod>2019-07-26T04:07:07.271Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://lurongkai.github.io/2015/11/24/functional-programming-skills/</loc>
+    
+    <lastmod>2019-04-15T06:17:14.534Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://lurongkai.github.io/2014/12/03/async-programming/</loc>
+    
+    <lastmod>2019-04-15T02:05:39.654Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://lurongkai.github.io/2019/02/15/shinetech-2018-security-training-summary/</loc>
     
     <lastmod>2019-02-15T05:22:45.644Z</lastmod>
@@ -30,13 +51,6 @@
   </url>
   
   <url>
-    <loc>https://lurongkai.github.io/2015/11/24/functional-programming-skills/</loc>
-    
-    <lastmod>2019-02-14T02:48:33.451Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://lurongkai.github.io/2015/10/14/improve-work-efficiency-and-happiness-2/</loc>
     
     <lastmod>2019-02-14T02:48:33.450Z</lastmod>
@@ -54,13 +68,6 @@
     <loc>https://lurongkai.github.io/2015/04/27/who-is-developer/</loc>
     
     <lastmod>2019-02-14T02:48:33.448Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://lurongkai.github.io/2014/12/03/async-programming/</loc>
-    
-    <lastmod>2019-02-14T02:48:33.447Z</lastmod>
     
   </url>
   
