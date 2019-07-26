@@ -19,7 +19,7 @@
 <meta property="og:site_name" content="lurongkai&#39;s blog">
 <meta property="og:description" content="如何优雅的在Golang中进行错误处理？ 答案是：没有……（本文完）  开个玩笑，Golang中的错误处理方式一直是社区热烈讨论的话题，有力挺者，有抱怨者，但不论如何，自 2009 年Golang正式发布以来，关于错误处理就一直是现在这种状况。 随着Golang愈加的火爆，原本是Java、Node、C#等语言擅长的应用级开发领域也逐渐出现Golang的身影。Golang自身其实更加擅长做基础设施级">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-26T04:25:10.463Z">
+<meta property="og:updated_time" content="2019-07-26T05:22:57.287Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何优雅的在Golang中进行错误处理">
 <meta name="twitter:description" content="如何优雅的在Golang中进行错误处理？ 答案是：没有……（本文完）  开个玩笑，Golang中的错误处理方式一直是社区热烈讨论的话题，有力挺者，有抱怨者，但不论如何，自 2009 年Golang正式发布以来，关于错误处理就一直是现在这种状况。 随着Golang愈加的火爆，原本是Java、Node、C#等语言擅长的应用级开发领域也逐渐出现Golang的身影。Golang自身其实更加擅长做基础设施级">
@@ -104,6 +104,7 @@
 <p>当一门语言火起来，就会出现各式各样的应用，于是<code>MVC</code>框架有了，音视频处理库有了，各种数据库驱动有了，甚至服务框架也出现了，游戏、<code>Machine Learning</code>都不在话下，还要啥自行车？组合一下做应用级开发妥妥的没毛病。</p>
 <p>但是，成也这 25 个关键字，败也这 25 个关键字，究其根本原因，都是因为它背后<strong>简单</strong>的哲学。</p>
 <p>做应用级开发可不是那么简单的，这涉及到很多的细节处理，例如本文将要讨论的错误处理。如果只是写一个库，那么这个话题相对比较简单，因为与<code>API</code>打交道的都是开发者，你只管开心的往外扔<code>error</code>就好了，总会有倒霉的程序员在使用你的代码时<strong>DEBUG</strong>到白头，最后，以最严谨的方式，小心使用你的库；可是有人出现的地方就会有幺蛾子，一个常见的误区就是将<strong>业务错误</strong>、<strong>运行时错误</strong>、<strong>程序错误</strong>一股脑的当成相同的<code>error</code>来处理。</p>
+<a id="more"></a>
 <blockquote>
 <p>你是还没在<code>error</code>上栽跟头，当你栽了跟头时才会哭着想起来，当年为什么没好好思考和反省<strong>错误处理</strong>这么一个宏大的话题</p>
 </blockquote>
