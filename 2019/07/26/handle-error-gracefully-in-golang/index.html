@@ -19,7 +19,7 @@
 <meta property="og:site_name" content="lurongkai&#39;s blog">
 <meta property="og:description" content="如何优雅的在Golang中进行错误处理？ 答案是：没有……（本文完）  开个玩笑，Golang中的错误处理方式一直是社区热烈讨论的话题，有力挺者，有抱怨者，但不论如何，自 2009 年Golang正式发布以来，关于错误处理就一直是现在这种状况。 随着Golang愈加的火爆，原本是Java、Node、C#等语言擅长的应用级开发领域也逐渐出现Golang的身影。Golang自身其实更加擅长做基础设施级">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-26T06:03:37.859Z">
+<meta property="og:updated_time" content="2019-12-05T01:52:40.981Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何优雅的在Golang中进行错误处理">
 <meta name="twitter:description" content="如何优雅的在Golang中进行错误处理？ 答案是：没有……（本文完）  开个玩笑，Golang中的错误处理方式一直是社区热烈讨论的话题，有力挺者，有抱怨者，但不论如何，自 2009 年Golang正式发布以来，关于错误处理就一直是现在这种状况。 随着Golang愈加的火爆，原本是Java、Node、C#等语言擅长的应用级开发领域也逐渐出现Golang的身影。Golang自身其实更加擅长做基础设施级">
@@ -175,7 +175,7 @@
 <h3 id="错误应该包含的信息"><a href="#错误应该包含的信息" class="headerlink" title="错误应该包含的信息"></a>错误应该包含的信息</h3><p>错误最主要包含的，就是错误信息，是给人类阅读使用的，更确切的讲，是<strong>给开发者阅读的</strong>。所以<code>error</code>接口里的<code>Error() string</code>直接将这个信息返回。那为什么要返回<code>error</code>，而不是直接返回<code>string</code>呢？因为在开发过程中，我们往往需要一些额外的信息。</p>
 <p>首先，如果只有错误的文本，我们很难定位到具体的出错地点。虽然通过在代码中搜索错误文本也是有可能找到出错地点的，但是信息有限。所以，在实践中，我们往往会将出错时的调用栈信息也附加上去。调用栈对消费方是没有意义的，从隔离和自治的角度来看，消费方唯一需要关心的就是错误文本和错误类型。调用栈对实现者自身才是是有价值的。所以，如果一个方法需要返回错误，我们一般会使用<code>errors.WithStack(err)</code>或者<code>errors.Wrap(err, &quot;custom message&quot;)</code>的方式，把此刻的调用栈加到<code>error</code>里去，并且在某个统一地方记录日志，方便开发者快速定位问题。</p>
 <p>举个例子：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// golang</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">"github.com/pkg/errors"</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">FindUser</span><span class="params">(userId <span class="keyword">string</span>)</span> <span class="params">(*User, error)</span></span> &#123;</span><br><span class="line">    <span class="keyword">if</span> userId == <span class="string">""</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> fmt.Errorf(<span class="string">"userId is required"</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    user, err := db.FindUserById(userId)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span>, errors.Wrapf(err, <span class="string">"query user %s failed"</span>, userId)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> user, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// golang</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">"github.com/pkg/errors"</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">FindUser</span><span class="params">(userId <span class="keyword">string</span>)</span> <span class="params">(*User, error)</span></span> &#123;</span><br><span class="line">    <span class="keyword">if</span> userId == <span class="string">""</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span>, fmt.Errorf(<span class="string">"userId is required"</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    user, err := db.FindUserById(userId)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span>, errors.Wrapf(err, <span class="string">"query user %s failed"</span>, userId)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> user, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>如此，在记录日志的地方通过使用<code>%+v</code>格式化占位符就可以把堆栈信息完整的记录下来。</p>
 <p>其次，如果是业务执行时的错误，只有错误消息的话，往往是不够的，因为调用方更加关心错误背后业务上的原因，例如，提交订单接口返回了<strong>提交订单失败</strong>的错误，为什么失败？这个时候就需要某种机制来告诉调用者一些业务上的原因。显然，如果通过错误消息告诉的话，调用方就不得不对错误文本进行判断，这很不优雅，所以我们往往通过其它两种方式来处理。</p>
 <p><strong>1. 特定错误类型</strong>，例如：</p>
@@ -390,22 +390,6 @@
 			
 		
 			
-				<li><a href="/tags/security/" title="security">security<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/microservice/" title="microservice">microservice<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/F/" title="F#">F#<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/collaboration/" title="collaboration">collaboration<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/asynchronous/" title="asynchronous">asynchronous<sup>1</sup></a></li>
 			
 		
@@ -422,7 +406,23 @@
 			
 		
 			
+				<li><a href="/tags/microservice/" title="microservice">microservice<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F/" title="F#">F#<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Functional-Programming/" title="Functional-Programming">Functional-Programming<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/collaboration/" title="collaboration">collaboration<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/security/" title="security">security<sup>1</sup></a></li>
 			
 		
 		</ul>
