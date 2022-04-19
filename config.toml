@@ -5,7 +5,7 @@ title = '程序物语'
 theme = "gokarna"
 enableRobotsTXT = true
 pygmentsStyle = "dracula"
-disqusShortname = "software_story"
+disqusShortname = "software-story"
 
 [params]
   # URL for the avatar on homepage
