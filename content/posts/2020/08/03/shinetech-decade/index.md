@@ -96,7 +96,7 @@ tags:
 ![编程挑战赛第一季直播评分](cc01-living.png)
 (编程挑战赛第一季直播评分)
 
-![读书会-Conan正在精彩分享](reading-party-conan.jpg)
+![读书会-Conan正在精彩分享](reading-party-conan.jpeg)
 (读书会-Conan 正在精彩分享)
 
 一群来自不同的分公司的小伙伴玩的不亦乐乎，我们甚至打算在今年做 Tech Days（由于疫情和一些其它因素还没有实施）。同时，也为公司带去了一些更有利于工程师开展工作的设施，例如 gitlab，将来也一定会无偿的提供更多优质的工具，让 Shinetech 变的更加的贴近工程师文化。
