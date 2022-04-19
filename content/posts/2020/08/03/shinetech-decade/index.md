@@ -47,7 +47,7 @@ tags:
 
 几年的工作很充实，但是却几乎没有加班过。其实实践不加班是很难的，但是 Shinetech 在这一点上践行的很彻底，值得尊敬。
 
-![Ralph Lauren团队在上海](rl-team.JPG)
+![Ralph Lauren团队在上海](rl-team.jpeg)
 (Ralph Lauren 团队在上海)
 
 ## 看看世界
