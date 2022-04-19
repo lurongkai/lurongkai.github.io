@@ -1,0 +1,82 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{--accent-color:#FF4D4D}</style><title>初探Razor视图引擎</title><meta name=description content="聊聊软件，聊聊设计，聊聊生活"><meta name=keywords content="blog,lurongkai,Ninja_Lu,software,architecture,C#,Razor"><meta property="og:url" content="https://lurongkai.github.io/posts/2010/07/21/razor-quick-glance/"><meta property="og:type" content="website"><meta property="og:title" content="初探Razor视图引擎"><meta property="og:description" content="聊聊软件，聊聊设计，聊聊生活"><meta property="og:image" content="/images/avatar.jpeg"><meta name=twitter:card content="summary_large_image"><meta name=twitter:title content="初探Razor视图引擎"><meta name=twitter:description content="聊聊软件，聊聊设计，聊聊生活"><meta property="twitter:domain" content="https://lurongkai.github.io/posts/2010/07/21/razor-quick-glance/"><meta property="twitter:url" content="https://lurongkai.github.io/posts/2010/07/21/razor-quick-glance/"><meta name=twitter:image content="/images/avatar.jpeg"><link rel=canonical href=https://lurongkai.github.io/posts/2010/07/21/razor-quick-glance/><link rel=stylesheet type=text/css href=https://lurongkai.github.io//css/normalize.min.css media=print onload='this.media="all"'><link rel=stylesheet type=text/css href=https://lurongkai.github.io//css/main.css><link disabled id=dark-theme rel=stylesheet href=https://lurongkai.github.io//css/dark.css><script src=https://lurongkai.github.io//js/svg-injector.min.js></script>
+<script src=https://lurongkai.github.io//js/feather-icons.min.js></script>
+<script src=https://lurongkai.github.io//js/main.js></script>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.16/dist/katex.min.css integrity=sha384-6LkG2wmY8FK9E0vU9OOr8UvLwsaqUg9SETfpq4uTCN1agNe8HRdE9ABlk+fVx6gZ crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.16/dist/katex.min.js integrity=sha384-31El76TwmbHj4rF9DyLsygbq6xoIobG0W+jqXim+a3dU9W53tdH3A/ngRPxOzzaB crossorigin=anonymous></script>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.16/dist/contrib/auto-render.min.js integrity=sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl crossorigin=anonymous onload=renderMathInElement(document.body)></script></head><body><script type=text/javascript>setThemeByUserPref()</script><header class=header><nav class=header-nav><div class=avatar><a href=https://lurongkai.github.io/><img src=https://lurongkai.github.io//images/avatar.jpeg alt=avatar></a></div><div class=nav-title><a class=nav-brand href=https://lurongkai.github.io/>程序物语</a></div><div class=nav-links><div class=nav-link><a href=https://lurongkai.github.io/posts/>Posts</a></div><div class=nav-link><a href=https://lurongkai.github.io/tags/>Tags</a></div><div class=nav-link><a href=https://github.com/lurongkai><span data-feather=github></span></a></div><span class=nav-icons-divider></span><div class="nav-link dark-theme-toggle"><a><span id=theme-toggle-icon data-feather=moon></span></a></div><div class=nav-link id=hamburger-menu-toggle><a><span data-feather=menu></span></a></div><ul class="nav-hamburger-list visibility-hidden"><li class=nav-item><a href=https://lurongkai.github.io/posts/>Posts</a></li><li class=nav-item><a href=https://lurongkai.github.io/tags/>Tags</a></li><li class=nav-item><a href=https://github.com/lurongkai><span data-feather=github></span></a></li><li class="nav-item dark-theme-toggle"><a><span id=theme-toggle-icon data-feather=moon></span></a></li></ul></div></nav></header><main id=content><div class="post container"><div class=post-header-section><h1>初探Razor视图引擎</h1><small role=doc-subtitle></small><p class=post-date>七月 21, 2010</p><ul class=post-tags><li class=post-tag><a href=https://lurongkai.github.io/tags/c>C#</a></li><li class=post-tag><a href=https://lurongkai.github.io/tags/razor>Razor</a></li></ul></div><div class=post-content><p><p>前一段时间，ScottGu在博客上发表了一些有关WebMatrix的文章，其中提到了一个新的ASP.NET视图引擎——Razor。</p><p>Razor有着非常简单和干净的语法，但是不管怎么样，它毕竟只是一个表现层面的东西，其底层仍然使用ASP.NET，与平时的开发没有什么大的区别，唯一的区别在于：视图的简洁。</p><h2 id=安装>安装</h2><p>使用Razor需要安装 Microsoft ASP.NET Web Pages，当然，官方的做法是：直接用Web Plamform安装WebMatrix，不过WebMatrix现在还处于Beta阶段，估计以后会增加更多支持Razor的功能。</p><p>安装完毕后打开WebMatrix，然后就可以通过Site Form Template来新建一个站点测试了。</p><p><img src=1.png alt=WebMatrix></p><p>默认生成的站点在“我的文档”My Web Sites下以站点名命名。</p><h2 id=初窥>初窥</h2><p>Razor的语言简单之极，只需记住一个字符就可以：<code>@</code>。</p><p>在传统的ASP.NET视图引擎中，如果我们要进行一些数据绑定或者逻辑判断就会使用类似下面的做法：</p><pre tabindex=0><code>&lt;%
+	var testStr1 = &#34;Hello&#34;;
+	var testStr2 = &#34;lurongkai&#34;;
+%&gt;
+</code></pre><p>我们先搞了两个变量，当然，这些变量可以从任意的地方获得，然后，我们将这两个变量绑定到页面中去：</p><pre tabindex=0><code>&lt;%= testStr1 %&gt;,Your name:&lt;%= testStr2 %&gt;
+</code></pre><p>不知道您看的如何，总之我感觉是够乱的。</p><p>同样的东西，我们用Razor的语法来重写，会是怎么样的呢？</p><pre tabindex=0><code>@{
+	var testStr1 = &#34;Hello&#34;;
+	var testStr2 = &#34;lurongkai&#34;;
+}
+@testStr1,Your name:@testStr2
+</code></pre><p>当然了，结果是一样的，不过在表现力上显然Razor更胜一筹，因为来回的<code>&lt;% %></code>看的人眼花，例如下面这个MVC中登陆部分的用户控件：</p><pre tabindex=0><code>&lt;% if (Request.IsAuthenticated) { %&gt;
+	欢迎您，&lt;b&gt;&lt;%: Page.User.Identity.Name %&gt;&lt;/b&gt;!
+	[ &lt;%: Html.ActionLink(&#34;注销&#34;, &#34;LogOff&#34;, &#34;Account&#34;) %&gt; ]
+&lt;%  } else { %&gt;
+	[ &lt;%: Html.ActionLink(&#34;登录&#34;, &#34;LogOn&#34;, &#34;Account&#34;) %&gt; ]
+&lt;%  } %&gt;
+</code></pre><p>我唯一的感觉：晕！用Razor后：</p><pre tabindex=0><code>@{
+	if(WebSecurity.IsAuthenticated) {
+		@:欢迎您,&lt;b&gt;@WebSecurity.CurrentUserName&lt;/b&gt;!
+		@Html.ActionLink(&#34;注销&#34;, &#34;LogOff&#34;, &#34;Account&#34;)
+	} else {
+		@Html.ActionLink(&#34;登录&#34;, &#34;LogOn&#34;, &#34;Account&#34;)
+	}
+}
+</code></pre><p>是不是更加的人性一些呢？唯一需要说的就是@:，这是说它后面的内容是混合内容，即有纯文本又有服务器端代码。不过上面的代码我没有做过测试，这是改成了Razor的样式，所以大家谨慎参考。</p><h2 id=helper>Helper</h2><p>严格的讲这部分不能算语法层面上的特性，只能算是支持Razor的辅助类库。因为Razor实在过于简单了，说白了就一个@，只要会C#或才VB.NET就行，以前的知识全部能用，所以为了使内容不那么水，我将这部分也加了进来。完整的文档请到<a href="http://www.microsoft.com/downloads/details.aspx?FamilyID=b7937c34-3b53-47b7-ae17-5a72fa700472&displaylang=en">这里</a>下载PDF文档，上面详细说明了Razor的细节（还有前面提到的Microsoft ASP.NET Web Pages安装包）。</p><h2 id=类似于传统aspnet的母版页用户控件机制>类似于传统ASP.NET的母版页、用户控件机制</h2><p>在呈现类似用户控件的内容时（说白了就是用户控件），可以使用<code>RenderPage</code>辅助类，例如：</p><pre tabindex=0><code>@RenderPage(&#34;/Shared/_Header.cshtml&#34;)
+@RenderPage(&#34;/Shared/_Footer.cshtml&#34;)
+</code></pre><p>而所谓的“用户控件”其实就是一个没有<code>&lt;html></code>的裸页，将经常会使用的一部分逻辑或者内容分离出来以达到复用。</p><p>母版页可以提供统一的外观，按照原来的思路，一般会在母版页中插入<code>ContentPlaceHolder</code>控件来指明哪部分是要被使用页来替换内容的，在Razor中，它不叫<code>ContentPlaceHodler</code>，叫<code>RenderBody</code>。</p><p>不同的时，传统ASP.NET可以在母版页中插入多个<code>ContentPlaceHolder</code>，而<code>RenderBody</code>只能有一个。其实，类似<code>ContentPlaceHolder</code>，Razor中也提供<code>RenderSection</code>来实现。</p><p>先说<code>RenderBody</code>。当我们在母版页中的某个位置写了<code>@RenderBody()</code>后，接下来在使用母版页时，只需在页面的顶部写入：<code>@{ LayoutPage = "MasterPageLocation"; }</code>，这样，接下来的内容会自动填充到母版页<code>RenderBody()</code>对应的位置：</p><p>MasterPage:</p><pre tabindex=0><code>@RenderBody()
+</code></pre><p>Page:</p><pre tabindex=0><code>@{
+	LayoutPage = &#34;/Shared/_MasterPage.cshtml&#34;;
+}
+</code></pre><p>使用<code>RenderSection</code>时需要指定Section片断的名字，
+我们可以在母版页中的相关位置上写上<code>@RenderSection("name")</code>，然后在使用母版页的页面中声明类似的Section，即：<code>@section header {/*HTML or other*/}</code>，具体如下：</p><p>MasterPage:</p><pre tabindex=0><code>@RenderSection(&#34;someSection&#34;)
+</code></pre><p>Page:</p><pre tabindex=0><code>@sectionsomeSection {
+	&lt;div id=&#34;someSection&#34;&gt;
+		someSection
+	&lt;/div&gt;
+}
+</code></pre><h2 id=对microsoft-sql-server-compact-edition数据库的辅助类>对Microsoft SQL Server Compact Edition数据库的辅助类</h2><p>这个比较简单，就是通过<code>Database</code>类来操作数据。例如最常用的“查”：</p><pre tabindex=0><code>@{
+	var db = Database.OpenFile(&#34;database.sdf&#34;);
+	var selectQueryString = &#34;SELECT * FROM Table1&#34;;
+	var data = db.Query(selectQueryString);
+}
+</code></pre><p>查出来的数据想怎么着就怎么着吧，管不着了……</p><p>很简单不是么？至于“增”，“改”，“删”都用<code>Database.Execute()</code>方法来完成。</p><h2 id=文件上传与image处理>文件上传与Image处理</h2><p>对于常用的文件上传功能，Razor做了封装，让我们使用更加的方便，只需简单的在页面上使用FileUpload类的相关方法即可，配合Razor的清爽语法，可读性非常高：</p><pre tabindex=0><code>@FileUpload.GetHtml(
+	initialNumberOfFiles: 1,
+	allowMoreFilesToBeAdded: false,
+	includeFromTag: true,
+	uploadText: &#34;Upload&#34;
+)
+</code></pre><p>配合C#4.0的默认参数，一个文件传的功能就实现了（其实我觉得更像是一种使用控件）生成的HTML如下：</p><pre tabindex=0><code>&lt;form action=&#34;&#34; enctype=&#34;multipart/form-data&#34; method=&#34;post&#34;&gt;
+	&lt;div id=&#34;file-upload-all-files&#34;&gt;
+		&lt;div&gt;
+			&lt;input name=&#34;fileUpload&#34; type=&#34;file&#34; /&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+	&lt;div id=&#34;file-upload-buttons&#34;&gt;
+		&lt;input type=&#34;submit&#34; value=&#34;Upload&#34; /&gt;
+	&lt;/div&gt;
+&lt;/form&gt;
+</code></pre><p>对于更加常见的Image，Razor也做了相应的封装：<code>WebImage</code>，常用的一些方法如下：</p><pre tabindex=0><code>WebImage.Resize(); //改变图像大小
+WebImage.FlipXXXX(); //图像旋转，XXXX对就旋转方向，例如Vertical垂直翻转，Horizontal水平翻转，Left,Right……
+WebImage.AddTextWatermark(); //在图像上加入文字水印
+WebImage.AddImageWatermark(); //在图像上加入图像水印
+</code></pre><h2 id=视频>视频</h2><p>对于常见的视频需求，Razor提供了简化手动配置视频标签的辅助类：<code>Video</code>。当下最为流行的网页视频播放无非3种：Flash，Windows Media
+Player，Silverlight，至于HTML5的先天支持那是后话。<code>Video</code>充分利用C#4.0默认参数的威力，使得生成一个视频标签也是手到擒来：</p><pre tabindex=0><code>@Video.Flash(
+	path: &#34;testFlash.swf&#34;,
+	width: &#34;400&#34;,
+	height: &#34;600&#34;,
+	play: true,
+	loop: true,
+	menu: false,
+	bgColor: &#34;red&#34;,
+	quality: &#34;medium&#34;,
+	scale: &#34;exactfit&#34;,
+	windowMode: &#34;transparent&#34;
+)
+</code></pre><p>至于Windows Media Player和Silverlight就不多说了，大同小异，有兴趣可以研究<code>Video.MediaPlayer()</code>，<code>Video.Silverlight()</code>。</p><h2 id=社交网络操作的简化>社交网络操作的简化</h2><p>天朝上不了Twitter，但是世界处处却留下了Twitter的影子……作为时下最火的社交网站，我等暴民经常爬出去上推，扯远了……Razor提供了对诸如Twitter，Facebook，Gravator，ReCaptcha等一些社交网络经常提及的网站的简化，使得跨站点的资源调用更加方便，用Reflector看了一下<code>C:\Program Files\Microsoft ASP.NET\ASP.NET Web Pagesv1.0\Assemblies</code>下的<code>Microsoft.WebPages.Helpers.Toolkit.dll</code>，我们发现：</p><p><img src=2.png alt="WebPage Helper"></p><p>其中提供了很多有用的封装，不过，可惜，可惜……</p><p>看一个简单的例子：</p><pre tabindex=0><code>@Twitter.Profile(&#34;haacked&#34;)
+</code></pre><p>运行如下：</p><p><img src=3.png alt="Haacked Twitter"></p><p>小梯子一搭，走您的…………</p><h2 id=总结>总结</h2><p>Razor作为传统ASP.NET视图引擎外的新选择，使得Web开发中“视图”部分更加的清爽。在这里我并不是在鼓吹新技术、新特性，或者是抱着new features抚摸来抚摸去，大家仁者见仁智者见智吧，毕竟这个新东西实在很简单，只是一个新的视图引擎。</p><p>在下一版本的ASP.NET MVC中，Razor也会被加入可选的视图引擎之一，而我在下面给出的链接中已经<a href=http://www.cnblogs.com/chsword/archive/2010/07/10/razor_in_aspnet_mvc_2.html>有人</a>将这一想法提前实现了，我想MVC的表现力再加上Razor的简洁定会使开发更加的愉快。</p><ol><li><a href=http://www.cnblogs.com/chsword/archive/2010/07/10/razor_in_aspnet_mvc_2.html>为ASP.NET MVC 2.0添加Razor模板引擎 (on .NET4)</a> - <a href=http://www.cnblogs.com/chsword>重典</a></li><li><a href="http://www.microsoft.com/downloads/details.aspx?FamilyID=b7937c34-3b53-47b7-ae17-5a72fa700472&displaylang=en">ASP.NET Web Pages with Razor Syntax</a></li><li><a href=http://www.hanselman.com/blog/MicrosoftWebMatrixInContextAndDeployingYourFirstSite.aspx>Microsoft WebMatrix in Context and Deploying Your First Site</a> – <a href=http://www.hanselman.com/blog>Scott Hanselman</a></li><li><a href=http://www.microsoft.com/web/webmatrix/>WebMatrix</a></li><li><a href=http://weblogs.asp.net/scottgu/archive/2010/07/02/introducing-razor.aspx>Introducing “Razor” – a new view engine for ASP.NET</a> – <a href=http://weblogs.asp.net/scottgu>Scott Guthrie</a></li><li><a href=http://weblogs.asp.net/scottgu/archive/2010/07/06/introducing-webmatrix.aspx>Introducing WebMatrix</a> – <a href=http://weblogs.asp.net/scottgu>Scott Guthrie</a></li></ol></p></div><div id=disqus_thread></div><script type=application/javascript>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//software-story.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div></main><footer class=footer><span>&copy; 2022 Lu Rongkai</span>
+<span>Made with &#10084;&#65039; using <a target=_blank href=https://github.com/526avijitgupta/gokarna>Gokarna</a></span></footer></body></html>

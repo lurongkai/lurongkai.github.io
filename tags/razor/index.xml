@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Razor on 程序物语</title><link>https://lurongkai.github.io/tags/razor/</link><description>Recent content in Razor on 程序物语</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 21 Jul 2010 00:00:00 +0800</lastBuildDate><atom:link href="https://lurongkai.github.io/tags/razor/index.xml" rel="self" type="application/rss+xml"/><item><title>初探Razor视图引擎</title><link>https://lurongkai.github.io/posts/2010/07/21/razor-quick-glance/</link><pubDate>Wed, 21 Jul 2010 00:00:00 +0800</pubDate><guid>https://lurongkai.github.io/posts/2010/07/21/razor-quick-glance/</guid><description>前一段时间，ScottGu在博客上发表了一些有关WebMatrix的文章，其中提到了一个新的ASP.NET视图引擎——Razor。
+Razor有着非常简单和干净的语法，但是不管怎么样，它毕竟只是一个表现层面的东西，其底层仍然使用ASP.NET，与平时的开发没有什么大的区别，唯一的区别在于：视图的简洁。
+安装 使用Razor需要安装 Microsoft ASP.NET Web Pages，当然，官方的做法是：直接用Web Plamform安装WebMatrix，不过WebMatrix现在还处于Beta阶段，估计以后会增加更多支持Razor的功能。
+安装完毕后打开WebMatrix，然后就可以通过Site Form Template来新建一个站点测试了。
+默认生成的站点在“我的文档”My Web Sites下以站点名命名。
+初窥 Razor的语言简单之极，只需记住一个字符就可以：@。
+在传统的ASP.NET视图引擎中，如果我们要进行一些数据绑定或者逻辑判断就会使用类似下面的做法：
+&amp;lt;% var testStr1 = &amp;#34;Hello&amp;#34;; var testStr2 = &amp;#34;lurongkai&amp;#34;; %&amp;gt; 我们先搞了两个变量，当然，这些变量可以从任意的地方获得，然后，我们将这两个变量绑定到页面中去：
+&amp;lt;%= testStr1 %&amp;gt;,Your name:&amp;lt;%= testStr2 %&amp;gt; 不知道您看的如何，总之我感觉是够乱的。
+同样的东西，我们用Razor的语法来重写，会是怎么样的呢？
+@{ var testStr1 = &amp;#34;Hello&amp;#34;; var testStr2 = &amp;#34;lurongkai&amp;#34;; } @testStr1,Your name:@testStr2 当然了，结果是一样的，不过在表现力上显然Razor更胜一筹，因为来回的&amp;lt;% %&amp;gt;看的人眼花，例如下面这个MVC中登陆部分的用户控件：
+&amp;lt;% if (Request.IsAuthenticated) { %&amp;gt; 欢迎您，&amp;lt;b&amp;gt;&amp;lt;%: Page.User.Identity.Name %&amp;gt;&amp;lt;/b&amp;gt;! [ &amp;lt;%: Html.ActionLink(&amp;#34;注销&amp;#34;, &amp;#34;LogOff&amp;#34;, &amp;#34;Account&amp;#34;) %&amp;gt; ] &amp;lt;% } else { %&amp;gt; [ &amp;lt;%: Html.</description></item></channel></rss>

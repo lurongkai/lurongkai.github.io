@@ -1,0 +1,165 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{--accent-color:#FF4D4D}</style><title>.NET 4中的并行编程(上)</title><meta name=description content="聊聊软件，聊聊设计，聊聊生活"><meta name=keywords content="blog,lurongkai,Ninja_Lu,software,architecture,C#,.NET,Parallel"><meta property="og:url" content="https://lurongkai.github.io/posts/2010/04/19/dotnet-parallel-programming-1/"><meta property="og:type" content="website"><meta property="og:title" content=".NET 4中的并行编程(上)"><meta property="og:description" content="聊聊软件，聊聊设计，聊聊生活"><meta property="og:image" content="/images/avatar.jpeg"><meta name=twitter:card content="summary_large_image"><meta name=twitter:title content=".NET 4中的并行编程(上)"><meta name=twitter:description content="聊聊软件，聊聊设计，聊聊生活"><meta property="twitter:domain" content="https://lurongkai.github.io/posts/2010/04/19/dotnet-parallel-programming-1/"><meta property="twitter:url" content="https://lurongkai.github.io/posts/2010/04/19/dotnet-parallel-programming-1/"><meta name=twitter:image content="/images/avatar.jpeg"><link rel=canonical href=https://lurongkai.github.io/posts/2010/04/19/dotnet-parallel-programming-1/><link rel=stylesheet type=text/css href=https://lurongkai.github.io//css/normalize.min.css media=print onload='this.media="all"'><link rel=stylesheet type=text/css href=https://lurongkai.github.io//css/main.css><link disabled id=dark-theme rel=stylesheet href=https://lurongkai.github.io//css/dark.css><script src=https://lurongkai.github.io//js/svg-injector.min.js></script>
+<script src=https://lurongkai.github.io//js/feather-icons.min.js></script>
+<script src=https://lurongkai.github.io//js/main.js></script>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.16/dist/katex.min.css integrity=sha384-6LkG2wmY8FK9E0vU9OOr8UvLwsaqUg9SETfpq4uTCN1agNe8HRdE9ABlk+fVx6gZ crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.16/dist/katex.min.js integrity=sha384-31El76TwmbHj4rF9DyLsygbq6xoIobG0W+jqXim+a3dU9W53tdH3A/ngRPxOzzaB crossorigin=anonymous></script>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.16/dist/contrib/auto-render.min.js integrity=sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl crossorigin=anonymous onload=renderMathInElement(document.body)></script></head><body><script type=text/javascript>setThemeByUserPref()</script><header class=header><nav class=header-nav><div class=avatar><a href=https://lurongkai.github.io/><img src=https://lurongkai.github.io//images/avatar.jpeg alt=avatar></a></div><div class=nav-title><a class=nav-brand href=https://lurongkai.github.io/>程序物语</a></div><div class=nav-links><div class=nav-link><a href=https://lurongkai.github.io/posts/>Posts</a></div><div class=nav-link><a href=https://lurongkai.github.io/tags/>Tags</a></div><div class=nav-link><a href=https://github.com/lurongkai><span data-feather=github></span></a></div><span class=nav-icons-divider></span><div class="nav-link dark-theme-toggle"><a><span id=theme-toggle-icon data-feather=moon></span></a></div><div class=nav-link id=hamburger-menu-toggle><a><span data-feather=menu></span></a></div><ul class="nav-hamburger-list visibility-hidden"><li class=nav-item><a href=https://lurongkai.github.io/posts/>Posts</a></li><li class=nav-item><a href=https://lurongkai.github.io/tags/>Tags</a></li><li class=nav-item><a href=https://github.com/lurongkai><span data-feather=github></span></a></li><li class="nav-item dark-theme-toggle"><a><span id=theme-toggle-icon data-feather=moon></span></a></li></ul></div></nav></header><main id=content><div class="post container"><div class=post-header-section><h1>.NET 4中的并行编程(上)</h1><small role=doc-subtitle></small><p class=post-date>四月 19, 2010</p><ul class=post-tags><li class=post-tag><a href=https://lurongkai.github.io/tags/c>C#</a></li><li class=post-tag><a href=https://lurongkai.github.io/tags/.net>.NET</a></li><li class=post-tag><a href=https://lurongkai.github.io/tags/parallel>Parallel</a></li></ul></div><div class=post-content><p><p>并行是.NET 4中新加入的特性，为了使程序在多核心多CPU环境运行的更好、更快、更强大。</p><p>并发和并行是不一样的，并发最多可以算做是多线程，而所谓并行是将任务分散到不同的CPU上同时执行。尤其值得我们关注的是，在Web环境下的先天并行特性，使得并行编程成为解决性能瓶颈的又一武器。</p><p>.NET 4中的并行编程主要是Parallel和Task，微软强势构建了TPL(Task Parallel Library)，使开发过程变得简洁。</p><p>接下来，先看一个简单的Demo：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=display:flex><span><span style=color:#ff79c6>using</span> System.Threading.Tasks;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Parallel.Invoke(
+</span></span><span style=display:flex><span>    () =&gt; {
+</span></span><span style=display:flex><span>        Thread.Sleep(<span style=color:#bd93f9>1000</span>);
+</span></span><span style=display:flex><span>        Console.WriteLine(<span style=color:#f1fa8c>&#34;1&#34;</span>);
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    () =&gt; {
+</span></span><span style=display:flex><span>        Thread.Sleep(<span style=color:#bd93f9>1000</span>);
+</span></span><span style=display:flex><span>        Console.WriteLine(<span style=color:#f1fa8c>&#34;2&#34;</span>);
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    () =&gt; {
+</span></span><span style=display:flex><span>        Thread.Sleep(<span style=color:#bd93f9>1000</span>);
+</span></span><span style=display:flex><span>        Console.WriteLine(<span style=color:#f1fa8c>&#34;3&#34;</span>);
+</span></span><span style=display:flex><span>    });
+</span></span></code></pre></div><p><code>Parallel.Invoke()</code>方法可以接收一个Action委托的params数组。我们来猜一下上段代码的执行结果是什么？123的顺序还是132？213？231？这个，不一定，得看人品……呵呵，开个玩笑，并行执行时，将上面三个Lambda表达式传递的方法分别看做一个“任务”，将其分配至空闲CPU，然后执行，由于CPU的情况是不一定的，所以执行完毕的顺序也就有了差异。</p><p>由于很多需要并行执行的任务都有一定的相似性，所以一般情况下我们可以用一种类似for循环的方式对这些任务进行并行的处理，例如在.NET 4中可以这么做：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=display:flex><span>Parallel.For(<span style=color:#bd93f9>0</span>, <span style=color:#bd93f9>10</span>, i =&gt; {
+</span></span><span style=display:flex><span>    Console.WriteLine(i);
+</span></span><span style=display:flex><span>});
+</span></span></code></pre></div><p>但样做有时却不方便，例如我们要处理一个集合中的数据，既然集合实现了IEnumerable接口，为什么还要用索引来遍历呢？</p><p>其实我们是可以方便并行的处理一个数据集合的，以在多CPU环境下获得更高的性能。具体的，我们可以这么做：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=display:flex><span><span style=color:#8be9fd>var</span> dataList = <span style=color:#ff79c6>new</span> <span style=color:#8be9fd>string</span>[] { <span style=color:#f1fa8c>&#34;data1&#34;</span>, <span style=color:#f1fa8c>&#34;data2&#34;</span>, <span style=color:#f1fa8c>&#34;data3&#34;</span> };<span style=color:#6272a4>//IEnumerable interface.</span>
+</span></span><span style=display:flex><span>Parallel.ForEach(dataList, taskOptions, data =&gt; {
+</span></span><span style=display:flex><span>    Console.WriteLine(data + <span style=color:#f1fa8c>&#34; processing&#34;</span>);
+</span></span><span style=display:flex><span>});
+</span></span></code></pre></div><p>taskOptions是一个可选的参数，用于指定并行任务执行的方式，可以这样设置它：</p><p>ParallelOptions taskOptions = new ParallelOptions();
+taskOptions.MaxDegreeOfParallelism = 2;
+这里只是简单的设置了一下并行执行的程序，可以理解为使用的CPU核心数，-1表示由CLR来决定，因为我的本本是两核的，那就指定为2吧……</p><p>当然了，processing的顺序也不一定的顺序了，原因看上面。</p><p>Parallel为我们提供了一种最原始的控制并行任务的过程，但这在实际的使用中是远不够的，我们需要更加细腻的控制并行执行中的阶段和并发冲突情况(并行中当然也有冲突了)等，.NET 4为我们带来的Task很好的解决了这个需求。</p><p>先上一个简单的例子：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=display:flex><span>Task task1 = <span style=color:#ff79c6>new</span> Task(() =&gt; {
+</span></span><span style=display:flex><span>    Console.WriteLine(<span style=color:#f1fa8c>&#34;Task1&#34;</span>);
+</span></span><span style=display:flex><span>});
+</span></span><span style=display:flex><span>task1.Start();
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Task task2 = Task.Factory.StartNew(() =&gt; {
+</span></span><span style=display:flex><span>    Console.WriteLine(<span style=color:#f1fa8c>&#34;Task2&#34;</span>);
+</span></span><span style=display:flex><span>});
+</span></span></code></pre></div><p>这里使用了两种方式来启动一个Task，第一种是普通的做法，先实例化一个Task，再调用Start()方法来启动一个任务。第二种是使用Task的工厂方法来初始化并启动。孰好孰坏就全看个人喜好了。</p><p>当我们的Task执行完毕后会产生一个新结果时，可以在初始化任务时指定返回的类型，然后访问.Result属性来获取任务结束后的值，例如下面：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=display:flex><span>Task task1 = Task.Factory.StartNew(() =&gt;{
+</span></span><span style=display:flex><span>    Thread.Sleep(<span style=color:#bd93f9>1000</span>);
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>return</span> <span style=color:#f1fa8c>&#34;string1&#34;</span>;
+</span></span><span style=display:flex><span>});
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Task task2 = Task.Factory.StartNew(() =&gt;{
+</span></span><span style=display:flex><span>    Thread.Sleep(<span style=color:#bd93f9>1000</span>);
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>return</span> <span style=color:#f1fa8c>&#34;string2&#34;</span>;
+</span></span><span style=display:flex><span>});
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Task task3 = Task.Factory.StartNew(() =&gt;{
+</span></span><span style=display:flex><span>    Thread.Sleep(<span style=color:#bd93f9>1000</span>);
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>return</span> <span style=color:#f1fa8c>&#34;string3&#34;</span>;
+</span></span><span style=display:flex><span>});
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Console.WriteLine(task1.Result);
+</span></span><span style=display:flex><span>Console.WriteLine(task2.Result);
+</span></span><span style=display:flex><span>Console.WriteLine(task3.Result);
+</span></span></code></pre></div><p>需要说明的是，当访问<code>Task.Result</code>属性时，如果对应的Task还没有结束，那么在访问线程将会阻塞，直到所对应的Task执行完毕才会继续。</p><p>这种阻塞当然是安全的，然而很多时候，我们需要确保某些任务结束后才可以执行后续的代码，这时候会怎么做呢？</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=display:flex><span>Task task1 = <span style=color:#ff79c6>new</span> Task(() =&gt; { Console.WriteLine(<span style=color:#f1fa8c>&#34;Task1&#34;</span>); });
+</span></span><span style=display:flex><span>Task task2 = <span style=color:#ff79c6>new</span> Task(() =&gt; { Console.WriteLine(<span style=color:#f1fa8c>&#34;Task2&#34;</span>); });
+</span></span><span style=display:flex><span>Task task3 = <span style=color:#ff79c6>new</span> Task(() =&gt; { Console.WriteLine(<span style=color:#f1fa8c>&#34;Task3&#34;</span>); });
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>task3.Start();
+</span></span><span style=display:flex><span>Task.WaitAll(task3);<span style=color:#6272a4>//params Task</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Console.WriteLine(<span style=color:#f1fa8c>&#34;Task3 complete&#34;</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Task.WaitAny(task3, task2);<span style=color:#6272a4>//task2并没有运行</span>
+</span></span><span style=display:flex><span>Console.WriteLine(<span style=color:#f1fa8c>&#34;task2和task3中必然完成了一个&#34;</span>);
+</span></span><span style=display:flex><span>task1.Start();
+</span></span></code></pre></div><p><code>Task.WaitAll()</code>方法会阻塞线程直到指定的Task全部完成后才会向下运行，这相当于设了一道关卡，确保指定任务全部结束。</p><p>而<code>Task.WaitAny()</code>方法会检测指定的全部Task，只要其中的任何一个Task完成，那么就可以继续。</p><p>其实在多线程中也有类似的做法，并不是并行的专利，例如这样：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=display:flex><span>CountdownEvent cde = <span style=color:#ff79c6>new</span> CountdownEvent(<span style=color:#bd93f9>3</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>ThreadPool.QueueUserWorkItem(<span style=color:#bd93f9>_</span> =&gt;{
+</span></span><span style=display:flex><span>    Thread.Sleep(<span style=color:#bd93f9>2000</span>);
+</span></span><span style=display:flex><span>    Console.WriteLine(<span style=color:#f1fa8c>&#34;Work item 1&#34;</span>);
+</span></span><span style=display:flex><span>    cde.Signal();
+</span></span><span style=display:flex><span>});
+</span></span><span style=display:flex><span>ThreadPool.QueueUserWorkItem(<span style=color:#bd93f9>_</span> =&gt;{
+</span></span><span style=display:flex><span>    Thread.Sleep(<span style=color:#bd93f9>4000</span>);
+</span></span><span style=display:flex><span>    Console.WriteLine(<span style=color:#f1fa8c>&#34;Work item 2&#34;</span>);
+</span></span><span style=display:flex><span>    cde.Signal();
+</span></span><span style=display:flex><span>});
+</span></span><span style=display:flex><span>ThreadPool.QueueUserWorkItem(<span style=color:#bd93f9>_</span> =&gt;{
+</span></span><span style=display:flex><span>    Thread.Sleep(<span style=color:#bd93f9>6000</span>);
+</span></span><span style=display:flex><span>    Console.WriteLine(<span style=color:#f1fa8c>&#34;Work item 3&#34;</span>);
+</span></span><span style=display:flex><span>    cde.Signal();
+</span></span><span style=display:flex><span>});
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>cde.Wait();
+</span></span><span style=display:flex><span>Console.WriteLine(<span style=color:#f1fa8c>&#34;All complete.&#34;</span>);
+</span></span></code></pre></div><p>只不过Task的方法更加的直接而已。</p><p>然而任务间有时也有着依赖关系，例如Task1依赖于Task2的执行，Task2又依赖于Task3的执行，这样，完全可以用普通的单线程来替代了，为什么还要使用并行呢？其实就拿上面的例子来说，Task3在一个CPU1上执行完毕了Task2在CPU2上立即启动，这时CPU1完全可以用来做别的并行任务了，不是么？这就是任务链的作用，我们可以用一个Demo来说明：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=display:flex><span>Task task1 = <span style=color:#ff79c6>new</span> Task(() =&gt;{
+</span></span><span style=display:flex><span>    Console.WriteLine(<span style=color:#f1fa8c>&#34;Task1&#34;</span>);
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>return</span> <span style=color:#bd93f9>1</span>;
+</span></span><span style=display:flex><span>});
+</span></span><span style=display:flex><span>Task task2 = task1.ContinueWith(parent =&gt; {
+</span></span><span style=display:flex><span>    Console.WriteLine(<span style=color:#f1fa8c>&#34;Task2&#34;</span>);
+</span></span><span style=display:flex><span>    Console.WriteLine(<span style=color:#f1fa8c>&#34;Task1&#39;s result:{0}&#34;</span>, parent.Result);
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>return</span> <span style=color:#f1fa8c>&#34;Task2&#34;</span>;
+</span></span><span style=display:flex><span>});
+</span></span><span style=display:flex><span>Task task3 = task2.ContinueWith(parent =&gt; {
+</span></span><span style=display:flex><span>    Console.WriteLine(<span style=color:#f1fa8c>&#34;Task3&#34;</span>);
+</span></span><span style=display:flex><span>    Console.WriteLine(<span style=color:#f1fa8c>&#34;Task2&#39;s result:{0}&#34;</span>, parent.Result);
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>return</span> <span style=color:#f1fa8c>&#34;Task3&#34;</span>;
+</span></span><span style=display:flex><span>});
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>task1.Start();
+</span></span></code></pre></div><p>当调用<code>task1.Start()</code>方法后task1启动，执行完毕后task2启动，再然后task3启动，呈一条链状执行，可以写在一条语句：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=display:flex><span>Task task = Task.Factory.StartNew(() =&gt; {
+</span></span><span style=display:flex><span>    Console.WriteLine(<span style=color:#f1fa8c>&#34;Task1&#34;</span>);
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>return</span> <span style=color:#bd93f9>1</span>;
+</span></span><span style=display:flex><span>}).ContinueWith(parent =&gt; {
+</span></span><span style=display:flex><span>    Console.WriteLine(<span style=color:#f1fa8c>&#34;Task2&#34;</span>);
+</span></span><span style=display:flex><span>    Console.WriteLine(<span style=color:#f1fa8c>&#34;Task1&#39;s result:{0}&#34;</span>, parent.Result);
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>return</span> <span style=color:#f1fa8c>&#34;Task2&#34;</span>;
+</span></span><span style=display:flex><span>}).ContinueWith(parent =&gt; {
+</span></span><span style=display:flex><span>    Console.WriteLine(<span style=color:#f1fa8c>&#34;Task3&#34;</span>);
+</span></span><span style=display:flex><span>    Console.WriteLine(<span style=color:#f1fa8c>&#34;Task2&#39;s result:{0}&#34;</span>, parent.Result);
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>return</span> <span style=color:#f1fa8c>&#34;Task3&#34;</span>;
+</span></span><span style=display:flex><span>});
+</span></span></code></pre></div><p>显然，这些只能在任务的外部进行并行执行阶段的控制，如果想要更加细度的控制并行的执行，例如在并行过程的内部实现阶段的控制，那么就需要引入Barrier结构了。Barrier结构可以为并行过程内部提供“阶段关卡”，让并行也分阶段来协作，一个简单的例子是这样：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=display:flex><span>Barrier barrierDemo = <span style=color:#ff79c6>new</span> Barrier(<span style=color:#bd93f9>3</span>, (barrier) =&gt; {
+</span></span><span style=display:flex><span>    Console.WriteLine(<span style=color:#f1fa8c>&#34;Phase {0} has been completed.&#34;</span>, barrier.CurrentPhaseNumber + <span style=color:#bd93f9>1</span>);
+</span></span><span style=display:flex><span>});
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Task task1 = Task.Factory.StartNew(() =&gt; {
+</span></span><span style=display:flex><span>    Console.WriteLine(<span style=color:#f1fa8c>&#34;Task1,phase 1.&#34;</span>);
+</span></span><span style=display:flex><span>    barrierDemo.SignalAndWait();<span style=color:#6272a4>// phase 1</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    Console.WriteLine(<span style=color:#f1fa8c>&#34;Task1,phase 2.&#34;</span>);
+</span></span><span style=display:flex><span>    barrierDemo.SignalAndWait();<span style=color:#6272a4>// phase 2</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    Console.WriteLine(<span style=color:#f1fa8c>&#34;Task1,phase 3.&#34;</span>);
+</span></span><span style=display:flex><span>    barrierDemo.SignalAndWait();<span style=color:#6272a4>// phase 3</span>
+</span></span><span style=display:flex><span>});
+</span></span><span style=display:flex><span>Task task2 = Task.Factory.StartNew(() =&gt; {
+</span></span><span style=display:flex><span>    Console.WriteLine(<span style=color:#f1fa8c>&#34;Task2,phase 1.&#34;</span>);
+</span></span><span style=display:flex><span>    barrierDemo.SignalAndWait();<span style=color:#6272a4>// phase 1</span>
+</span></span><span style=display:flex><span>    Console.WriteLine(<span style=color:#f1fa8c>&#34;Task2,phase 2.&#34;</span>);
+</span></span><span style=display:flex><span>    barrierDemo.SignalAndWait();<span style=color:#6272a4>// phase 2</span>
+</span></span><span style=display:flex><span>    Console.WriteLine(<span style=color:#f1fa8c>&#34;Task2,phase 3.&#34;</span>);
+</span></span><span style=display:flex><span>    barrierDemo.SignalAndWait();<span style=color:#6272a4>// phase 3</span>
+</span></span><span style=display:flex><span>});
+</span></span><span style=display:flex><span>Task task3 = Task.Factory.StartNew(() =&gt; {
+</span></span><span style=display:flex><span>    Console.WriteLine(<span style=color:#f1fa8c>&#34;Task3,phase 1.&#34;</span>);
+</span></span><span style=display:flex><span>    barrierDemo.SignalAndWait();<span style=color:#6272a4>// phase 1</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    Console.WriteLine(<span style=color:#f1fa8c>&#34;Task3,phase 2.&#34;</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    barrierDemo.SignalAndWait();<span style=color:#6272a4>// phase 2</span>
+</span></span><span style=display:flex><span>    Console.WriteLine(<span style=color:#f1fa8c>&#34;Task3,phase 3.&#34;</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    barrierDemo.SignalAndWait();<span style=color:#6272a4>// phase 3</span>
+</span></span><span style=display:flex><span>});
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Task.WaitAll(task1, task2, task3);
+</span></span><span style=display:flex><span>Console.WriteLine(<span style=color:#f1fa8c>&#34;All complete.&#34;</span>);
+</span></span></code></pre></div><p>三个Task是并行执行的当然没有问题，因而顺序也就不一定，原因再请看上面。我们需要解决的问题是怎样把Task分为3个阶段，让所有的Task在对应的阶段能统一一下步子，然后再往下走，Barrier就是为此而生，先在主线线程内声明一个Barrier实例并指定需要控制的阶段数量，然后在Task内分别来使用SignalAndWait()来设阶段关卡，可以预想执行的结果是：</p><pre tabindex=0><code>Task2,phase 1.    
+Task1,phase 1.    
+Task3,phase 1.
+Phase 1 has been completed. 
+Task1,phase 2. 
+Task2,phase 2. 
+Task3,phase 2. 
+Phase 2 has been completed. 
+Task3,phase 3. 
+Task1,phase 3. 
+Task2,phase 3.  
+Phase 3 has been completed.
+All complete.
+</code></pre><p>当然，每个阶段的完成顺序可以是不一样的。</p><p>下一次将要讨论的是并行编程中的关于异常处理、访问安全问题以及PLINQ，当然了，这些都只是一些开头，当真正要在工程中使用并行，需要考虑的问题还有很多，毕竟，不管是多线程还是并行都提升了代码的复杂度，我们必须要衡量在大的环境下这样做是否值得……</p></p></div><div id=disqus_thread></div><script type=application/javascript>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//software-story.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div></main><footer class=footer><span>&copy; 2022 Lu Rongkai</span>
+<span>Made with &#10084;&#65039; using <a target=_blank href=https://github.com/526avijitgupta/gokarna>Gokarna</a></span></footer></body></html>

@@ -1,0 +1,306 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{--accent-color:#FF4D4D}</style><title>关注软件开发中的安全</title><meta name=description content="聊聊软件，聊聊设计，聊聊生活"><meta name=keywords content="blog,lurongkai,Ninja_Lu,software,architecture,Software Security,Speech"><meta property="og:url" content="https://lurongkai.github.io/posts/2019/02/15/shinetech-2018-security-training-summary/"><meta property="og:type" content="website"><meta property="og:title" content="关注软件开发中的安全"><meta property="og:description" content="聊聊软件，聊聊设计，聊聊生活"><meta property="og:image" content="/images/avatar.jpeg"><meta name=twitter:card content="summary_large_image"><meta name=twitter:title content="关注软件开发中的安全"><meta name=twitter:description content="聊聊软件，聊聊设计，聊聊生活"><meta property="twitter:domain" content="https://lurongkai.github.io/posts/2019/02/15/shinetech-2018-security-training-summary/"><meta property="twitter:url" content="https://lurongkai.github.io/posts/2019/02/15/shinetech-2018-security-training-summary/"><meta name=twitter:image content="/images/avatar.jpeg"><link rel=canonical href=https://lurongkai.github.io/posts/2019/02/15/shinetech-2018-security-training-summary/><link rel=stylesheet type=text/css href=https://lurongkai.github.io//css/normalize.min.css media=print onload='this.media="all"'><link rel=stylesheet type=text/css href=https://lurongkai.github.io//css/main.css><link disabled id=dark-theme rel=stylesheet href=https://lurongkai.github.io//css/dark.css><script src=https://lurongkai.github.io//js/svg-injector.min.js></script>
+<script src=https://lurongkai.github.io//js/feather-icons.min.js></script>
+<script src=https://lurongkai.github.io//js/main.js></script>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.16/dist/katex.min.css integrity=sha384-6LkG2wmY8FK9E0vU9OOr8UvLwsaqUg9SETfpq4uTCN1agNe8HRdE9ABlk+fVx6gZ crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.16/dist/katex.min.js integrity=sha384-31El76TwmbHj4rF9DyLsygbq6xoIobG0W+jqXim+a3dU9W53tdH3A/ngRPxOzzaB crossorigin=anonymous></script>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.16/dist/contrib/auto-render.min.js integrity=sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl crossorigin=anonymous onload=renderMathInElement(document.body)></script></head><body><script type=text/javascript>setThemeByUserPref()</script><header class=header><nav class=header-nav><div class=avatar><a href=https://lurongkai.github.io/><img src=https://lurongkai.github.io//images/avatar.jpeg alt=avatar></a></div><div class=nav-title><a class=nav-brand href=https://lurongkai.github.io/>程序物语</a></div><div class=nav-links><div class=nav-link><a href=https://lurongkai.github.io/posts/>Posts</a></div><div class=nav-link><a href=https://lurongkai.github.io/tags/>Tags</a></div><div class=nav-link><a href=https://github.com/lurongkai><span data-feather=github></span></a></div><span class=nav-icons-divider></span><div class="nav-link dark-theme-toggle"><a><span id=theme-toggle-icon data-feather=moon></span></a></div><div class=nav-link id=hamburger-menu-toggle><a><span data-feather=menu></span></a></div><ul class="nav-hamburger-list visibility-hidden"><li class=nav-item><a href=https://lurongkai.github.io/posts/>Posts</a></li><li class=nav-item><a href=https://lurongkai.github.io/tags/>Tags</a></li><li class=nav-item><a href=https://github.com/lurongkai><span data-feather=github></span></a></li><li class="nav-item dark-theme-toggle"><a><span id=theme-toggle-icon data-feather=moon></span></a></li></ul></div></nav></header><main id=content><div class="post container"><div class=post-header-section><h1>关注软件开发中的安全</h1><small role=doc-subtitle></small><p class=post-date>二月 5, 2019</p><ul class=post-tags><li class=post-tag><a href=https://lurongkai.github.io/tags/software-security>Software Security</a></li><li class=post-tag><a href=https://lurongkai.github.io/tags/speech>Speech</a></li></ul></div><div class=post-content><p><p>18 年 10 月底的时候，我在 Shinetech Software 内部做了一场在线的培训，主要关注的是在软件开发过程中，对于安全方面的工程实践，并不算是很深入的探讨，更多的是一些极不易察觉但又很常见的疏忽，这篇博客整理出来。</p><h2 id=一切漏洞都可以是注入漏洞>一切漏洞都可以是注入漏洞</h2><h3 id=不要相信来自用户的数据>不要相信来自用户的数据</h3><p><strong>e.g. SQL</strong></p><p>如果我们碰到了如下一段代码片断，用于实现将用户通过 id 从数据库中查询出来，有经验的你一定知道有什么严重的问题：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span>var id <span style=color:#ff79c6>=</span> ctx.query[<span style=color:#f1fa8c>&#39;id&#39;</span>];
+</span></span><span style=display:flex><span><span style=color:#ff79c6>SELECT</span> <span style=color:#ff79c6>*</span> <span style=color:#ff79c6>FROM</span> USERS <span style=color:#ff79c6>WHERE</span> ID <span style=color:#ff79c6>=</span> id;
+</span></span></code></pre></div><p>这段代码从用户的 http 请求中取出 id(查询字符串)，之后然后通过 sql 拼接生产一条合法的查询语句并执行，正常的请求可能是这样：</p><pre tabindex=0><code>GET /users?id=66721855
+[{
+    &#34;id&#34;: 66721855,
+    &#34;name&#34;: &#34;lurongkai&#34;,
+    &#34;addr&#34;: &#34;Tian Jin&#34;
+}]
+</code></pre><p>那么此时执行的是<code>SELECT * FROM USERS WHERE ID = 66721855</code>，这没有问题，但是如果精心构造一个特殊的 query string 值呢？</p><pre tabindex=0><code>GET /users?id=1%20OR%201%3D1
+1%20OR%201%3D1 --(uri decode) -&gt; 1 OR 1=1
+</code></pre><p>这样，最后执行的 sql 就变成了<code>SELECT * FROM USERS WHERE ID = 1 OR 1=1</code>，不解释了，典型的 sql 注入，一定留意。</p><blockquote><p>想像一下<code>DELETE FROM POSTS WHERE ID = id</code>……</p></blockquote><p>解决的方法其实很简单，大部分的驱动都是支持<code>param</code>构造的，比如可以这么做：</p><pre tabindex=0><code>SELECT * FROM USERS WHERE ID = @ID
+conn.execute(sql, { ID: id });
+</code></pre><blockquote><p>有同学会嘲笑，说这都 2019 年了，谁还在用 sql 拼接，我们都 ORM 甚至 nosql 了。别大意，有很多你想像不到的场景仍然在大量使用 sql 拼接，这是一块神奇土壤，而且 nosql 不见得一定安全，请看下一个例子。</p></blockquote><p><strong>e.g. Mongo</strong></p><p>假设我们有一个不规范的查询接口，使用了 POST 来查询 payments 数据，并在 body 中传递查询的条件：</p><pre tabindex=0><code>POST /payments
+{
+    &#34;f1&#34;: 1
+}
+=&gt;
+[{
+    &#34;id&#34;: &#34;5a69b8e0817870269d5fe82c&#34;,
+    &#34;amount&#34;: &#34;100&#34;,
+    &#34;f1&#34;: 1,
+    &#34;createdAtUtc&#34;: &#34;2018-10-01T10:10:10.000&#34;
+}]
+</code></pre><p>返回的是通过给定的条件过滤后的数据。一般此类的接口会限定只能查询自身的数据，所以除非烂到无法拯救，通常是不会查询到其他用户的数据的。后端 api 的实现可能会是如此：</p><pre tabindex=0><code>var q = ctx.body;
+var query = { uid: uid, …q };
+db.collection[&#39;payments&#39;].find(q);
+</code></pre><p>uid 来自 authentication/authorization 中间件。那么最终执行的 mongo 查询会是<code>db.collection['payments'].find({ uid: 1 f1: 1 })</code>。接下来我们来构造特殊数据：</p><pre tabindex=0><code>/POST /payments
+{
+    uid: {
+        $ne: -1
+    }
+}
+</code></pre><p>执行起来会是<code>db.collection['payments'].find({ uid: { $ne: -1 } })</code>，查到了所有用户的数据。</p><p>这其实不算是个好例子，js 的锅可能更大一些。我想在这里表达的是，mongo 的<strong>操作符</strong>是存在注入风险的，要留意。</p><p><strong>e.g. XSS</strong></p><p>跨站脚本注入非常常见，假设有以下接口:</p><pre tabindex=0><code>POST /blogs
+{
+    &#34;title&#34;: &#34;my blog&#34;,
+    &#34;content&#34;: &#34;hello, shinetech&#34;
+}
+</code></pre><p>这个接口用来发布一篇博客，当前端开始展示该博客的时候，对应的可能是这样的代码:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-html data-lang=html><span style=display:flex><span>&lt;<span style=color:#ff79c6>html</span>&gt;
+</span></span><span style=display:flex><span>  &lt;<span style=color:#ff79c6>head</span>&gt;
+</span></span><span style=display:flex><span>    …
+</span></span><span style=display:flex><span>  &lt;/<span style=color:#ff79c6>head</span>&gt;
+</span></span><span style=display:flex><span>  &lt;<span style=color:#ff79c6>body</span>&gt;
+</span></span><span style=display:flex><span>    &lt;<span style=color:#ff79c6>div</span> <span style=color:#50fa7b>id</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;blog-body&#34;</span> <span style=color:#50fa7b>class</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;container&#34;</span>&gt;&lt;/<span style=color:#ff79c6>div</span>&gt;
+</span></span><span style=display:flex><span>  &lt;/<span style=color:#ff79c6>body</span>&gt;
+</span></span><span style=display:flex><span>  &lt;<span style=color:#ff79c6>script</span> <span style=color:#50fa7b>id</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;template&#34;</span> <span style=color:#50fa7b>type</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;x-tmpl-mustache&#34;</span>&gt;
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>&lt;</span>section<span style=color:#ff79c6>&gt;</span>{{{ body }}}<span style=color:#ff79c6>&lt;</span>/section&gt;
+</span></span><span style=display:flex><span>  &lt;/<span style=color:#ff79c6>script</span>&gt;
+</span></span><span style=display:flex><span>  &lt;<span style=color:#ff79c6>script</span>&gt;
+</span></span><span style=display:flex><span>    $.get(<span style=color:#f1fa8c>&#34;/blogs/1&#34;</span>, <span style=color:#8be9fd;font-style:italic>function</span> (data) {
+</span></span><span style=display:flex><span>      <span style=color:#8be9fd;font-style:italic>var</span> rendered <span style=color:#ff79c6>=</span> Mustache.render(template, data);
+</span></span><span style=display:flex><span>      $(<span style=color:#f1fa8c>&#34;#blog-body&#34;</span>).html(rendered);
+</span></span><span style=display:flex><span>    });
+</span></span><span style=display:flex><span>  &lt;/<span style=color:#ff79c6>script</span>&gt;
+</span></span><span style=display:flex><span>&lt;/<span style=color:#ff79c6>html</span>&gt;
+</span></span></code></pre></div><p>我们把逻辑剥离开，那么刚才那篇博客对应的 html 是:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-html data-lang=html><span style=display:flex><span>&lt;<span style=color:#ff79c6>html</span>&gt;
+</span></span><span style=display:flex><span>  &lt;<span style=color:#ff79c6>head</span>&gt;
+</span></span><span style=display:flex><span>    …
+</span></span><span style=display:flex><span>  &lt;/<span style=color:#ff79c6>head</span>&gt;
+</span></span><span style=display:flex><span>  &lt;<span style=color:#ff79c6>body</span>&gt;
+</span></span><span style=display:flex><span>    &lt;<span style=color:#ff79c6>div</span> <span style=color:#50fa7b>id</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;blog-body&#34;</span> <span style=color:#50fa7b>class</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;container&#34;</span>&gt;
+</span></span><span style=display:flex><span>      &lt;<span style=color:#ff79c6>section</span>&gt;hello, shinetech&lt;/<span style=color:#ff79c6>section</span>&gt;
+</span></span><span style=display:flex><span>    &lt;/<span style=color:#ff79c6>div</span>&gt;
+</span></span><span style=display:flex><span>  &lt;/<span style=color:#ff79c6>body</span>&gt;
+</span></span><span style=display:flex><span>&lt;/<span style=color:#ff79c6>html</span>&gt;
+</span></span></code></pre></div><p>接下来开始构造特殊数据：</p><pre tabindex=0><code>POST /blogs
+{
+    &#34;title&#34;: &#34;my blog&#34;,
+    &#34;content&#34;: &#34;hello, shinetech
+      &lt;script&gt;/* DO EVIL */&lt;/script&gt;&#34;
+}
+</code></pre><p>那么，渲染后的 html 是:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-html data-lang=html><span style=display:flex><span>&lt;<span style=color:#ff79c6>html</span>&gt;
+</span></span><span style=display:flex><span>  &lt;<span style=color:#ff79c6>head</span>&gt;
+</span></span><span style=display:flex><span>    …
+</span></span><span style=display:flex><span>  &lt;/<span style=color:#ff79c6>head</span>&gt;
+</span></span><span style=display:flex><span>  &lt;<span style=color:#ff79c6>body</span>&gt;
+</span></span><span style=display:flex><span>    &lt;<span style=color:#ff79c6>div</span> <span style=color:#50fa7b>id</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;blog-body&#34;</span> <span style=color:#50fa7b>class</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;container&#34;</span>&gt;
+</span></span><span style=display:flex><span>      &lt;<span style=color:#ff79c6>section</span>&gt;
+</span></span><span style=display:flex><span>        hello, shinetech
+</span></span><span style=display:flex><span>        &lt;<span style=color:#ff79c6>script</span>&gt;
+</span></span><span style=display:flex><span>          <span style=color:#6272a4>/* DO EVIL */</span>
+</span></span><span style=display:flex><span>        &lt;/<span style=color:#ff79c6>script</span>&gt;
+</span></span><span style=display:flex><span>      &lt;/<span style=color:#ff79c6>section</span>&gt;
+</span></span><span style=display:flex><span>    &lt;/<span style=color:#ff79c6>div</span>&gt;
+</span></span><span style=display:flex><span>  &lt;/<span style=color:#ff79c6>body</span>&gt;
+</span></span><span style=display:flex><span>&lt;/<span style=color:#ff79c6>html</span>&gt;
+</span></span></code></pre></div><p>解决的办法也是比较简单，渲染的时候不要使用<code>{% raw %}{{{}}}{% endraw %}</code>，而是使用<code>{% raw %}{{}}{% endraw %}</code>就好了。</p><blockquote><p>这背后的逻辑其实是这样：mustache 不是个例，而是所有的前端页面的渲染都不应该相信用户的输入，都必需要做 encoding 或者危险标签剔除(这个很有难度)，如果嫌麻烦还可以使用 markdown，但不应该直接将用户的数据渲染出来。</p></blockquote><p>最终处理后的 html 会变成:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-html data-lang=html><span style=display:flex><span>&lt;<span style=color:#ff79c6>html</span>&gt;
+</span></span><span style=display:flex><span>  &lt;<span style=color:#ff79c6>head</span>&gt;
+</span></span><span style=display:flex><span>    …
+</span></span><span style=display:flex><span>  &lt;/<span style=color:#ff79c6>head</span>&gt;
+</span></span><span style=display:flex><span>  &lt;<span style=color:#ff79c6>body</span>&gt;
+</span></span><span style=display:flex><span>    &lt;<span style=color:#ff79c6>div</span> <span style=color:#50fa7b>id</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;blog-body&#34;</span> <span style=color:#50fa7b>class</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;container&#34;</span>&gt;
+</span></span><span style=display:flex><span>      &lt;<span style=color:#ff79c6>section</span>&gt;
+</span></span><span style=display:flex><span>        hello, shinetech %3Cscript%3E%2F%2A+DO+EVIL+%2A%2F%3C%2Fscript%3E
+</span></span><span style=display:flex><span>      &lt;/<span style=color:#ff79c6>section</span>&gt;
+</span></span><span style=display:flex><span>    &lt;/<span style=color:#ff79c6>div</span>&gt;
+</span></span><span style=display:flex><span>  &lt;/<span style=color:#ff79c6>body</span>&gt;
+</span></span><span style=display:flex><span>&lt;/<span style=color:#ff79c6>html</span>&gt;
+</span></span></code></pre></div><p><strong>e.g. Bounds Checking</strong></p><p>边界检查简直是重灾区，不少祸事都是因为没有做严格的边界检查造成的。</p><p>假设有一个用于转账的接口：</p><pre tabindex=0><code>POST /transfer
+{
+    &#34;trans&#34;: [{
+        &#34;toUser&#34;: &#34;5a69b8f865bdcc26a2ca32ee&#34;, // user a
+        &#34;amount&#34;: 100
+    }, {
+        &#34;toUser&#34;: &#34;5a69b8f865bdcc26a2ca32ef&#34;, // user b
+        &#34;amount&#34;: 200
+    }]
+}
+</code></pre><p>后端的实现是这样的（假设 js 是一门没有溢出检查的语言）：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=display:flex><span><span style=color:#ff79c6>async</span> <span style=color:#8be9fd;font-style:italic>function</span> processTransfer(model) {
+</span></span><span style=display:flex><span>  <span style=color:#ff79c6>const</span> balance <span style=color:#ff79c6>=</span> getBalance();
+</span></span><span style=display:flex><span>  <span style=color:#ff79c6>const</span> total <span style=color:#ff79c6>=</span> _.sumBy(model.trans, (t) =&gt; t.amount);
+</span></span><span style=display:flex><span>  <span style=color:#6272a4>//假定当前用户的余额是2000
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>  <span style=color:#ff79c6>if</span> (total <span style=color:#ff79c6>&gt;</span> balance) {
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>throw</span> <span style=color:#ff79c6>new</span> <span style=color:#8be9fd;font-style:italic>Error</span>(<span style=color:#f1fa8c>&#34;insufficient balance &#34;</span>);
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  <span style=color:#6272a4>// maybe in transaction
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>  <span style=color:#ff79c6>await</span> withdraw(ctx.user.id, total);
+</span></span><span style=display:flex><span>  <span style=color:#ff79c6>for</span> (<span style=color:#8be9fd;font-style:italic>let</span> t <span style=color:#ff79c6>of</span> model.trans) {
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>await</span> deposit(t.toUser, t.amount);
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>如果在正常情况下，执行的结果应该是：</p><pre tabindex=0><code>Before:
+Self:                        = 2000
+User a:                      = 500
+User b:                      = 500
+
+After:
+Self: 2000 - ((100) + (200)) = 1700
+User a: 500 + (100)          = 600
+User b: 500 + (200)          = 700
+</code></pre><p>接下来，开始构造特殊数据：</p><pre tabindex=0><code>POST /transfer
+{
+    &#34;trans&#34;: [{
+        &#34;toUser&#34;: &#34;5a69b8f865bdcc26a2ca32ee&#34;,
+        &#34;amount&#34;: -100
+    }, {
+        &#34;toUser&#34;: &#34;5a69b8f865bdcc26a2ca32ef&#34;,
+        &#34;amount&#34;: 200
+    }]
+}
+</code></pre><p>于是，结果变为:</p><pre tabindex=0><code>Before:
+Self:                         = 2000
+User a:                       = 500
+User b:                       = 500
+
+After:
+Self: 2000 - ((-100) + (200)) = 1900
+User a: 500 + (—100)          = 400
+User b: 500 + (200)           = 700
+</code></pre><p>再比如：</p><pre tabindex=0><code>POST /transfer
+{
+    &#34;trans&#34;: [{
+        &#34;toUser&#34;: &#34;5a69b8f865bdcc26a2ca32ee&#34;,
+        &#34;amount&#34;: 2147483647
+    }, {
+        &#34;toUser&#34;: &#34;5a69b8f865bdcc26a2ca32ef&#34;,
+        &#34;amount&#34;: 1
+    }]
+}
+</code></pre><p>结果会变成：</p><pre tabindex=0><code>Before:
+Self:                       = 2000
+User a:                     = 500
+User b:                     = 500
+
+After:
+Self: 2000 - ((2147483647) + (1)) = -2147481648
+User a: 500 + (2147483647)        = -2147483149
+User b: 500 + (1)                 = 501
+</code></pre><p>第一段数据显示，业务逻辑没有针对负值进行处理，第二段说明没有处理溢出的情况。</p><p>为什么会溢出？</p><p>32 位整型的最大值为<code>2^31-1 2147483647</code>，最小值为<code>-2^31 -2147483648</code>，我们举例说明<code>Int32.MaxValue + 1</code>的计算过程:</p><pre tabindex=0><code>原码:
+    0_1111111111111111111111111111111
++   0_0000000000000000000000000000001
+=   1_0000000000000000000000000000000
+</code></pre><p>之后对结果（补码）转换为原码：</p><pre tabindex=0><code>补 -&gt; 原(后31位取反加1)
+=   1_10000000000000000000000000000000
+=   - 2^31 = -2147483648
+</code></pre><p>再举个<code>2147483647 + (-2147483648) = -1</code>的例子：</p><pre tabindex=0><code>运算时:
+    0_1111111111111111111111111111111
++   1_0000000000000000000000000000000（内存中，负数都是补码表示）
+=   1_1111111111111111111111111111111
+
+补 -&gt; 原:
+    1_0000000000000000000000000000001
+    - 1
+</code></pre><p>所幸，现在的编程语言大多对溢出有了很好的控制，例如会抛出异常，但是针对边界检查上仍然需要留意。</p><h3 id=不要相信外部第三方的数据>不要相信外部(第三方)的数据</h3><p><strong>e.g. 微信支付</strong></p><p>一般的流程是：</p><ol><li>web|app: GET /wx/params 获取支付参数</li><li>web: (jsapi) 跳转到微信支付页面, app: (唤起微信)</li><li>用户在页面或者 app 完成支付并跳回 web|app</li><li>服务端等待微信服务器的回调，并完成对应业务</li><li>web|app 拉取最新数据</li></ol><p>通常的实现为:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=display:flex><span><span style=color:#6272a4>// 微信支付回调接口
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>router.post(<span style=color:#f1fa8c>&#34;/wx/cb&#34;</span>, <span style=color:#ff79c6>async</span> <span style=color:#8be9fd;font-style:italic>function</span> (ctx) {
+</span></span><span style=display:flex><span>  <span style=color:#ff79c6>const</span> rc <span style=color:#ff79c6>=</span> ctx.request.body.return_code <span style=color:#ff79c6>||</span> <span style=color:#f1fa8c>&#34;&#34;</span> <span style=color:#ff79c6>===</span> <span style=color:#f1fa8c>&#34;SUCCESS&#34;</span>;
+</span></span><span style=display:flex><span>  <span style=color:#ff79c6>const</span> rm <span style=color:#ff79c6>=</span> ctx.request.body.return_msg <span style=color:#ff79c6>||</span> <span style=color:#f1fa8c>&#34;&#34;</span> <span style=color:#ff79c6>===</span> <span style=color:#f1fa8c>&#34;OK&#34;</span>;
+</span></span><span style=display:flex><span>  <span style=color:#ff79c6>if</span> (<span style=color:#ff79c6>!</span>rc <span style=color:#ff79c6>||</span> <span style=color:#ff79c6>!</span>rm) {
+</span></span><span style=display:flex><span>    <span style=color:#6272a4>// 支付失败的业务逻辑，并回复微信服务器
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    ctx.body <span style=color:#ff79c6>=</span> xml(<span style=color:#f1fa8c>`
+</span></span></span><span style=display:flex><span><span style=color:#f1fa8c>&lt;xml&gt;
+</span></span></span><span style=display:flex><span><span style=color:#f1fa8c>  &lt;return_code&gt;&lt;![CDATA[SUCCESS]]&gt;&lt;/return_code&gt;
+</span></span></span><span style=display:flex><span><span style=color:#f1fa8c>  &lt;return_msg&gt;&lt;![CDATA[OK]]&gt;&lt;/return_msg&gt;
+</span></span></span><span style=display:flex><span><span style=color:#f1fa8c>&lt;/xml&gt;100
+</span></span></span><span style=display:flex><span><span style=color:#f1fa8c>`</span>);
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#6272a4>// 更新数据状态 &amp; 更新订单或者其它业务
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>});
+</span></span></code></pre></div><p>那么我们看看，发现支付的回调接口没有验证来源，其实是可以伪造支持通知请求：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>curl <span style=color:#f1fa8c>\
+</span></span></span><span style=display:flex><span><span style=color:#f1fa8c></span>  -H <span style=color:#f1fa8c>&#34;Content-Type:application/json&#34;</span> <span style=color:#f1fa8c>\
+</span></span></span><span style=display:flex><span><span style=color:#f1fa8c></span>  -X POST <span style=color:#f1fa8c>\
+</span></span></span><span style=display:flex><span><span style=color:#f1fa8c></span>  --data <span style=color:#f1fa8c>&#39;{ \
+</span></span></span><span style=display:flex><span><span style=color:#f1fa8c>    &#34;return_code&#34;: &#34;SUCCESS&#34;, \
+</span></span></span><span style=display:flex><span><span style=color:#f1fa8c>    &#34;return_msg&#34;: &#34;OK&#34;, \
+</span></span></span><span style=display:flex><span><span style=color:#f1fa8c>    &#34;appid: &#34;&#34;, \                    // 可从params里取得
+</span></span></span><span style=display:flex><span><span style=color:#f1fa8c>    &#34;mch_id: &#34;&#34;, \                   // 可从params里取得
+</span></span></span><span style=display:flex><span><span style=color:#f1fa8c>    &#34;nonce_str: &#34;&#34;, \                // 可从params里取得
+</span></span></span><span style=display:flex><span><span style=color:#f1fa8c>    &#34;sign: &#34;&#34;, \                     // 伪造
+</span></span></span><span style=display:flex><span><span style=color:#f1fa8c>    &#34;openid&#34;: &#34;&#34;, \                  // 可从params里取得
+</span></span></span><span style=display:flex><span><span style=color:#f1fa8c>    &#34;trade_type: &#34;&#34;, \               // JSAPI、NATIVE、APP
+</span></span></span><span style=display:flex><span><span style=color:#f1fa8c>    &#34;bank_type: &#34;CMB_CREDIT&#34;, \      // 伪造
+</span></span></span><span style=display:flex><span><span style=color:#f1fa8c>    &#34;total_fee: 100, \               // 可从params里取得
+</span></span></span><span style=display:flex><span><span style=color:#f1fa8c>    &#34;transaction_id: &#34;wx2018100110101082741&#34;, \ // 伪造
+</span></span></span><span style=display:flex><span><span style=color:#f1fa8c>    &#34;out_trade_no: &#34;&#34;, \             // 可从params里取得
+</span></span></span><span style=display:flex><span><span style=color:#f1fa8c>    &#34;time_end: &#34;20181001101010&#34; \
+</span></span></span><span style=display:flex><span><span style=color:#f1fa8c>  }&#39;</span> <span style=color:#f1fa8c>\
+</span></span></span><span style=display:flex><span><span style=color:#f1fa8c></span>  http://demo.api.com/wx/cb
+</span></span></code></pre></div><p>对于回调类，尤其是第三方的数据来源，一定要做身份或合法性验证。</p><h3 id=也不要过于相信自己的数据>也不要过于相信自己的数据</h3><p><strong>e.g. 运营商劫持</strong></p><p>很多只使用<code>http</code>协议的 app 会经常发现页面上有很多第三方的广告或<code>widget</code>这是由于运营商的动态注入造成的。</p><p>这些 http 流量在运营商看来就是透明的，所以为了防微杜渐，干脆全走<code>https</code>更加简单。</p><p><strong>e.g. 双向验证</strong></p><p>启用<code>https</code>后事情还没有结束，有可能还会涉及到中间人攻击问题，尤其是 app 的后端 api，传统的过程是这样:</p><pre tabindex=0><code>Browser &lt;------- HTTPS -------&gt; Server
+</code></pre><p>被中间人攻击后就变成：</p><pre tabindex=0><code>Browser &lt;-------HTTPS -------&gt; (Attacker)
+                                    |
+                                    | // 证书替换?
+                                    |
+Server &lt;------- HTTPS -------&gt; (Attacker)
+</code></pre><p>解决的办法倒也是简单，直接将公钥打包在 app 中，通讯时强制检查公私钥就行，会安全许多。</p><h2 id=一切非业务缺陷都是缺少检查>一切(非业务)缺陷都是缺少检查</h2><h3 id=前端检查>前端检查</h3><p>前端页面的检查是很有必要的，除了能改善用户体验，还能部分避免后端脆弱所造成的严重问题。但是不能只依靠前端的检查，如果前端/后端的检查有个比重的话，我可能会给出<code>1:9</code>这么毫不夸张的比例：</p><ul><li>input required?</li><li>input type?</li><li>input format? email, phone, number precision/max/min</li><li>password complexity?</li><li>input dependencies?</li><li>date format?</li><li>timezone convert?</li><li>&mldr;</li></ul><p>如果忽略这些</p><h3 id=后端验证>后端验证</h3><p>当数据是从用户端产生并提交到服务端时，需要做很多的合法性检查，因为你无法盲目的去相信用户数据：</p><ul><li>illegal fields cleaning</li><li>format checking</li><li>required/dependencies checking</li><li>range/bounds checking</li><li>signature/certification verifying</li><li>anti-forgery token checking(防止重放)</li><li>business logic precondition checking</li><li>&mldr;</li></ul><p>能做到这些，就能避免很大一部分的逻辑缺陷和试探。</p><p><strong>e.g. asp.net core mvc</strong></p><p>一个良好实现后端检查的例子（使用 C#语言）</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=display:flex><span><span style=color:#ff79c6>public</span> <span style=color:#ff79c6>class</span> <span style=color:#50fa7b>BookInputModel</span> {
+</span></span><span style=display:flex><span><span style=color:#50fa7b>    [Required]</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>public</span> <span style=color:#8be9fd>string</span> Title { <span style=color:#ff79c6>get</span>; <span style=color:#ff79c6>private</span> <span style=color:#ff79c6>set</span>; }
+</span></span><span style=display:flex><span><span style=color:#50fa7b>    [Required]</span>
+</span></span><span style=display:flex><span><span style=color:#50fa7b>    [RegularExpression(@&#34;^\d{3}-\d-\d{3,4}-\d{4,5}-\d$&#34;)]</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>public</span> <span style=color:#8be9fd>string</span> Isbn { <span style=color:#ff79c6>get</span>; <span style=color:#ff79c6>private</span> <span style=color:#ff79c6>set</span>; }
+</span></span><span style=display:flex><span><span style=color:#50fa7b>    [Required]</span>
+</span></span><span style=display:flex><span><span style=color:#50fa7b>    [Range(0, 1000)]</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>public</span> <span style=color:#8be9fd>int</span> Price { <span style=color:#ff79c6>get</span>; <span style=color:#ff79c6>private</span> <span style=color:#ff79c6>set</span>; }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span><span style=color:#50fa7b>
+</span></span></span><span style=display:flex><span><span style=color:#50fa7b>[Route(&#34;api/books&#34;)]</span>
+</span></span><span style=display:flex><span><span style=color:#50fa7b>[ApiController]</span>
+</span></span><span style=display:flex><span><span style=color:#50fa7b>[AutoValidateAntiforgeryToken]</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>public</span> <span style=color:#ff79c6>class</span> <span style=color:#50fa7b>BooksController</span> : ControllerBase
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span><span style=color:#50fa7b>    [HttpPost]</span>
+</span></span><span style=display:flex><span><span style=color:#50fa7b>    [Route(&#34;&#34;)]</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>public</span> <span style=color:#ff79c6>async</span> Task&lt;IActionResult&gt; Post([FromBody]BookInputModel model) {
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>if</span> (!ModelState.IsValid) {
+</span></span><span style=display:flex><span>            <span style=color:#ff79c6>return</span> BadRequest(<span style=color:#f1fa8c>&#34;book data invalid&#34;</span>);
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>if</span> (<span style=color:#ff79c6>await</span> <span style=color:#bd93f9>_</span>bookRepository.HasByIsbn(model.Isbn)) {
+</span></span><span style=display:flex><span>            <span style=color:#ff79c6>return</span> BadRequest(<span style=color:#f1fa8c>&#34;the specified book already exists&#34;</span>);
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#8be9fd>var</span> serviceDto = Mapper.Map&lt;Book&gt;(model); <span style=color:#6272a4>// 数据清洗</span>
+</span></span><span style=display:flex><span>        <span style=color:#8be9fd>var</span> book = <span style=color:#ff79c6>await</span> <span style=color:#bd93f9>_</span>bookService.Create(serviceDto);
+</span></span><span style=display:flex><span>        <span style=color:#8be9fd>var</span> bookDisplayModel = Mapper.Map&lt;BookDisplayModel&gt;(book); <span style=color:#6272a4>// 数据清洗</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>return</span> CreatedAtAction(<span style=color:#f1fa8c>&#34;Get&#34;</span>, bookDisplayModel);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span><span style=color:#50fa7b>
+</span></span></span><span style=display:flex><span><span style=color:#50fa7b>    [HttpGet]</span>
+</span></span><span style=display:flex><span><span style=color:#50fa7b>    [Route(&#34;{id}&#34;)]</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>public</span> <span style=color:#ff79c6>async</span> Task&lt;IActionResult&gt; Get([FromRoute]<span style=color:#8be9fd>string</span> id) {
+</span></span><span style=display:flex><span>        <span style=color:#8be9fd>var</span> book = <span style=color:#ff79c6>await</span> <span style=color:#bd93f9>_</span>bookRepository.Find(id);
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>if</span> (<span style=color:#ff79c6>null</span> == book) {
+</span></span><span style=display:flex><span>            <span style=color:#ff79c6>return</span> NotFound();
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>return</span> Ok(Mapper.Map&lt;BookDisplayModel&gt;(book));
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=复杂的业务状态检查利器状态机>复杂的业务状态检查利器:状态机</h3><p>如果我来推荐的话，对于复杂一些的业务，推荐使用状态机建模，避免自顶向下一条龙式的实现，极易出错而且还不易排查和文档化。</p><p>一个假想的例子是这样的：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=display:flex><span>router.put(<span style=color:#f1fa8c>&#34;/some/business&#34;</span>, <span style=color:#ff79c6>async</span> <span style=color:#8be9fd;font-style:italic>function</span> (ctx) {
+</span></span><span style=display:flex><span>  <span style=color:#ff79c6>const</span> input <span style=color:#ff79c6>=</span> ctx.request.body;
+</span></span><span style=display:flex><span>  <span style=color:#ff79c6>if</span> (<span style=color:#ff79c6>!</span>isValid(input)) {
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>throw</span> <span style=color:#ff79c6>new</span> <span style=color:#8be9fd;font-style:italic>Error</span>(<span style=color:#f1fa8c>&#34;input invalid&#34;</span>);
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#ff79c6>const</span> stateInput <span style=color:#ff79c6>=</span> parseRaw(input);
+</span></span><span style=display:flex><span>  <span style=color:#ff79c6>const</span> state <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>await</span> loadState(stateInput);
+</span></span><span style=display:flex><span>  <span style=color:#ff79c6>const</span> expected <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>await</span> decideNext(input.action);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#ff79c6>if</span> (<span style=color:#ff79c6>!</span>(<span style=color:#ff79c6>await</span> state.canProcess(expected, input))) {
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>throw</span> <span style=color:#ff79c6>new</span> <span style=color:#8be9fd;font-style:italic>Error</span>(<span style=color:#f1fa8c>&#34;business checking failed, forbidden&#34;</span>);
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#ff79c6>await</span> state.goNext(expected, input);
+</span></span><span style=display:flex><span>  <span style=color:#ff79c6>await</span> saveState(state);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#ff79c6>const</span> ss <span style=color:#ff79c6>=</span> state.snapshot;
+</span></span><span style=display:flex><span>  <span style=color:#ff79c6>const</span> mapper <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> Mapper();
+</span></span><span style=display:flex><span>  <span style=color:#ff79c6>const</span> res <span style=color:#ff79c6>=</span> mapper.mapTo({ ns<span style=color:#ff79c6>:</span> <span style=color:#f1fa8c>&#34;some/business&#34;</span>, data<span style=color:#ff79c6>:</span> ss });
+</span></span><span style=display:flex><span>  ctx.body <span style=color:#ff79c6>=</span> res;
+</span></span><span style=display:flex><span>});
+</span></span></code></pre></div><p>当然，并不存在这样一种现成的框架，但是如果有精力，我可能会去做这么一个基础模块出来，但是背后的理念是通用的。</p><h2 id=人的因素>人的因素</h2><h3 id=弱口令>弱口令</h3><p>有没有见过下面这些眼熟的密码？</p><pre tabindex=0><code>12345678
+1234567890
+111111
+aaaaaa
+1qaz2wsx#EDC
+admin
+hello2018
+[name]112233
+[phone]
+</code></pre><p>建议还是花一些时间，对内部使用的密码例如数据库连接密码等集中做一次审计，避免因弱口令造成的事故。如果有能力的话，同时建议定期更换密码，并限制到极少数人知道或者通过安全的硬件保存。</p><h3 id=未验证的第三库引用>未验证的第三库引用</h3><p>一些关于引用第三库的小 tips：</p><ul><li>Open Source 库可能更安全一些</li><li>下载二进制包时，注意和官方的 gpg 签名做对比(有良心的都提供)</li><li>去官方下载，不要去 xx 网盘，宁肯使用有节操的镜像节点</li><li>在使用 npm, maven, nuget 等 registry 时，如果下载的是小众包，那么仍然需要慎重，你看到的代码不代表是包中使用的代码，不放心请手动 build</li><li>使用互操作时，请更加留意底层的原生库，一个不留神，反手就是一个缓冲区溢出，尽量避免 Interop</li><li>docker 镜像请使用官方出品，小众镜像请手动 docker build(这事儿爆过很严重的事件: ref-> docker123321)</li></ul><h3 id=credentials-及源代码管理>credentials 及源代码管理</h3><p>一些关于凭证和 SCM 的小 tips：</p><ul><li>不要以明文存密码，使用 hash，必要时还可以加 salt</li><li>CI/CD 上使用的凭证要注意隐藏，否则会在 build 日志中看到，例如使用 Jenkins 的凭证管理</li><li>调用第三方 api 的凭证不要直接放在源代码中，环境变量是一种选项，或者更好的配置管理方式</li><li>目前 github 会帮你扫描是否有敏感信息签入代码库，但是仍然需要留意，避免出现第二个"华住"</li><li>不要轻易把私有仓库变成公有仓库，你并不是很清楚提交历史里有什么敏感信息，有必要的话清除历史并检查后新开仓库</li><li>保护好企业的自动化工具，提升工具的安全性，例如保护好 Jenkins，保护好内部 npm、maven、nuget</li></ul><h3 id=一定要做环境隔离>一定要做环境隔离!</h3><p>一些其它的 tips：</p><ul><li>生产、测试、开发，不同环境应该使用的所有凭证都不相同</li><li>JWT 签发 token 一定留意 Audience，子站 A 签发的 token 不见得是给子站 B 用的</li><li>不同的环境使用不同的 JWT Signing Key，这是信仰</li><li>除非不得已，不同的环境间应该完全阻止互通，防止跳板攻击</li><li>生产应该只有极少数人可以操作，尽量避免开发人员操作</li><li>不要在生产环境上调试错误，除非根本没在代码中做日志</li><li>不要在生产上安装各种无用的东西，比如安个 360 浏览器…再比如安个不知名的根证书，脆弱就是一瞬间</li><li>必要时，连 source-map 都不要暴露在生产上，dbg 符号文件更不能泄露，否则和泄露代码一样</li></ul><h2 id=在实践中>在实践中</h2><p>一些在实践中的小 tips：</p><ul><li>慎重选择加密方式，必要的话请使用高强度的非对称加密，并妥善保存私钥
+代码中的写的日志一定要定期的梳理，不要把敏感信息(例如用户密码)写到日志中(github 自己出过这问题)</li><li>定期升级依赖库，虽然有可能会有 bug，但是和安全比起来，仍然值得投入
+类似 HeartBleed 的漏洞不是普通开发者能避免的，我们能做的就是第一时间升级，然后做好自己的安全</li><li>开发时，时刻进行人格分裂，站在攻击者的角度，思考一下可能会如何攻击</li></ul><h2 id=最后>最后</h2><p>需要强调两点：</p><ul><li>安全投资是很昂贵的，我们能做的只能是尽量从开发层面降低伤害</li><li>开发环节、运维环节、基础设施，任何一层都有可能会出现问题</li></ul><p>强烈建议！使用容器或虚拟化技术。</p><blockquote><p>安全遵循木桶理论，缺一块儿都会降低整体可用性</p></blockquote></p></div><div id=disqus_thread></div><script type=application/javascript>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//software-story.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div></main><footer class=footer><span>&copy; 2022 Lu Rongkai</span>
+<span>Made with &#10084;&#65039; using <a target=_blank href=https://github.com/526avijitgupta/gokarna>Gokarna</a></span></footer></body></html>

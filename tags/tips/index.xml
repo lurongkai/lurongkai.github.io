@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tips on 程序物语</title><link>https://lurongkai.github.io/tags/tips/</link><description>Recent content in Tips on 程序物语</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Fri, 22 Mar 2013 00:00:00 +0800</lastBuildDate><atom:link href="https://lurongkai.github.io/tags/tips/index.xml" rel="self" type="application/rss+xml"/><item><title>MacOS密码恢复</title><link>https://lurongkai.github.io/posts/2013/02/22/how-to-recovery-macos-password-without-installation-cd/</link><pubDate>Fri, 22 Mar 2013 00:00:00 +0800</pubDate><guid>https://lurongkai.github.io/posts/2013/02/22/how-to-recovery-macos-password-without-installation-cd/</guid><description>方法一 官方解决方法。找出电脑原配的系统盘，找不到就借一张或者刻录一张，重启电脑，启动的时候按C键，选好语言后进入安装的时候，点击“常用工具”，里面有一项是“重设密码”，这时就可以重新设定Mac OS系统的管理员密码了。
+方法二 黑客解决方法。开机， 启动时按cmd+S。这时进入单一用户模式（Single user model）。Mac OS的单一用户模式有准入特权（Root access privilege）而不要求根密码（root password）。出现像DOS一样的提示符 #root&amp;gt;。在#root&amp;gt;下逐步输入以下命令，注意空格，大小写
+//执行硬盘检测（只读）, 这一步可以省略 /sbin/fsck -y //加载文件系统（读/写） /sbin/mount -uaw //删除初始化设置时的OSX生成的隐藏文件”.applesetupdone” rm /var/db/.AppleSetupDone //重启 reboot 重启开机后出现类似装机时的欢迎界面。别担心，东西没丢。就像第一次安装一样， 重新建立一个新的Mac OS管理员账号。然后在新的管理员下打开系统预制 － 账户，打开最下面的锁，询问密码时，用新的管理员密码登录。会看到至少两个账号，新的管理员的帐号和原来的帐号，点中原来的账号，选 密码 － 更改密码……（一切，从此改变） 你不必有原先的Mac OS密码就直接可以设新密码了。 点下面的登陆选项 (小房子)，选中 自动以右边的身份登陆， 同时在下拉菜单中选你原先的账号。 重启， 大功告成。至此破解Mac OS开机密码工作完成。 如果不喜欢多出一个账号， 删除它。 系统预制 － 账户，选新的管理员帐号， 点一下锁上面的减号。</description></item><item><title>mht和chm文件打不开的解决方法</title><link>https://lurongkai.github.io/posts/2010/01/20/issues-of-mht-and-chm/</link><pubDate>Wed, 20 Jan 2010 00:00:00 +0800</pubDate><guid>https://lurongkai.github.io/posts/2010/01/20/issues-of-mht-and-chm/</guid><description>先引入这两种文件：
+mht IE保存的文件格式，也不知道是什么版本开始成为默认的网页保存格式。 chm 不用解释了吧。 情况是这样：双击mht文件打不开，双击chm文件打开后无法显示。
+怎么办呢？
+仔细检查了一下，发现了一些问题：文件名中是包含了一些特殊的字符，例如文件名为C#测试.mht，这样的话就会出现上述的问题。
+为了进一步研究，尝试用正常的文件名，但是将路径中的目录名改为包含特殊的字符，也出现了上述的问题。
+看来在文件名和路径中不能出现特殊的字符，那么在IE中将这些特殊的字符进行转义（或者称之为Encode更为合适）行不行呢？答案是：不行。
+接下来有理由怀疑所谓的“特殊字符”绝不止#这一个字符，如果大家遇到类似的问题可以尝试检查文件名或者路径，估计这样可以解决99%的所谓mht文件打不开的故障吧。
+（上述问题已经反馈到微软，暂时没有一个完整解决方案，例如补丁什么的）
+说完.mht，回过头来说.chm。
+我的解决方案就一条：参照上述解决方法，原因是我已经用这种方法解决了，如果不行，请Google之。</description></item></channel></rss>
